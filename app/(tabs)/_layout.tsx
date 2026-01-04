@@ -6,17 +6,24 @@ export default function TabLayout() {
   return (
     <Tabs>
       <Tabs.Screen
-        name="index"
+        name='index'
         options={{
           title: 'Inicio',
-          tabBarIcon: ({ color }) => <MaterialIcons name="home" size={28} color={color} />,
+          tabBarIcon: ({ color }) => <MaterialIcons name='home' size={28} color={color} />,
         }}
       />
       <Tabs.Screen
-        name="about"
+        name='schedule'
+        options={{
+          title: 'Horario',
+          tabBarIcon: ({ color }) => <MaterialIcons name='calendar-month' size={28} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name='about'
         options={{
           title: 'Acerca de',
-          tabBarIcon: ({ color }) => <MaterialIcons name="info" size={28} color={color} />,
+          tabBarIcon: ({ color }) => <MaterialIcons name='info' size={28} color={color} />,
         }}
       />
     </Tabs>
