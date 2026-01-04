@@ -1,5 +1,10 @@
 import '../../global.css';
-import { Text, View } from 'react-native';
+import {
+  Text,
+  View,
+  ScrollView,
+} from 'react-native';
+import { useState } from 'react';
 
 const MODULES = [
     { id: 1, label: 'Mod 1', range: '8:20 - 9:30' },
@@ -16,16 +21,54 @@ const MODULES = [
 
 const DAYS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
+type ScheduleT = {
+  [day: string]: {
+    [moduleId: number]: string;
+  };
+};
+
 export default function Schedule() {
+  const [schedule, setSchedule] = useState<ScheduleT>({});
+
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <Text>Esta es la página del calendario.</Text>
+    <View className='flex-1 bg-white pt-[50px]'>
+      <Text className='text-2xl font-bold text-center mb-[15px]'>Horario por Módulos</Text>
+    
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <View>
+          <View className='flex-row border-b border-[#EEE]'>
+            <View className='w-[70px]'/>
+            {DAYS.map(day => (
+              <View key={day} className='py-[12px] items-center w-[110px]'>
+                <Text className='font-bold text-[#2C3E50]'>{day}</Text>
+              </View>
+            ))}
+          </View>
+
+          <ScrollView>
+            {MODULES.map(mod => (
+                <View key={mod.id} className='flex-row border-b border-[#F9F9F9]'>
+                  <View className='w-[70px] justify-center items-center bg-[#F8F9Fa]'>
+                    <Text className='text-base font-bold text-[#333]'>{mod.label}</Text>
+                    <Text className='text-sm text-[#999]'>{mod.range.split(' ')[0]}</Text>
+                  </View>
+                  
+                  {DAYS.map(day => (
+                    <View key={`${day}-${mod.id}`} className='w-[110px] h-[85px] p-[4px] border-l border-[#EEE]'>
+                      {schedule[day]?.[mod.id] ? (
+                        <View className='flex-1 bg-[#E8F5E9] rounded-lg p-[8px] border-l-5 border-l-[#4CAF50]'>
+                          <Text className='text-xs font-bold text-[#2E7D32]'>{schedule[day][mod.id]}</Text>
+                        </View>
+                      ) : (
+                        <View className='flex-1 bg-[#FAFAFA] rounded-sm' />
+                      )}
+                    </View>
+                  ))}
+                </View>
+              ))}
+          </ScrollView>
+        </View>
+      </ScrollView>
     </View>
   );
 }
