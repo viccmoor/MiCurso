@@ -3,8 +3,10 @@ import {
   Text,
   View,
   ScrollView,
+  Pressable,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useState } from 'react';
 
 const MODULES = [
@@ -32,24 +34,24 @@ export default function Schedule() {
   const [schedule] = useState<ScheduleT>({});
 
   return (
-    <SafeAreaView className="flex-1 bg-white justify-center items-center">
-      <Text className="text-2xl font-bold text-center mb-[15px]">
+    <SafeAreaView className='flex-1 bg-white justify-center items-center'>
+      <Text className='text-2xl font-bold text-center mb-[15px]'>
         Horario por Módulos
       </Text>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View className="flex-row">
+        <View className='flex-row'>
           <View>
-            <View className="h-[50px] w-[100px]" />
+            <View className='h-[50px] w-[100px]' />
             {MODULES.map(mod => (
               <View
                 key={mod.id}
-                className="w-[100px] h-[85px] justify-center items-center border-b border-[#EEE] bg-[#F8F9FA]"
+                className='w-[100px] h-[85px] justify-center items-center border-b border-[#EEE] bg-[#F8F9FA]'
               >
-                <Text className="text-base font-bold text-[#333]">
+                <Text className='text-base font-bold text-[#333]'>
                   {mod.label}
                 </Text>
-                <Text className="text-xs text-[#999]">
+                <Text className='text-xs text-[#999]'>
                   {mod.range}
                 </Text>
               </View>
@@ -58,13 +60,13 @@ export default function Schedule() {
 
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View>
-              <View className="flex-row h-[50px] border-b border-[#EEE]">
+              <View className='flex-row h-[50px] border-b border-[#EEE]'>
                 {DAYS.map(day => (
                   <View
                     key={day}
-                    className="w-[110px] items-center justify-center"
+                    className='w-[110px] items-center justify-center'
                   >
-                    <Text className="font-bold text-[#2C3E50]">
+                    <Text className='font-bold text-[#2C3E50]'>
                       {day}
                     </Text>
                   </View>
@@ -74,14 +76,14 @@ export default function Schedule() {
               {MODULES.map(mod => (
                 <View
                   key={mod.id}
-                  className="flex-row h-[85px] border-b border-[#F9F9F9]"
+                  className='flex-row h-[85px] border-b border-[#F9F9F9]'
                 >
                   {mod.id === 5 ? (
                     <View
-                      className="h-full justify-center items-center bg-[#FFF3CD]"
+                      className='h-full justify-center items-center bg-[#FFF3CD]'
                       style={{ width: DAYS.length * 110 }}
                     >
-                      <Text className="text-xl font-semibold text-[#856404]">
+                      <Text className='text-xl font-semibold text-[#856404]'>
                         Horario de Almuerzo
                       </Text>
                     </View>
@@ -89,16 +91,16 @@ export default function Schedule() {
                     DAYS.map(day => (
                       <View
                         key={`${day}-${mod.id}`}
-                        className="w-[110px] p-[4px] border-l border-[#EEE]"
+                        className='w-[110px] p-[4px] border-l border-[#EEE]'
                       >
                         {schedule[day]?.[mod.id] ? (
-                          <View className="flex-1 bg-[#E8F5E9] rounded-lg p-[8px] border-l-4 border-l-[#4CAF50]">
-                            <Text className="text-xs font-bold text-[#2E7D32]">
+                          <View className='flex-1 bg-[#E8F5E9] rounded-lg p-[8px] border-l-4 border-l-[#4CAF50]'>
+                            <Text className='text-xs font-bold text-[#2E7D32]'>
                               {schedule[day][mod.id]}
                             </Text>
                           </View>
                         ) : (
-                          <View className="flex-1 bg-[#FAFAFA] rounded-sm" />
+                          <View className='flex-1 bg-[#FAFAFA] rounded-sm' />
                         )}
                       </View>
                     ))
@@ -109,6 +111,20 @@ export default function Schedule() {
           </ScrollView>
         </View>
       </ScrollView>
+
+      {/* El FAB solo funciona utilizando style más no TailwindCSS. */}
+      <Pressable
+        style={{
+          position: 'absolute',
+          right: 25, bottom: 25,
+          backgroundColor: '#172094',
+          width: 60, height: 60,
+          borderRadius: 30,
+          justifyContent: 'center',
+          alignItems: 'center',
+          elevation: 8 }}>
+        <MaterialIcons name='add' size={32} color='#FFF' />
+      </Pressable>
     </SafeAreaView>
   );
 }
