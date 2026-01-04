@@ -4,6 +4,7 @@ import {
   View,
   ScrollView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 
 const MODULES = [
@@ -31,7 +32,7 @@ export default function Schedule() {
   const [schedule] = useState<ScheduleT>({});
 
   return (
-    <View className="flex-1 bg-white pt-[50px] justify-center items-center">
+    <SafeAreaView className="flex-1 bg-white justify-center items-center">
       <Text className="text-2xl font-bold text-center mb-[15px]">
         Horario por Módulos
       </Text>
@@ -108,6 +109,6 @@ export default function Schedule() {
           </ScrollView>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
