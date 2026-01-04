@@ -1,3 +1,4 @@
+import '../../global.css';
 import { Text, View } from 'react-native';
 
 const MODULES = [
