@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 
-export default function HomeScreen() {
+export default function About() {
   return (
     <View
       style={{
@@ -9,7 +9,7 @@ export default function HomeScreen() {
         alignItems: "center",
       }}
     >
-      <Text>Esta es la página principal.</Text>
+      <Text>Este proyecto está hecho con React Native.</Text>
     </View>
   );
 }
