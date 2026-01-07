@@ -4,10 +4,11 @@ import {
   View,
   ScrollView,
   Pressable,
+  Animated,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 const MODULES = [
   { id: 1, label: 'Mod 1', range: '8:20 - 9:30' },
@@ -32,9 +33,34 @@ type ScheduleT = {
 
 export default function Schedule() {
   const [schedule] = useState<ScheduleT>({});
+  const [open, setOpen] = useState(false);
+
+  const animationValue = useRef(new Animated.Value(0)).current;
+
+  const toggleMenu = () => {
+    const toValue = open ? 0 : 1;
+    setOpen(!open);
+
+    Animated.spring(animationValue, {
+      toValue,
+      friction: 5,
+      tension: 40,
+      useNativeDriver: false,
+    }).start();
+  };
+
+  const animatedWidth = animationValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [60, 160],
+  });
+
+  const animatedOpacity = animationValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  });
 
   return (
-    <SafeAreaView className='flex-1 bg-white justify-center items-center'>
+    <SafeAreaView className='flex-1 bg-white'>
       <Text className='text-2xl font-bold text-center mb-[15px]'>
         Horario por Módulos
       </Text>
@@ -111,20 +137,55 @@ export default function Schedule() {
           </ScrollView>
         </View>
       </ScrollView>
+      
+      <View className='absolute bottom-[20px] right-[25px] items-end'>
+        <Animated.View style={{ width: animatedWidth, opacity: animatedOpacity, marginBottom: 20 }}>
+          <Pressable
+            style={{
+              backgroundColor: '#172094',
+              height: 60,
+              borderRadius: 30,
+              justifyContent: 'center',
+              alignItems: 'center',
+              elevation: 8,
+              overflow: 'hidden' }}
+            onPress={() => {}}
+          >
 
-      {/* El FAB solo funciona utilizando style más no TailwindCSS. */}
-      <Pressable
-        style={{
-          position: 'absolute',
-          right: 25, bottom: 25,
-          backgroundColor: '#172094',
-          width: 60, height: 60,
-          borderRadius: 30,
-          justifyContent: 'center',
-          alignItems: 'center',
-          elevation: 8 }}>
-        <MaterialIcons name='add' size={32} color='#FFF' />
-      </Pressable>
+          </Pressable>
+        </Animated.View>
+
+        <Animated.View style={{ width: animatedWidth, opacity: animatedOpacity, marginBottom: 40 }}>
+          <Pressable
+            style={{
+              backgroundColor: '#172094',
+              height: 60,
+              borderRadius: 30,
+              justifyContent: 'center',
+              alignItems: 'center',
+              elevation: 8,
+              overflow: 'hidden' }}
+            onPress={() => {}}
+          >
+            
+          </Pressable>
+        </Animated.View>
+
+        {/* El FAB solo funciona utilizando style más no TailwindCSS. */}
+        <Pressable
+          style={{
+            bottom: 25,
+            backgroundColor: '#172094',
+            width: 60, height: 60,
+            borderRadius: 30,
+            justifyContent: 'center',
+            alignItems: 'center',
+            elevation: 8 }}
+          onPress={toggleMenu}
+        >
+          <MaterialIcons name='add' size={32} color='#FFF' />
+        </Pressable>
+      </View>
     </SafeAreaView>
   );
 }
