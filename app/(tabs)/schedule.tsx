@@ -43,7 +43,7 @@ export default function Schedule() {
 
     Animated.spring(animationValue, {
       toValue,
-      friction: 5,
+      friction: 6,
       tension: 40,
       useNativeDriver: false,
     }).start();
@@ -57,6 +57,16 @@ export default function Schedule() {
   const animatedOpacity = animationValue.interpolate({
     inputRange: [0, 1],
     outputRange: [0, 1],
+  });
+
+  const animatedBorderRadius = animationValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [20, 30],
+  });
+
+  const animatedColor = animationValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['#172094', '#4A54E3'],
   });
 
   return (
@@ -139,15 +149,16 @@ export default function Schedule() {
       </ScrollView>
       
       <View className='absolute bottom-[20px] right-[25px] items-end'>
-        <Animated.View style={{ width: animatedWidth, opacity: animatedOpacity, marginBottom: 20 }}>
+        <Animated.View style={{ width: animatedWidth, opacity: animatedOpacity, marginBottom: 5 }}>
           <Pressable
+            pointerEvents={open ? 'auto' : 'none'}
             style={{
               backgroundColor: '#172094',
               height: 60,
               borderRadius: 30,
               justifyContent: 'center',
               alignItems: 'center',
-              elevation: 8,
+              elevation: open ? 8 : 0,
               overflow: 'hidden' }}
             onPress={() => {}}
           >
@@ -155,15 +166,16 @@ export default function Schedule() {
           </Pressable>
         </Animated.View>
 
-        <Animated.View style={{ width: animatedWidth, opacity: animatedOpacity, marginBottom: 40 }}>
+        <Animated.View style={{ width: animatedWidth, opacity: animatedOpacity, marginBottom: 5 }}>
           <Pressable
+            pointerEvents={open ? 'auto' : 'none'}
             style={{
               backgroundColor: '#172094',
               height: 60,
               borderRadius: 30,
               justifyContent: 'center',
               alignItems: 'center',
-              elevation: 8,
+              elevation: open ? 8 : 0,
               overflow: 'hidden' }}
             onPress={() => {}}
           >
@@ -172,19 +184,42 @@ export default function Schedule() {
         </Animated.View>
 
         {/* El FAB solo funciona utilizando style más no TailwindCSS. */}
-        <Pressable
+        <Animated.View
           style={{
-            bottom: 25,
-            backgroundColor: '#172094',
-            width: 60, height: 60,
-            borderRadius: 30,
-            justifyContent: 'center',
-            alignItems: 'center',
-            elevation: 8 }}
-          onPress={toggleMenu}
+            backgroundColor: animatedColor,
+            width: 60,
+            height: 60,
+            borderRadius: animatedBorderRadius,
+            elevation: 8,
+            overflow: 'hidden',
+          }}
         >
-          <MaterialIcons name='add' size={32} color='#FFF' />
-        </Pressable>
+          <Pressable
+            onPress={toggleMenu}
+            style={({ pressed }) => ({
+              width: 60,
+              height: 60,
+              justifyContent: 'center',
+              alignItems: 'center',
+              opacity: pressed ? 0.8 : 1,
+            })}
+          >
+            <Animated.View 
+              style={{
+                width: 60,
+                height: 60,
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <MaterialIcons 
+                name={open ? "close" : "add"} 
+                size={24}
+                color="#FFF"
+              />
+            </Animated.View>
+          </Pressable>
+        </Animated.View>
       </View>
     </SafeAreaView>
   );
