@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { useState, useRef } from 'react';
 
 const MODULES = [
@@ -49,9 +50,14 @@ export default function Schedule() {
     }).start();
   };
 
-  const animatedWidth = animationValue.interpolate({
+  const widthCourse = animationValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [60, 160],
+    outputRange: [60, 180],
+  });
+
+  const widthExport = animationValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [60, 200],
   });
 
   const animatedOpacity = animationValue.interpolate({
@@ -66,7 +72,7 @@ export default function Schedule() {
 
   const animatedColor = animationValue.interpolate({
     inputRange: [0, 1],
-    outputRange: ['#172094', '#4A54E3'],
+    outputRange: ['#172094', '#9A9FEF'],
   });
 
   return (
@@ -149,7 +155,7 @@ export default function Schedule() {
       </ScrollView>
       
       <View className='absolute bottom-[20px] right-[25px] items-end'>
-        <Animated.View style={{ width: animatedWidth, opacity: animatedOpacity, marginBottom: 5 }}>
+        <Animated.View style={{ width: widthExport, opacity: animatedOpacity, marginBottom: 5 }}>
           <Pressable
             pointerEvents={open ? 'auto' : 'none'}
             style={{
@@ -162,11 +168,20 @@ export default function Schedule() {
               overflow: 'hidden' }}
             onPress={() => {}}
           >
-
+            <View className='flex-row gap-2 items-center justify-center'>
+              <Ionicons 
+                  name='share-social-outline' 
+                  size={28}
+                  color='#9A9FEF'
+              />
+              <Text className='text-[#9A9FEF] font-semibold text-lg'>
+                Compartir horario
+              </Text>
+            </View>
           </Pressable>
         </Animated.View>
 
-        <Animated.View style={{ width: animatedWidth, opacity: animatedOpacity, marginBottom: 5 }}>
+        <Animated.View style={{ width: widthCourse, opacity: animatedOpacity, marginBottom: 5 }}>
           <Pressable
             pointerEvents={open ? 'auto' : 'none'}
             style={{
@@ -179,7 +194,16 @@ export default function Schedule() {
               overflow: 'hidden' }}
             onPress={() => {}}
           >
-            
+            <View className='flex-row gap-2 items-center justify-center'>
+              <Ionicons 
+                  name='school-outline' 
+                  size={28}
+                  color='#9A9FEF'
+              />
+              <Text className='text-[#9A9FEF] font-semibold text-lg'>
+                Agregar curso
+              </Text>
+            </View>
           </Pressable>
         </Animated.View>
 
@@ -213,9 +237,10 @@ export default function Schedule() {
               }}
             >
               <MaterialIcons 
-                name={open ? "close" : "add"} 
+                name={open ? 'close' : 'add'} 
                 size={24}
-                color="#FFF"
+                color={open ? '#172094' : '#9A9FEF'}
+                
               />
             </Animated.View>
           </Pressable>
