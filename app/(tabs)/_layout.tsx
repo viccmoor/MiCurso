@@ -1,5 +1,6 @@
 import { Tabs } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React from 'react';
 
 export default function TabLayout() {
@@ -8,28 +9,43 @@ export default function TabLayout() {
       screenOptions={{
         tabBarShowLabel: false,
         headerShown: false,
-        tabBarActiveTintColor: '#172094',
+        tabBarActiveTintColor: '#2D336B',
       }}
     >
       <Tabs.Screen
         name='index'
         options={{
           title: 'Inicio',
-          tabBarIcon: ({ color }) => <MaterialIcons name='home' size={28} color={color} />,
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name={focused ? 'home' : 'home-outline'}
+              size={28}
+            />
+          ),
         }}
       />
       <Tabs.Screen
         name='schedule'
         options={{
           title: 'Horario',
-          tabBarIcon: ({ color }) => <MaterialIcons name='calendar-month' size={28} color={color} />,
+          tabBarIcon: ({ focused }) => (
+            <MaterialCommunityIcons
+              name={focused ? 'calendar-month' : 'calendar-month-outline'}
+              size={28}
+            />
+          ),
         }}
       />
       <Tabs.Screen
         name='about'
         options={{
           title: 'Acerca de',
-          tabBarIcon: ({ color }) => <MaterialIcons name='info' size={28} color={color} />,
+          tabBarIcon: ({ focused }) => (
+            <MaterialIcons
+              name={focused ? 'info' : 'info-outline'}
+              size={28}
+            />
+          ),
         }}
       />
     </Tabs>

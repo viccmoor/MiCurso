@@ -10,7 +10,6 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { fetch } from 'expo/fetch';
@@ -37,9 +36,9 @@ interface TipoColor {
 }
 
 const TIPO_COLORS: { [key: string]: TipoColor } = {
-  'CLAS': { bg: '#fbc575', border: '#F79708'},
-  'AYU':  { bg: '#99cc99', border: '#55AA55'},
-  'LAB':  { bg: '#b3d4f5', border: '#6FADEC'},
+  'CLAS': { bg: '#FDE2BA', border: '#F79708'},
+  'AYU':  { bg: '#D0E7D0', border: '#55AA55'},
+  'LAB':  { bg: '#b3d4f5', border: '#4696E7'},
   'TER':  { bg: '#ffccff', border: '#FF5CFF'},
   'TAL':  { bg: '#c7c2f8', border: '#7A6DEE'},
   'PRA':  { bg: '#cccc99', border: '#AAAA55'},
@@ -114,12 +113,11 @@ export default function Schedule() {
         setSearchResults(data?.data?.curso);
         setModalVisible(false);
         setResultsModalVisible(true);
+        resetForm()
       } else {
         Alert.alert('Sin resultados', 'No se encontraron cursos con esos criterios.');
         setSearchResults([]);
       }
-
-      console.log(data);
     } catch (err) {
       console.error(err);
       Alert.alert('Atención', 'No pudimos buscar el curso. Intenta nuevamente.');
@@ -201,12 +199,12 @@ export default function Schedule() {
 
   const widthCourse = animationValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [60, 180],
+    outputRange: [60, 190],
   });
 
   const widthExport = animationValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [60, 200],
+    outputRange: [60, 210],
   });
 
   const animatedOpacity = animationValue.interpolate({
@@ -221,37 +219,29 @@ export default function Schedule() {
 
   const animatedColor = animationValue.interpolate({
     inputRange: [0, 1],
-    outputRange: ['#172094', '#9A9FEF'],
+    outputRange: ['#A9B5DF', '#2D336B'],
+  });
+
+  const textOpacity = animationValue.interpolate({
+    inputRange: [0.4, 1],
+    outputRange: [0, 1],
+    extrapolate: 'clamp',
+  });
+
+  const textTranslateX = animationValue.interpolate({
+    inputRange: [0.4, 1],
+    outputRange: [-10, 0],
+    extrapolate: 'clamp',
   });
 
   return (
-    <SafeAreaView className='flex-1 bg-white'>
-      <Text className='text-2xl font-bold text-center mb-[15px]'>
-        Horario por Módulos
-      </Text>
-
+    <View className='flex-1 bg-white'>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className='flex-row'>
-          <View>
-            <View className='h-[50px] w-[100px]' />
-            {MODULES.map(mod => (
-              <View
-                key={mod.id}
-                className='w-[100px] h-[85px] justify-center items-center border-b border-[#EEE] bg-[#F8F9FA]'
-              >
-                <Text className='text-base font-bold text-[#333]'>
-                  {mod.label}
-                </Text>
-                <Text className='text-xs text-[#999]'>
-                  {mod.range}
-                </Text>
-              </View>
-            ))}
-          </View>
-
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View>
               <View className='flex-row h-[50px] border-b border-[#EEE]'>
+                <View className='w-[100px]' />
                 {DAYS.map(day => (
                   <View
                     key={day}
@@ -267,11 +257,23 @@ export default function Schedule() {
               {MODULES.map(mod => (
                 <View
                   key={mod.id}
-                  className='flex-row h-[85px] border-b border-[#F9F9F9]'
+                  className='flex-row min-h-[95px] border-b border-[#F9F9F9]'
                 >
+                  <View
+                    key={mod.id}
+                    className='w-[100px] min-h-[95px] justify-center items-center border-b border-[#EEE] bg-[#F8F9FA]'
+                  >
+                    <Text className='text-base font-bold text-[#333]'>
+                      {mod.label}
+                    </Text>
+                    <Text className='text-xs text-[#999]'>
+                      {mod.range}
+                    </Text>
+                  </View>
+
                   {mod.id === 5 ? (
                     <View
-                      className='h-full justify-center items-center bg-[#FFF3CD]'
+                      className='flex-1 justify-center items-center bg-[#FFF3CD]'
                       style={{ width: DAYS.length * 110 }}
                     >
                       <Text className='text-xl font-semibold text-[#856404]'>
@@ -285,7 +287,7 @@ export default function Schedule() {
                         className='w-[110px] p-[4px] border-l border-[#EEE]'
                       >
                         {schedule[day]?.[mod.id] ? (
-                          <View className='flex-1'>
+                          <View className='flex-1 gap-[4px]'>
                             {schedule[day][mod.id].map((curso, idx) => {
                               const colors = TIPO_COLORS[curso.tipo] || TIPO_COLORS.DEFAULT;
 
@@ -297,7 +299,7 @@ export default function Schedule() {
                                     borderLeftColor: colors.border,
                                     borderLeftWidth: 4
                                   }}
-                                  className='rounded-md p-1 flex-1 justify-center'
+                                  className='flex-1 rounded-md p-1 justify-center'
                                 >
                                   <Text
                                     style={{ color: colors.border }}
@@ -333,8 +335,8 @@ export default function Schedule() {
           <Pressable
             pointerEvents={open ? 'auto' : 'none'}
             style={{
-              backgroundColor: '#172094',
-              height: 60,
+              backgroundColor: '#A9B5DF',
+              height: 55,
               borderRadius: 30,
               justifyContent: 'center',
               alignItems: 'center',
@@ -346,11 +348,19 @@ export default function Schedule() {
               <Ionicons 
                   name='share-social-outline' 
                   size={28}
-                  color='#9A9FEF'
+                  color='#2D336B'
               />
-              <Text className='text-[#9A9FEF] font-semibold text-lg'>
-                Compartir horario
-              </Text>
+              <Animated.View
+                style={{
+                  opacity: textOpacity,
+                  transform: [{ translateX: textTranslateX }],
+                  marginLeft: 8,
+                }}
+              >
+                <Text className="text-[#2D336B] font-semibold text-lg">
+                  Compartir horario
+                </Text>
+              </Animated.View>
             </View>
           </Pressable>
         </Animated.View>
@@ -359,24 +369,35 @@ export default function Schedule() {
           <Pressable
             pointerEvents={open ? 'auto' : 'none'}
             style={{
-              backgroundColor: '#172094',
-              height: 60,
+              backgroundColor: '#A9B5DF',
+              height: 55,
               borderRadius: 30,
               justifyContent: 'center',
               alignItems: 'center',
               elevation: open ? 8 : 0,
               overflow: 'hidden' }}
-            onPress={() => setModalVisible(true)}
+            onPress={() => {
+              setModalVisible(true);
+              toggleMenu();
+            }}
           >
             <View className='flex-row gap-2 items-center justify-center'>
               <Ionicons 
                   name='school-outline' 
                   size={28}
-                  color='#9A9FEF'
+                  color='#2D336B'
               />
-              <Text className='text-[#9A9FEF] font-semibold text-lg'>
-                Agregar curso
-              </Text>
+              <Animated.View
+                style={{
+                  opacity: textOpacity,
+                  transform: [{ translateX: textTranslateX }],
+                  marginLeft: 8,
+                }}
+              >
+                <Text className="text-[#2D336B] font-semibold text-lg">
+                  Agregar curso
+                </Text>
+              </Animated.View>
             </View>
           </Pressable>
         </Animated.View>
@@ -413,7 +434,7 @@ export default function Schedule() {
               <MaterialIcons 
                 name={open ? 'close' : 'add'} 
                 size={24}
-                color={open ? '#172094' : '#9A9FEF'}
+                color={open ? '#A9B5DF' : '#2D336B'}
                 
               />
             </Animated.View>
@@ -426,7 +447,7 @@ export default function Schedule() {
           transparent={true}
         >
           <View className='flex-1 bg-black/50 justify-center items-center'>
-              <View className='width-9/10 bg-white rounded-lg p-[20px]'>
+              <View className='width-9/10 bg-white rounded-2xl p-[20px]'>
                 <Text className='font-bold text-lg text-center'>
                   Agregar curso
                 </Text>
@@ -525,7 +546,7 @@ export default function Schedule() {
         >
           <View className='flex-1 bg-black/50 justify-center items-center'>
             <View className='w-[95%] h-[80%] bg-white rounded-2xl p-4'>
-              <Text className='text-xl font-bold text-center mb-4 text-[#172094]'>
+              <Text className='text-xl font-bold text-center mb-4 text-[#2D336B]'>
                 Se han encontrado {searchResults.length} cursos
               </Text>
 
@@ -534,18 +555,18 @@ export default function Schedule() {
                   <Pressable
                     key={index}
                     onPress={() => addCourseToSchedule(curso)}
-                    className='bg-[#F8F9FA] p-4 rounded-xl mb-3 border-l-4 border-[#172094] shadow-sm active:opacity-70'
+                    className='bg-[#F8F9FA] p-4 rounded-xl mb-3 border-l-4 border-[#2D336B] shadow-sm active:opacity-70'
                   >
                     <View className='flex-row justify-between items-start'>
                       <View className='flex-1'>
-                        <Text className='text-[#172094] font-bold text-sm'>{curso.sigla}</Text>
+                        <Text className='text-[#2D336B] font-bold text-sm'>{curso.sigla}</Text>
                         <Text className='text-gray-800 font-semibold text-lg' numberOfLines={1}>
                           {curso.nombre}
                         </Text>
                         <Text className='text-gray-500 text-xs'>Sección: {curso.seccion} | NRC: {curso.nrc}</Text>
                         <Text className='text-gray-600 text-sm italic mt-1'>{curso.profesor.join(', ')}</Text>
                       </View>
-                      <MaterialIcons name='add-circle-outline' size={24} color='#172094' />
+                      <MaterialIcons name='add-circle-outline' size={24} color='#2D336B' />
                     </View>
                   </Pressable>
                 ))}
@@ -561,6 +582,6 @@ export default function Schedule() {
           </View>
         </Modal>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
