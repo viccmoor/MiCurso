@@ -5,10 +5,15 @@ import {
   ScrollView,
   Pressable,
   Animated,
+  Modal,
+  TextInput,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { fetch } from 'expo/fetch';
 import { useState, useRef } from 'react';
 
 const MODULES = [
@@ -26,15 +31,159 @@ const MODULES = [
 
 const DAYS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
+interface TipoColor {
+  bg: string;
+  border: string;
+}
+
+const TIPO_COLORS: { [key: string]: TipoColor } = {
+  'CLAS': { bg: '#fbc575', border: '#F79708'},
+  'AYU':  { bg: '#99cc99', border: '#55AA55'},
+  'LAB':  { bg: '#b3d4f5', border: '#6FADEC'},
+  'TER':  { bg: '#ffccff', border: '#FF5CFF'},
+  'TAL':  { bg: '#c7c2f8', border: '#7A6DEE'},
+  'PRA':  { bg: '#cccc99', border: '#AAAA55'},
+  'TES':  { bg: '#b2efef', border: '#78E3E3'},
+  'OTR':  { bg: '#ff9999', border: '#FF2E2E'},
+  'DEFAULT': { bg: '#E8F5E9', border: '#2E7D32'},
+};
+
+type CourseBlock = {
+  nombre: string;
+  sigla: string;
+  sala: string;
+  tipo: string;
+  seccion: string;
+};
+
 type ScheduleT = {
   [day: string]: {
-    [moduleId: number]: string;
+    [moduleId: number]: CourseBlock[];
   };
 };
 
 export default function Schedule() {
-  const [schedule] = useState<ScheduleT>({});
+  const [schedule, setSchedule] = useState<ScheduleT>({});
   const [open, setOpen] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [resultsModalVisible, setResultsModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
+  const [courseForm, setCourseForm] = useState({
+    sigla: '',
+    nrc: '',
+    nombre: '',
+    profesor: ''
+  });
+
+  const handleInputChange = (name: string, value: string) => {
+    setCourseForm({ ...courseForm, [name]: value });
+  };
+
+  const resetForm = () => {
+    setCourseForm({ sigla: '', nrc: '', nombre: '', profesor: '' });
+    setModalVisible(false);
+  };
+
+  const handleSearch = async () => {
+    const hasInput = Object.values(courseForm).some(value => value.trim() !== '');
+    
+    if (!hasInput) {
+      Alert.alert('Atención', 'Debes completar al menos un campo para realizar la búsqueda.');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const params = new URLSearchParams({
+        periodo: '2026-1',
+        sigla: courseForm.sigla,
+        nrc: courseForm.nrc,
+        nombre: courseForm.nombre,
+        profesor: courseForm.profesor,
+      });
+
+      const res = await fetch(`https://buscacursosapi.viccmoor.xyz/api/cursos/?${params}`);
+      if (!res.ok) {
+        throw new Error('El servidor respondió con un error.')
+      }
+
+      const data = await res.json();
+      if (data?.meta?.cursos_encontrados > 0) {
+        setSearchResults(data?.data?.curso);
+        setModalVisible(false);
+        setResultsModalVisible(true);
+      } else {
+        Alert.alert('Sin resultados', 'No se encontraron cursos con esos criterios.');
+        setSearchResults([]);
+      }
+
+      console.log(data);
+    } catch (err) {
+      console.error(err);
+      Alert.alert('Atención', 'No pudimos buscar el curso. Intenta nuevamente.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const addCourseToSchedule = (curso: any) => {
+    Alert.alert(
+      'Agregar Curso',
+      `¿Quieres añadir ${curso.sigla}-${curso.seccion} a tu horario?`,
+      [
+      { text: 'Cancelar', style: 'cancel' },
+      { 
+        text: 'Sí, agregar', 
+        onPress: () => {
+          const dayMap: { [key: string]: string } = {
+            'L': 'Lun',
+            'M': 'Mar',
+            'W': 'Mié',
+            'J': 'Jue',
+            'V': 'Vie',
+            'S': 'Sab',
+          };
+
+          setSchedule(prev => {
+            const nextSchedule = { ...prev };
+
+            curso.horario.forEach((block: any) => {
+              const day = dayMap[block.dia];
+              const modId = block.modulo;
+
+              if (day) {
+                if (!nextSchedule[day]) nextSchedule[day] = {};
+                
+                const existingBlocks = nextSchedule[day][modId] || [];
+                const exists = existingBlocks.some(b => 
+                  b.sigla === curso.sigla && b.seccion === curso.seccion
+                );
+                
+                if (!exists) {
+                  const newBlock: CourseBlock = {
+                    nombre: curso.nombre,
+                    sigla: curso.sigla,
+                    sala: curso.sala,
+                    tipo: block.tipo,
+                    seccion: curso.seccion,
+                  };
+                  nextSchedule[day][modId] = [...existingBlocks, newBlock];
+                }
+              }
+            });
+
+            return nextSchedule;
+          });
+
+          setResultsModalVisible(false);
+          Alert.alert('Añadido', `${curso.sigla} se sumó a tu horario.`);
+        }
+      }
+    ]
+    )
+  };
 
   const animationValue = useRef(new Animated.Value(0)).current;
 
@@ -136,10 +285,35 @@ export default function Schedule() {
                         className='w-[110px] p-[4px] border-l border-[#EEE]'
                       >
                         {schedule[day]?.[mod.id] ? (
-                          <View className='flex-1 bg-[#E8F5E9] rounded-lg p-[8px] border-l-4 border-l-[#4CAF50]'>
-                            <Text className='text-xs font-bold text-[#2E7D32]'>
-                              {schedule[day][mod.id]}
-                            </Text>
+                          <View className='flex-1'>
+                            {schedule[day][mod.id].map((curso, idx) => {
+                              const colors = TIPO_COLORS[curso.tipo] || TIPO_COLORS.DEFAULT;
+
+                              return (
+                                <View
+                                  key={idx}
+                                  style={{
+                                    backgroundColor: colors.bg,
+                                    borderLeftColor: colors.border,
+                                    borderLeftWidth: 4
+                                  }}
+                                  className='rounded-md p-1 flex-1 justify-center'
+                                >
+                                  <Text
+                                    style={{ color: colors.border }}
+                                    className='text-sm font-bold text-center'
+                                  >
+                                    {`${curso.nombre}\n${curso.sigla}-${curso.seccion}`}
+                                  </Text>
+                                  <Text
+                                    style={{ color: colors.border }}
+                                    className='text-xs font-bold text-center'
+                                  >
+                                    {curso.tipo}
+                                  </Text>
+                                </View>
+                              );
+                          })}
                           </View>
                         ) : (
                           <View className='flex-1 bg-[#FAFAFA] rounded-sm' />
@@ -192,7 +366,7 @@ export default function Schedule() {
               alignItems: 'center',
               elevation: open ? 8 : 0,
               overflow: 'hidden' }}
-            onPress={() => {}}
+            onPress={() => setModalVisible(true)}
           >
             <View className='flex-row gap-2 items-center justify-center'>
               <Ionicons 
@@ -245,6 +419,147 @@ export default function Schedule() {
             </Animated.View>
           </Pressable>
         </Animated.View>
+
+        <Modal
+          visible={modalVisible}
+          animationType='fade'
+          transparent={true}
+        >
+          <View className='flex-1 bg-black/50 justify-center items-center'>
+              <View className='width-9/10 bg-white rounded-lg p-[20px]'>
+                <Text className='font-bold text-lg text-center'>
+                  Agregar curso
+                </Text>
+
+                <View className='gap-2 p-[10px]'>
+                  <TextInput
+                    className='bg-[#FAFAFA] rounded-lg p-[5px]'
+                    placeholder='Nombre (ej: Cálculo I)'
+                    value={courseForm.nombre}
+                    onChangeText={(val) => handleInputChange('nombre', val)}
+                  />
+
+                  <TextInput
+                    className='bg-[#FAFAFA] rounded-lg p-[5px]'
+                    placeholder='Sigla (ej: MAT1610)'
+                    value={courseForm.sigla}
+                    onChangeText={(val) => handleInputChange('sigla', val)}
+                  />
+
+                  <TextInput
+                    className='bg-[#FAFAFA] rounded-lg p-[5px]'
+                    placeholder='NRC (ej: 12345)'
+                    value={courseForm.nrc}
+                    onChangeText={(val) => handleInputChange('nrc', val)}
+                    keyboardType='numeric'
+                  />
+
+                  <TextInput
+                    className='bg-[#FAFAFA] rounded-lg p-[5px]'
+                    placeholder='Profesor (ej: Nombre Apellido)'
+                    value={courseForm.profesor}
+                    onChangeText={(val) => handleInputChange('profesor', val)}
+                  />
+
+                  <View className='pt-[15px] flex-row gap-4'>
+                    <Pressable
+                      onPress={() => resetForm()}
+                      style={{
+                        backgroundColor: '#B51C26',
+                        width: 110,
+                        height: 40,
+                        borderRadius: 20,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        overflow: 'hidden' }}
+                    >
+                      <View className='flex-row gap-2 items-center justify-center'>
+                        <MaterialIcons 
+                            name='close' 
+                            size={20}
+                            color='#EDF5EA'
+                        />
+                        <Text className='text-[#EDF5EA] font-semibold text-base'>
+                          Cancelar
+                        </Text>
+                      </View>
+                    </Pressable>
+                    <Pressable
+                      onPress={() => handleSearch()}
+                      disabled={loading}
+                      style={{
+                        backgroundColor: loading ? '#27911C' : '#26B51C',
+                        width: 100,
+                        height: 40,
+                        borderRadius: 20,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        overflow: 'hidden' }}
+                    >
+                      {loading ? (
+                        <ActivityIndicator color='#FFF' />
+                      ) : (
+                        <View className='flex-row gap-2 items-center justify-center'>
+                          <Ionicons 
+                              name='search' 
+                              size={20}
+                              color='#EDF5EA'
+                          />
+                          <Text className='text-[#EDF5EA] font-semibold text-base'>
+                            Buscar
+                          </Text>
+                        </View>
+                      )}
+                    </Pressable>
+                  </View>
+                </View>
+
+              </View>
+          </View>
+        </Modal>
+
+        <Modal
+          visible={resultsModalVisible}
+          animationType='slide'
+          transparent={true}
+        >
+          <View className='flex-1 bg-black/50 justify-center items-center'>
+            <View className='w-[95%] h-[80%] bg-white rounded-2xl p-4'>
+              <Text className='text-xl font-bold text-center mb-4 text-[#172094]'>
+                Se han encontrado {searchResults.length} cursos
+              </Text>
+
+              <ScrollView className='flex-1' showsVerticalScrollIndicator={false}>
+                {searchResults.map((curso: any, index) => (
+                  <Pressable
+                    key={index}
+                    onPress={() => addCourseToSchedule(curso)}
+                    className='bg-[#F8F9FA] p-4 rounded-xl mb-3 border-l-4 border-[#172094] shadow-sm active:opacity-70'
+                  >
+                    <View className='flex-row justify-between items-start'>
+                      <View className='flex-1'>
+                        <Text className='text-[#172094] font-bold text-sm'>{curso.sigla}</Text>
+                        <Text className='text-gray-800 font-semibold text-lg' numberOfLines={1}>
+                          {curso.nombre}
+                        </Text>
+                        <Text className='text-gray-500 text-xs'>Sección: {curso.seccion} | NRC: {curso.nrc}</Text>
+                        <Text className='text-gray-600 text-sm italic mt-1'>{curso.profesor.join(', ')}</Text>
+                      </View>
+                      <MaterialIcons name='add-circle-outline' size={24} color='#172094' />
+                    </View>
+                  </Pressable>
+                ))}
+              </ScrollView>
+
+              <Pressable
+                onPress={() => setResultsModalVisible(false)}
+                className='mt-4 bg-gray-200 p-3 rounded-xl items-center'
+              >
+                <Text className='text-gray-600 font-bold'>Volver a buscar</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
       </View>
     </SafeAreaView>
   );
