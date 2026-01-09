@@ -4,7 +4,6 @@ import {
   View,
   ScrollView,
   Pressable,
-  Animated,
   Modal,
   TextInput,
   Alert,
@@ -12,17 +11,17 @@ import {
 } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 
-import { useTheme } from '@/providers/ThemeProviders';
 import { searchCourses } from '@/services/courses';
-import { fabStyle, appStyle } from '@/utils/native-theme';
+import { useTheme } from '@/providers/ThemeProviders';
+import { Colors } from '@/utils/native-theme';
 import { MODULES, DAYS, TYPE_COLORS } from '@/constants/schedule';
-import { CourseBlock, ScheduleT} from '@/types/schedule';
+import { CourseBlock, ScheduleT } from '@/types/schedule';
+import FloatingActionButton from '@/components/schedule/FloatingActionButton';
 
 export default function Schedule() {
   const [schedule, setSchedule] = useState<ScheduleT>({});
-  const [open, setOpen] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [resultsModalVisible, setResultsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -35,7 +34,7 @@ export default function Schedule() {
   });
 
   const { theme } = useTheme();
-  const fabColors = fabStyle[theme];
+  const appColors = Colors[theme].app;
 
   const handleInputChange = (name: string, value: string) => {
     setCourseForm({ ...courseForm, [name]: value });
@@ -132,59 +131,8 @@ export default function Schedule() {
     )
   };
 
-  const animationValue = useRef(new Animated.Value(0)).current;
-
-  const toggleMenu = () => {
-    const toValue = open ? 0 : 1;
-    setOpen(!open);
-
-    Animated.spring(animationValue, {
-      toValue,
-      friction: 6,
-      tension: 40,
-      useNativeDriver: false,
-    }).start();
-  };
-
-  const widthCourse = animationValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [60, 180],
-  });
-
-  const widthExport = animationValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [60, 200],
-  });
-
-  const animatedOpacity = animationValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 1],
-  });
-
-  const animatedBorderRadius = animationValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [20, 30],
-  });
-
-  const animatedColor = animationValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [fabColors.mainBgClosed, fabColors.mainBgOpen],
-  });
-
-  const textOpacity = animationValue.interpolate({
-    inputRange: [0.4, 1],
-    outputRange: [0, 1],
-    extrapolate: 'clamp',
-  });
-
-  const textTranslateX = animationValue.interpolate({
-    inputRange: [0.4, 1],
-    outputRange: [-10, 0],
-    extrapolate: 'clamp',
-  });
-
   return (
-    <View className='flex-1' style={{ backgroundColor: appStyle[theme].layout }}>
+    <View className='flex-1' style={{ backgroundColor: appColors.layout }}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className='flex-row'>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -196,7 +144,7 @@ export default function Schedule() {
                     key={day}
                     className='w-[110px] items-center justify-center'
                   >
-                    <Text className='font-bold text-[#2C3E50]'>
+                    <Text className='font-bold text-[color:var(--color-days-text)]'>
                       {day}
                     </Text>
                   </View>
@@ -212,7 +160,7 @@ export default function Schedule() {
                     key={mod.id}
                     className='w-[100px] min-h-[95px] justify-center items-center --color-bg'
                   >
-                    <Text className='text-base font-bold text-[#333]'>
+                    <Text className='text-base font-bold text-[color:var(--color-modules-text)]'>
                       {mod.label}
                     </Text>
                     <Text className='text-xs text-[#999]'>
@@ -282,96 +230,10 @@ export default function Schedule() {
       </ScrollView>
       
       <View className='absolute bottom-[20px] right-[25px] items-end'>
-        <Animated.View style={{ width: widthExport, opacity: animatedOpacity, marginBottom: 5 }}>
-          <Pressable
-            pointerEvents={open ? 'auto' : 'none'}
-            style={{
-              backgroundColor: fabColors.optionsBg,
-              height: 55,
-              borderRadius: 30,
-              justifyContent: 'center',
-              alignItems: 'center',
-              elevation: open ? 8 : 0,
-              overflow: 'hidden' }}
-            onPress={() => {}}
-          >
-            <View className='flex-row items-center justify-center'>
-              <Ionicons 
-                  name='share-social-outline' 
-                  size={24}
-                  color={fabColors.optionsIcon}
-              />
-              <Animated.View
-                style={{
-                  opacity: textOpacity,
-                  transform: [{ translateX: textTranslateX }],
-                  marginLeft: 8,
-                }}
-              >
-                <Text className="text-[color:var(--color-secondary-default)] font-medium text-lg">
-                  Compartir horario
-                </Text>
-              </Animated.View>
-            </View>
-          </Pressable>
-        </Animated.View>
-
-        <Animated.View style={{ width: widthCourse, opacity: animatedOpacity, marginBottom: 5 }}>
-          <Pressable
-            pointerEvents={open ? 'auto' : 'none'}
-            style={{
-              backgroundColor: fabColors.optionsBg,
-              height: 55,
-              borderRadius: 30,
-              justifyContent: 'center',
-              alignItems: 'center',
-              elevation: open ? 8 : 0,
-              overflow: 'hidden' }}
-            onPress={() => {
-              setModalVisible(true);
-              toggleMenu();
-            }}
-          >
-            <View className='flex-row items-center justify-center'>
-              <Ionicons 
-                  name='school-outline' 
-                  size={24}
-                  color={fabColors.optionsIcon}
-              />
-              <Animated.View
-                style={{
-                  opacity: textOpacity,
-                  transform: [{ translateX: textTranslateX }],
-                  marginLeft: 8,
-                }}
-              >
-                <Text className="text-[color:var(--color-secondary-default)] font-medium text-lg">
-                  Agregar curso
-                </Text>
-              </Animated.View>
-            </View>
-          </Pressable>
-        </Animated.View>
-
-        {/* Floating action button. */}
-        <Animated.View
-          className='w-[60px] h-[60px] overflow-hidden shadow-lg'
-          style={{
-            backgroundColor: animatedColor,
-            borderRadius: animatedBorderRadius,
-          }}
-        >
-          <Pressable
-            onPress={toggleMenu}
-            className='w-[60px] h-[60px] justify-center items-center'
-          >
-            <MaterialIcons
-              name={open ? 'close' : 'add'} 
-              size={24}
-              color={open ? fabColors.mainIconOpen : fabColors.mainIconClosed}
-            />
-          </Pressable>
-        </Animated.View>
+        <FloatingActionButton
+          onAddCourse={() => setModalVisible(true)}
+          onShare={() => {}}
+        />
 
         <Modal
           visible={modalVisible}
@@ -379,52 +241,14 @@ export default function Schedule() {
           transparent={true}
         >
           <View className='flex-1 bg-black/50 justify-center items-center'>
-              <View className='width-9/10 bg-white rounded-2xl p-[20px]'>
-                <Text className='font-bold text-lg text-center'>
-                  Agregar curso
-                </Text>
-
-                <View className='gap-2 p-[10px]'>
-                  <TextInput
-                    className='bg-[#FAFAFA] rounded-lg p-[5px]'
-                    placeholder='Nombre (ej: Cálculo I)'
-                    value={courseForm.nombre}
-                    onChangeText={(val) => handleInputChange('nombre', val)}
-                  />
-
-                  <TextInput
-                    className='bg-[#FAFAFA] rounded-lg p-[5px]'
-                    placeholder='Sigla (ej: MAT1610)'
-                    value={courseForm.sigla}
-                    onChangeText={(val) => handleInputChange('sigla', val)}
-                  />
-
-                  <TextInput
-                    className='bg-[#FAFAFA] rounded-lg p-[5px]'
-                    placeholder='NRC (ej: 12345)'
-                    value={courseForm.nrc}
-                    onChangeText={(val) => handleInputChange('nrc', val)}
-                    keyboardType='numeric'
-                  />
-
-                  <TextInput
-                    className='bg-[#FAFAFA] rounded-lg p-[5px]'
-                    placeholder='Profesor (ej: Nombre Apellido)'
-                    value={courseForm.profesor}
-                    onChangeText={(val) => handleInputChange('profesor', val)}
-                  />
-
-                  <View className='pt-[15px] flex-row gap-4'>
-                    <Pressable
+              <View className='width-9/10 bg-[color:var(--color-bg)] rounded-2xl p-[20px]'>
+                <View className='flex-row justify-between items-center'>
+                  <Text className='font-bold text-xl text-left text-[color:var(--color-text-default)]'>
+                    Agregar curso
+                  </Text>
+                  <Pressable
                       onPress={() => resetForm()}
-                      style={{
-                        backgroundColor: '#B51C26',
-                        width: 110,
-                        height: 40,
-                        borderRadius: 20,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        overflow: 'hidden' }}
+                      className='bg-[color:var(--color-bg)] w-[40px] h-[40px] rounded-xs justify-center items-center'
                     >
                       <View className='flex-row gap-2 items-center justify-center'>
                         <MaterialIcons 
@@ -432,11 +256,41 @@ export default function Schedule() {
                             size={20}
                             color='#EDF5EA'
                         />
-                        <Text className='text-[#EDF5EA] font-semibold text-base'>
-                          Cancelar
-                        </Text>
                       </View>
                     </Pressable>
+                </View>
+
+                <View className='gap-2 p-[10px]'>
+                  <TextInput
+                    className='bg-[color:var(--bg-modal-input)] text-[color:var(--text-modal-focus)] focus:text-[color:var(--text-modal-focus)] placeholder:text-[color:var(--text-modal-placeholder)] placeholder:font-medium rounded-lg p-[10px]'
+                    placeholder='Nombre (ej: Cálculo I)'
+                    value={courseForm.nombre}
+                    onChangeText={(val) => handleInputChange('nombre', val)}
+                  />
+
+                  <TextInput
+                    className='bg-[color:var(--bg-modal-input)] text-[color:var(--text-modal-focus)] focus:text-[color:var(--text-modal-focus)] placeholder:text-[color:var(--text-modal-placeholder)] placeholder:font-medium rounded-lg p-[10px]'
+                    placeholder='Sigla (ej: MAT1610)'
+                    value={courseForm.sigla}
+                    onChangeText={(val) => handleInputChange('sigla', val)}
+                  />
+
+                  <TextInput
+                    className='bg-[color:var(--bg-modal-input)] text-[color:var(--text-modal-focus)] focus:text-[color:var(--text-modal-focus)] placeholder:text-[color:var(--text-modal-placeholder)] placeholder:font-medium rounded-lg p-[10px]'
+                    placeholder='NRC (ej: 12345)'
+                    value={courseForm.nrc}
+                    onChangeText={(val) => handleInputChange('nrc', val)}
+                    keyboardType='numeric'
+                  />
+
+                  <TextInput
+                    className='bg-[color:var(--bg-modal-input)] text-[color:var(--text-modal-focus)] focus:text-[color:var(--text-modal-focus)] placeholder:text-[color:var(--text-modal-placeholder)] placeholder:font-medium rounded-lg p-[10px]'
+                    placeholder='Profesor (ej: Nombre Apellido)'
+                    value={courseForm.profesor}
+                    onChangeText={(val) => handleInputChange('profesor', val)}
+                  />
+
+                  <View className='pt-[15px] flex-row gap-4'>
                     <Pressable
                       onPress={() => handleSearch()}
                       disabled={loading}
@@ -477,7 +331,7 @@ export default function Schedule() {
           transparent={true}
         >
           <View className='flex-1 bg-black/50 justify-center items-center'>
-            <View className='w-[95%] h-[80%] bg-white rounded-2xl p-4'>
+            <View className='w-[95%] h-[80%] bg-[color:var(--color-bg)] rounded-2xl p-4'>
               <Text className='text-xl font-bold text-center mb-4 text-[#2D336B]'>
                 Se han encontrado {searchResults.length} cursos
               </Text>

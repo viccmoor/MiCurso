@@ -4,10 +4,11 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React from 'react';
 
 import { useTheme } from '@/providers/ThemeProviders';
-import { appStyle } from '@/utils/native-theme';
+import { Colors } from '@/utils/native-theme';
 
 export default function TabLayout() {
   const { theme } = useTheme();
+  const appColors = Colors[theme].app;
 
   return (
     <Tabs
@@ -15,8 +16,8 @@ export default function TabLayout() {
         tabBarShowLabel: false,
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: appStyle[theme].layout,
-          borderTopColor: appStyle[theme].layout,
+          backgroundColor: appColors.layout,
+          borderTopColor: appColors.layout,
         }
       }}
     >
@@ -27,7 +28,7 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
               name={focused ? 'home' : 'home-outline'}
-              color={appStyle[theme].tabs}
+              color={appColors.tabs}
               size={28}
             />
           ),
@@ -40,7 +41,7 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
               name={focused ? 'calendar-month' : 'calendar-month-outline'}
-              color={appStyle[theme].tabs}
+              color={appColors.tabs}
               size={28}
             />
           ),
@@ -53,7 +54,7 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) => (
             <MaterialIcons
               name={focused ? 'info' : 'info-outline'}
-              color={appStyle[theme].tabs}
+              color={appColors.tabs}
               size={28}
             />
           ),

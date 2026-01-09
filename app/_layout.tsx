@@ -3,7 +3,7 @@ import { Image } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
 import { ThemeProvider, useTheme } from '@/providers/ThemeProviders';
-import { appStyle } from '@/utils/native-theme';
+import { Colors } from '@/utils/native-theme';
 
 export default function RootLayout() {
   return (
@@ -15,6 +15,7 @@ export default function RootLayout() {
 
 function ThemedStack() {
   const { theme } = useTheme();
+  const appColors = Colors[theme].app;
 
   return (
     <>
@@ -23,7 +24,7 @@ function ThemedStack() {
           headerTitleAlign: 'center',
           headerShadowVisible: false,
           headerStyle: {
-            backgroundColor: appStyle[theme].layout,
+            backgroundColor: appColors.layout,
           },
           headerTitle: () => (
             <Image
