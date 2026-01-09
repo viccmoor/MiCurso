@@ -15,6 +15,9 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { fetch } from 'expo/fetch';
 import { useState, useRef } from 'react';
 
+import { useTheme } from '@/hooks/useTheme';
+import { fabTheme } from '@/utils/native-theme';
+
 const MODULES = [
   { id: 1, label: 'Mod 1', range: '8:20 - 9:30' },
   { id: 2, label: 'Mod 2', range: '9:40 - 10:50' },
@@ -74,6 +77,9 @@ export default function Schedule() {
     nombre: '',
     profesor: ''
   });
+
+  const { theme } = useTheme();
+  const fabColors = fabTheme[theme];
 
   const handleInputChange = (name: string, value: string) => {
     setCourseForm({ ...courseForm, [name]: value });
@@ -199,12 +205,12 @@ export default function Schedule() {
 
   const widthCourse = animationValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [60, 190],
+    outputRange: [60, 180],
   });
 
   const widthExport = animationValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [60, 210],
+    outputRange: [60, 200],
   });
 
   const animatedOpacity = animationValue.interpolate({
@@ -219,7 +225,7 @@ export default function Schedule() {
 
   const animatedColor = animationValue.interpolate({
     inputRange: [0, 1],
-    outputRange: ['#A9B5DF', '#2D336B'],
+    outputRange: [fabColors.mainBgClosed, fabColors.mainBgOpen],
   });
 
   const textOpacity = animationValue.interpolate({
@@ -335,7 +341,7 @@ export default function Schedule() {
           <Pressable
             pointerEvents={open ? 'auto' : 'none'}
             style={{
-              backgroundColor: '#A9B5DF',
+              backgroundColor: fabColors.optionsBg,
               height: 55,
               borderRadius: 30,
               justifyContent: 'center',
@@ -344,11 +350,11 @@ export default function Schedule() {
               overflow: 'hidden' }}
             onPress={() => {}}
           >
-            <View className='flex-row gap-2 items-center justify-center'>
+            <View className='flex-row items-center justify-center'>
               <Ionicons 
                   name='share-social-outline' 
-                  size={28}
-                  color='#2D336B'
+                  size={24}
+                  color={fabColors.optionsIcon}
               />
               <Animated.View
                 style={{
@@ -357,7 +363,7 @@ export default function Schedule() {
                   marginLeft: 8,
                 }}
               >
-                <Text className="text-[#2D336B] font-semibold text-lg">
+                <Text className="text-[color:var(--color-secondary-default)] font-medium text-lg">
                   Compartir horario
                 </Text>
               </Animated.View>
@@ -369,7 +375,7 @@ export default function Schedule() {
           <Pressable
             pointerEvents={open ? 'auto' : 'none'}
             style={{
-              backgroundColor: '#A9B5DF',
+              backgroundColor: fabColors.optionsBg,
               height: 55,
               borderRadius: 30,
               justifyContent: 'center',
@@ -381,11 +387,11 @@ export default function Schedule() {
               toggleMenu();
             }}
           >
-            <View className='flex-row gap-2 items-center justify-center'>
+            <View className='flex-row items-center justify-center'>
               <Ionicons 
                   name='school-outline' 
-                  size={28}
-                  color='#2D336B'
+                  size={24}
+                  color={fabColors.optionsIcon}
               />
               <Animated.View
                 style={{
@@ -394,7 +400,7 @@ export default function Schedule() {
                   marginLeft: 8,
                 }}
               >
-                <Text className="text-[#2D336B] font-semibold text-lg">
+                <Text className="text-[color:var(--color-secondary-default)] font-medium text-lg">
                   Agregar curso
                 </Text>
               </Animated.View>
@@ -402,42 +408,23 @@ export default function Schedule() {
           </Pressable>
         </Animated.View>
 
-        {/* El FAB solo funciona utilizando style más no TailwindCSS. */}
+        {/* Floating action button. */}
         <Animated.View
+          className='w-[60px] h-[60px] overflow-hidden shadow-lg'
           style={{
             backgroundColor: animatedColor,
-            width: 60,
-            height: 60,
             borderRadius: animatedBorderRadius,
-            elevation: 8,
-            overflow: 'hidden',
           }}
         >
           <Pressable
             onPress={toggleMenu}
-            style={({ pressed }) => ({
-              width: 60,
-              height: 60,
-              justifyContent: 'center',
-              alignItems: 'center',
-              opacity: pressed ? 0.8 : 1,
-            })}
+            className='w-[60px] h-[60px] justify-center items-center'
           >
-            <Animated.View 
-              style={{
-                width: 60,
-                height: 60,
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              <MaterialIcons 
-                name={open ? 'close' : 'add'} 
-                size={24}
-                color={open ? '#A9B5DF' : '#2D336B'}
-                
-              />
-            </Animated.View>
+            <MaterialIcons
+              name={open ? 'close' : 'add'} 
+              size={24}
+              color={open ? fabColors.mainIconOpen : fabColors.mainIconClosed}
+            />
           </Pressable>
         </Animated.View>
 

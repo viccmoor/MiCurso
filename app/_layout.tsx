@@ -1,10 +1,11 @@
 import { Stack } from 'expo-router';
 import { Image } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { ThemeProvider } from '@/providers/ThemeProviders';
 
 export default function RootLayout() {
   return (
-    <>
+    <ThemeProvider>
       <Stack
         screenOptions={{
           headerTitle: () => (
@@ -21,6 +22,6 @@ export default function RootLayout() {
         <Stack.Screen name='(tabs)' />
       </Stack>
       <StatusBar style='dark' />
-    </>
+    </ThemeProvider>
   );
 }
