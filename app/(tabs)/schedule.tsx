@@ -12,57 +12,13 @@ import {
 } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { fetch } from 'expo/fetch';
 import { useState, useRef } from 'react';
 
 import { useTheme } from '@/hooks/useTheme';
-import { fabTheme } from '@/utils/native-theme';
-
-const MODULES = [
-  { id: 1, label: 'Mod 1', range: '8:20 - 9:30' },
-  { id: 2, label: 'Mod 2', range: '9:40 - 10:50' },
-  { id: 3, label: 'Mod 3', range: '11:00 - 12:10' },
-  { id: 4, label: 'Mod 4', range: '12:20 - 13:30' },
-  { id: 5, label: 'Mod 5', range: '13:30 - 14:50' },
-  { id: 6, label: 'Mod 6', range: '14:50 - 16:00' },
-  { id: 7, label: 'Mod 7', range: '16:10 - 17:20' },
-  { id: 8, label: 'Mod 8', range: '17:30 - 18:40' },
-  { id: 9, label: 'Mod 9', range: '18:50 - 20:00' },
-  { id: 10, label: 'Mod 10', range: '20:10 - 21:20' },
-];
-
-const DAYS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
-
-interface TipoColor {
-  bg: string;
-  border: string;
-}
-
-const TIPO_COLORS: { [key: string]: TipoColor } = {
-  'CLAS': { bg: '#FDE2BA', border: '#F79708'},
-  'AYU':  { bg: '#D0E7D0', border: '#55AA55'},
-  'LAB':  { bg: '#b3d4f5', border: '#4696E7'},
-  'TER':  { bg: '#ffccff', border: '#FF5CFF'},
-  'TAL':  { bg: '#c7c2f8', border: '#7A6DEE'},
-  'PRA':  { bg: '#cccc99', border: '#AAAA55'},
-  'TES':  { bg: '#b2efef', border: '#78E3E3'},
-  'OTR':  { bg: '#ff9999', border: '#FF2E2E'},
-  'DEFAULT': { bg: '#E8F5E9', border: '#2E7D32'},
-};
-
-type CourseBlock = {
-  nombre: string;
-  sigla: string;
-  sala: string;
-  tipo: string;
-  seccion: string;
-};
-
-type ScheduleT = {
-  [day: string]: {
-    [moduleId: number]: CourseBlock[];
-  };
-};
+import { searchCourses } from '@/services/courses';
+import { fabStyle, appStyle } from '@/utils/native-theme';
+import { MODULES, DAYS, TYPE_COLORS } from '@/constants/schedule';
+import { CourseBlock, ScheduleT} from '@/types/schedule';
 
 export default function Schedule() {
   const [schedule, setSchedule] = useState<ScheduleT>({});
@@ -79,7 +35,7 @@ export default function Schedule() {
   });
 
   const { theme } = useTheme();
-  const fabColors = fabTheme[theme];
+  const fabColors = fabStyle[theme];
 
   const handleInputChange = (name: string, value: string) => {
     setCourseForm({ ...courseForm, [name]: value });
@@ -101,20 +57,7 @@ export default function Schedule() {
     setLoading(true);
 
     try {
-      const params = new URLSearchParams({
-        periodo: '2026-1',
-        sigla: courseForm.sigla,
-        nrc: courseForm.nrc,
-        nombre: courseForm.nombre,
-        profesor: courseForm.profesor,
-      });
-
-      const res = await fetch(`https://buscacursosapi.viccmoor.xyz/api/cursos/?${params}`);
-      if (!res.ok) {
-        throw new Error('El servidor respondió con un error.')
-      }
-
-      const data = await res.json();
+      const data = await searchCourses(courseForm);
       if (data?.meta?.cursos_encontrados > 0) {
         setSearchResults(data?.data?.curso);
         setModalVisible(false);
@@ -241,12 +184,12 @@ export default function Schedule() {
   });
 
   return (
-    <View className='flex-1 bg-white'>
+    <View className='flex-1' style={{ backgroundColor: appStyle[theme].layout }}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className='flex-row'>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <View>
-              <View className='flex-row h-[50px] border-b border-[#EEE]'>
+              <View className='flex-row h-[50px]'>
                 <View className='w-[100px]' />
                 {DAYS.map(day => (
                   <View
@@ -263,11 +206,11 @@ export default function Schedule() {
               {MODULES.map(mod => (
                 <View
                   key={mod.id}
-                  className='flex-row min-h-[95px] border-b border-[#F9F9F9]'
+                  className='flex-row min-h-[95px]'
                 >
                   <View
                     key={mod.id}
-                    className='w-[100px] min-h-[95px] justify-center items-center border-b border-[#EEE] bg-[#F8F9FA]'
+                    className='w-[100px] min-h-[95px] justify-center items-center --color-bg'
                   >
                     <Text className='text-base font-bold text-[#333]'>
                       {mod.label}
@@ -279,23 +222,25 @@ export default function Schedule() {
 
                   {mod.id === 5 ? (
                     <View
-                      className='flex-1 justify-center items-center bg-[#FFF3CD]'
+                      className="p-[4px]"
                       style={{ width: DAYS.length * 110 }}
                     >
-                      <Text className='text-xl font-semibold text-[#856404]'>
-                        Horario de Almuerzo
-                      </Text>
+                      <View className="flex-1 justify-center items-center bg-[#FFF3CD] rounded-lg">
+                        <Text className='text-xl font-semibold text-[#856404]'>
+                          Horario de Almuerzo
+                        </Text>
+                      </View>
                     </View>
                   ) : (
                     DAYS.map(day => (
                       <View
                         key={`${day}-${mod.id}`}
-                        className='w-[110px] p-[4px] border-l border-[#EEE]'
+                        className='w-[110px] p-[4px]'
                       >
                         {schedule[day]?.[mod.id] ? (
                           <View className='flex-1 gap-[4px]'>
                             {schedule[day][mod.id].map((curso, idx) => {
-                              const colors = TIPO_COLORS[curso.tipo] || TIPO_COLORS.DEFAULT;
+                              const colors = TYPE_COLORS[curso.tipo] || TYPE_COLORS.DEFAULT;
 
                               return (
                                 <View
@@ -303,7 +248,7 @@ export default function Schedule() {
                                   style={{
                                     backgroundColor: colors.bg,
                                     borderLeftColor: colors.border,
-                                    borderLeftWidth: 4
+                                    borderLeftWidth: 5
                                   }}
                                   className='flex-1 rounded-md p-1 justify-center'
                                 >
@@ -324,7 +269,7 @@ export default function Schedule() {
                           })}
                           </View>
                         ) : (
-                          <View className='flex-1 bg-[#FAFAFA] rounded-sm' />
+                          <View className='flex-1 bg-[color:var(--color-schedule-block)] rounded-lg' />
                         )}
                       </View>
                     ))
@@ -335,6 +280,13 @@ export default function Schedule() {
           </ScrollView>
         </View>
       </ScrollView>
+
+      {open && (
+        <Pressable
+          onPress={toggleMenu}
+          className='absolute bg-white/90 top-0 left-0 right-0 bottom-0'
+        />
+      )}
       
       <View className='absolute bottom-[20px] right-[25px] items-end'>
         <Animated.View style={{ width: widthExport, opacity: animatedOpacity, marginBottom: 5 }}>
