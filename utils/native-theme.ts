@@ -9,6 +9,10 @@ export const Colors = {
       optionsIcon: '#2D336B',
 			optionsText: '#2D336B',
     },
+    addCourseModal: {
+      cancelIcon: '#1E1E1E',
+      searchIcon: '#FFFFFF',
+    },
     app: {
       layout: '#FFFFFF',
       tabs: '#1E1E1E',
@@ -23,6 +27,10 @@ export const Colors = {
       optionsBg: '#2D336B',
       optionsIcon: '#A9B5DF',
 			optionsText: '#A9B5DF',
+    },
+    addCourseModal: {
+      cancelIcon: '#FFFFFF',
+      searchIcon: '#2D336B',
     },
     app: {
       layout: '#1E1E1E',

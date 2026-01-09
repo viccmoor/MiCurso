@@ -5,74 +5,28 @@ import {
   ScrollView,
   Pressable,
   Modal,
-  TextInput,
   Alert,
-  ActivityIndicator,
 } from 'react-native';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { useState } from 'react';
 
-import { searchCourses } from '@/services/courses';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+
 import { useTheme } from '@/providers/ThemeProviders';
 import { Colors } from '@/utils/native-theme';
 import { MODULES, DAYS, TYPE_COLORS } from '@/constants/schedule';
-import { CourseBlock, ScheduleT } from '@/types/schedule';
+import { Course, CourseBlock, ScheduleT } from '@/types/schedule';
+
 import FloatingActionButton from '@/components/schedule/FloatingActionButton';
+import AddCourseModal from '@/components/schedule/AddCourseModal';
 
 export default function Schedule() {
   const [schedule, setSchedule] = useState<ScheduleT>({});
   const [modalVisible, setModalVisible] = useState(false);
   const [resultsModalVisible, setResultsModalVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [searchResults, setSearchResults] = useState([]);
-  const [courseForm, setCourseForm] = useState({
-    sigla: '',
-    nrc: '',
-    nombre: '',
-    profesor: ''
-  });
+  const [searchResults, setSearchResults] = useState<Course[]>([]);
 
   const { theme } = useTheme();
   const appColors = Colors[theme].app;
-
-  const handleInputChange = (name: string, value: string) => {
-    setCourseForm({ ...courseForm, [name]: value });
-  };
-
-  const resetForm = () => {
-    setCourseForm({ sigla: '', nrc: '', nombre: '', profesor: '' });
-    setModalVisible(false);
-  };
-
-  const handleSearch = async () => {
-    const hasInput = Object.values(courseForm).some(value => value.trim() !== '');
-    
-    if (!hasInput) {
-      Alert.alert('Atención', 'Debes completar al menos un campo para realizar la búsqueda.');
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const data = await searchCourses(courseForm);
-      if (data?.meta?.cursos_encontrados > 0) {
-        setSearchResults(data?.data?.curso);
-        setModalVisible(false);
-        setResultsModalVisible(true);
-        resetForm()
-      } else {
-        Alert.alert('Sin resultados', 'No se encontraron cursos con esos criterios.');
-        setSearchResults([]);
-      }
-    } catch (err) {
-      console.error(err);
-      Alert.alert('Atención', 'No pudimos buscar el curso. Intenta nuevamente.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const addCourseToSchedule = (curso: any) => {
     Alert.alert(
@@ -235,95 +189,14 @@ export default function Schedule() {
           onShare={() => {}}
         />
 
-        <Modal
+        <AddCourseModal
           visible={modalVisible}
-          animationType='fade'
-          transparent={true}
-        >
-          <View className='flex-1 bg-black/50 justify-center items-center'>
-              <View className='width-9/10 bg-[color:var(--color-bg)] rounded-2xl p-[20px]'>
-                <View className='flex-row justify-between items-center'>
-                  <Text className='font-bold text-xl text-left text-[color:var(--color-text-default)]'>
-                    Agregar curso
-                  </Text>
-                  <Pressable
-                      onPress={() => resetForm()}
-                      className='bg-[color:var(--color-bg)] w-[40px] h-[40px] rounded-xs justify-center items-center'
-                    >
-                      <View className='flex-row gap-2 items-center justify-center'>
-                        <MaterialIcons 
-                            name='close' 
-                            size={20}
-                            color='#EDF5EA'
-                        />
-                      </View>
-                    </Pressable>
-                </View>
-
-                <View className='gap-2 p-[10px]'>
-                  <TextInput
-                    className='bg-[color:var(--bg-modal-input)] text-[color:var(--text-modal-focus)] focus:text-[color:var(--text-modal-focus)] placeholder:text-[color:var(--text-modal-placeholder)] placeholder:font-medium rounded-lg p-[10px]'
-                    placeholder='Nombre (ej: Cálculo I)'
-                    value={courseForm.nombre}
-                    onChangeText={(val) => handleInputChange('nombre', val)}
-                  />
-
-                  <TextInput
-                    className='bg-[color:var(--bg-modal-input)] text-[color:var(--text-modal-focus)] focus:text-[color:var(--text-modal-focus)] placeholder:text-[color:var(--text-modal-placeholder)] placeholder:font-medium rounded-lg p-[10px]'
-                    placeholder='Sigla (ej: MAT1610)'
-                    value={courseForm.sigla}
-                    onChangeText={(val) => handleInputChange('sigla', val)}
-                  />
-
-                  <TextInput
-                    className='bg-[color:var(--bg-modal-input)] text-[color:var(--text-modal-focus)] focus:text-[color:var(--text-modal-focus)] placeholder:text-[color:var(--text-modal-placeholder)] placeholder:font-medium rounded-lg p-[10px]'
-                    placeholder='NRC (ej: 12345)'
-                    value={courseForm.nrc}
-                    onChangeText={(val) => handleInputChange('nrc', val)}
-                    keyboardType='numeric'
-                  />
-
-                  <TextInput
-                    className='bg-[color:var(--bg-modal-input)] text-[color:var(--text-modal-focus)] focus:text-[color:var(--text-modal-focus)] placeholder:text-[color:var(--text-modal-placeholder)] placeholder:font-medium rounded-lg p-[10px]'
-                    placeholder='Profesor (ej: Nombre Apellido)'
-                    value={courseForm.profesor}
-                    onChangeText={(val) => handleInputChange('profesor', val)}
-                  />
-
-                  <View className='pt-[15px] flex-row gap-4'>
-                    <Pressable
-                      onPress={() => handleSearch()}
-                      disabled={loading}
-                      style={{
-                        backgroundColor: loading ? '#27911C' : '#26B51C',
-                        width: 100,
-                        height: 40,
-                        borderRadius: 20,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        overflow: 'hidden' }}
-                    >
-                      {loading ? (
-                        <ActivityIndicator color='#FFF' />
-                      ) : (
-                        <View className='flex-row gap-2 items-center justify-center'>
-                          <Ionicons 
-                              name='search' 
-                              size={20}
-                              color='#EDF5EA'
-                          />
-                          <Text className='text-[#EDF5EA] font-semibold text-base'>
-                            Buscar
-                          </Text>
-                        </View>
-                      )}
-                    </Pressable>
-                  </View>
-                </View>
-
-              </View>
-          </View>
-        </Modal>
+          onClose={() => setModalVisible(false)}
+          onResults={(results) => {
+            setSearchResults(results);
+            setResultsModalVisible(true);
+          }}
+        />
 
         <Modal
           visible={resultsModalVisible}

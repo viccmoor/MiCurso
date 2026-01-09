@@ -1,7 +1,11 @@
-export interface TypeColor {
-  bg: string;
-  border: string;
-}
+export type Course = {
+  sigla: string;
+  nombre: string;
+  seccion: string;
+  nrc: string;
+  profesor: string[];
+  horario: any[];
+};
 
 export type CourseBlock = {
   nombre: string;
@@ -16,3 +20,8 @@ export type ScheduleT = {
     [moduleId: number]: CourseBlock[];
   };
 };
+
+export interface TypeColor {
+  bg: string;
+  border: string;
+}

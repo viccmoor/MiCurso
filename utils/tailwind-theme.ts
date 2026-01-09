@@ -14,6 +14,7 @@ export const themes = {
 		'--bg-modal-input': '#FAFAFA',
 		'--text-modal-placeholder': '#858585',
 		'--text-modal-focus': '#1E1E1E',
+		'--text-modal-button': '#FFFFFF',
 	}),
 	dark: vars({
 		'--color-bg': '#1E1E1E',
@@ -28,5 +29,6 @@ export const themes = {
 		'--bg-modal-input': '#131313',
 		'--text-modal-placeholder': '#858585',
 		'--text-modal-focus': '#FFFFFF',
+		'--text-modal-button': '#2D336B',
 	}),
 };
