@@ -13,7 +13,7 @@ type FABProps = {
   onShare: () => void;
 };
 
-export default function FloatingFAB({
+export default function FloatingActionButton({
   onAddCourse,
   onShare,
 }: FABProps) {
