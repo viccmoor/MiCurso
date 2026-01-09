@@ -1,4 +1,4 @@
-import React, { createContext } from 'react';
+import React, { createContext, useContext} from 'react';
 import { View } from 'react-native';
 import { useColorScheme } from 'nativewind';
 import { themes } from '@/utils/tailwind-theme';
@@ -24,4 +24,9 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
 			</View>
 		</ThemeContext.Provider>
 	)
+};
+
+export const useTheme = () => {
+  const context = useContext(ThemeContext);
+  return context;
 };

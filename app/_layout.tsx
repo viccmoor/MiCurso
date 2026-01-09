@@ -2,8 +2,7 @@ import { Stack } from 'expo-router';
 import { Image } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
-import { ThemeProvider } from '@/providers/ThemeProviders';
-import { useTheme } from '@/hooks/useTheme';
+import { ThemeProvider, useTheme } from '@/providers/ThemeProviders';
 import { appStyle } from '@/utils/native-theme';
 
 export default function RootLayout() {

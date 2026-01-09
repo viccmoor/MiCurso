@@ -1,4 +1,4 @@
-import '../../global.css';
+import '@/global.css';
 import {
   Text,
   View,
@@ -14,7 +14,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useState, useRef } from 'react';
 
-import { useTheme } from '@/hooks/useTheme';
+import { useTheme } from '@/providers/ThemeProviders';
 import { searchCourses } from '@/services/courses';
 import { fabStyle, appStyle } from '@/utils/native-theme';
 import { MODULES, DAYS, TYPE_COLORS } from '@/constants/schedule';
@@ -280,13 +280,6 @@ export default function Schedule() {
           </ScrollView>
         </View>
       </ScrollView>
-
-      {open && (
-        <Pressable
-          onPress={toggleMenu}
-          className='absolute bg-white/90 top-0 left-0 right-0 bottom-0'
-        />
-      )}
       
       <View className='absolute bottom-[20px] right-[25px] items-end'>
         <Animated.View style={{ width: widthExport, opacity: animatedOpacity, marginBottom: 5 }}>

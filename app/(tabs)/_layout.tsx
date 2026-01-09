@@ -3,7 +3,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import React from 'react';
 
-import { useTheme } from '@/hooks/useTheme';
+import { useTheme } from '@/providers/ThemeProviders';
 import { appStyle } from '@/utils/native-theme';
 
 export default function TabLayout() {
