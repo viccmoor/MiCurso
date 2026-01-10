@@ -12,6 +12,12 @@ export const Colors = {
     addCourseModal: {
       cancelIcon: '#1E1E1E',
       searchIcon: '#FFFFFF',
+      textInputIcon: '#1E1E1E',
+      placeholderText: '#1E1E1E',
+      containerBg: '#FFFFFF',
+      containerBorder: '#E1E1E1',
+      containerText: '#1E1E1E',
+      containerActiveItem: '#F1F1F1',
     },
     app: {
       layout: '#FFFFFF',
@@ -31,6 +37,12 @@ export const Colors = {
     addCourseModal: {
       cancelIcon: '#FFFFFF',
       searchIcon: '#2D336B',
+      textInputIcon: '#FFFFFF',
+      placeholderText: '#FFFFFF',
+      containerBg: '#1E1E1E',
+      containerBorder: '#131313',
+      containerText: '#FFFFFF',
+      containerActiveItem: '#131313',
     },
     app: {
       layout: '#1E1E1E',
