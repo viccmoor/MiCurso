@@ -1,23 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Dropdown } from 'react-native-element-dropdown';
 
 import { Colors } from '@/utils/native-theme';
 import { useTheme } from '@/providers/ThemeProviders';
 
-const data = [
-	{ label: 'Campus Externo', value: 'Campus Externo' },
-	{ label: 'Casa Central', value: 'Casa Central' },
-	{ label: 'Lo Contador', value: 'Lo Contador' },
-	{ label: 'Oriente', value: 'Oriente' },
-	{ label: 'San Joaquín', value: 'San Joaquín' },
-	{ label: 'Villarica', value: 'Villarica' },
-];
+import { DataOption } from '@/utils/searchData';
 
-export default function CampusDropdown() {
+type ModalDropdownProps = {
+  data: DataOption[];
+  placeholder: string;
+};
+
+export default function ModalDropdown({ data, placeholder }: ModalDropdownProps) {
 	const { theme } = useTheme();
 	const colors = Colors[theme].addCourseModal;
 
-	const [value, setValue] = useState<string | null>(null);
+	const dropdownData = useMemo(() => {
+		return [
+			{ label: placeholder, value: 'TODOS' },
+			...data,
+		];
+	}, [data, placeholder]);
+
+	const [value, setValue] = useState<string | null>('TODOS');
 
 	return (
 		<Dropdown
@@ -42,10 +47,11 @@ export default function CampusDropdown() {
 				color: colors.containerText,
 			}}
 			activeColor={colors.containerActiveItem}
-			data={data}
+			data={dropdownData}
+			dropdownPosition='top'
 			labelField='label'
 			valueField='value'
-			placeholder='Selecciona un campus'
+			placeholder={placeholder}
 			value={value}
 			onChange={(item) => setValue(item.value)}
 		/>

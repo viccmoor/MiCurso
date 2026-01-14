@@ -1,0 +1,103 @@
+export type DataOption = {
+    label: string;
+    value: string;
+};
+
+export const campusData: DataOption[] = [
+	{ label: 'Campus Externo', value: 'Campus Externo' },
+	{ label: 'Casa Central', value: 'Casa Central' },
+	{ label: 'Lo Contador', value: 'Lo Contador' },
+	{ label: 'Oriente', value: 'Oriente' },
+	{ label: 'San Joaquín', value: 'San Joaquín' },
+	{ label: 'Villarica', value: 'Villarica' },
+];
+
+export const formatData: DataOption[] = [
+	{ label: 'Híbrido', value: 'HIB' },
+	{ label: 'Online Asincrónico', value: 'OA' },
+	{ label: 'Online Combinado', value: 'OC' },
+	{ label: 'Remoto', value: 'OL' },
+	{ label: 'Online Sincrónico', value: 'OS' },
+	{ label: 'Presencial', value: 'PR' },
+	{ label: 'Presencial y Online Asincrónico', value: 'PROA' },
+	{ label: 'Presencial y Online Combinado', value: 'PROC' },
+	{ label: 'Presencial y Online Sincrónico', value: 'PROS' },
+	{ label: 'Remoto con Act.Presencial', value: 'REPR' },
+];
+
+export const generalFormationData: DataOption[] = [
+	{ label: 'Artes', value: 'ARTS' },
+	{ label: 'Ciencias Sociales', value: 'CSOC' },
+	{ label: 'Ciencia y Tecnología', value: 'CTEC' },
+	{ label: 'Ecología Integral y Sustentabilidad', value: 'EISU' },
+	{ label: 'Formación Filosófica', value: 'FFIL' },
+	{ label: 'Formación Teológica', value: 'FTEO' },
+	{ label: 'Humanidades', value: 'HUMS' },
+	{ label: 'Pensamiento Matemático', value: 'PMAT' },
+	{ label: 'Salud y Bienestar', value: 'SBIE' },
+];
+
+export const categoriesData: DataOption[] = [
+	{ label: 'Formación Antropológica Ética', value: 'AE' },
+	{ label: 'Aprendizaje Servicio', value: 'AS' },
+	{ label: 'Formación Teológica', value: 'FT' },
+	{ label: 'Cursos orientados a la Investigación', value: 'IN' },
+	{ label: 'Metodología Aprendizaje Activo', value: 'MA' },
+	{ label: 'Reconocimiento Inclusivo', value: 'RI' },
+	{ label: 'Formación Transversal Als Doct', value: 'TD' },
+];
+
+export const academicUnitsData: DataOption[] = [
+	{ label: 'Acad Inter de Filosofía', value: '68' },
+	{ label: 'Actividades Universitarias', value: '0' },
+	{ label: 'Agronomía y Sistemas Naturales', value: '11' },
+	{ label: 'Antropología', value: '92' },
+	{ label: 'Arquitectura', value: '94' },
+	{ label: 'Arte', value: '33' },
+	{ label: 'Astrofísica', value: '2' },
+	{ label: 'Bachillerato', value: '7' },
+	{ label: 'Bachillerato Inicia', value: '55' },
+	{ label: 'CARA', value: '52' },
+	{ label: 'Ciencia Política', value: '45' },
+	{ label: 'Ciencias Biológicas', value: '12' },
+	{ label: 'College', value: '9' },
+	{ label: 'Comunicaciones', value: '28' },
+	{ label: 'Construcción Civil', value: '1' },
+	{ label: 'Deportes', value: '53' },
+	{ label: 'Derecho', value: '17' },
+	{ label: 'Desarrollo Sustentable', value: '25' },
+	{ label: 'Diseño', value: '59' },
+	{ label: 'Economía y Administración', value: '5' },
+	{ label: 'Educación', value: '20' },
+	{ label: 'Escuela Ciencias de la Salud', value: '16' },
+	{ label: 'Escuela de Enfermería', value: '13' },
+	{ label: 'Escuela de Gobierno', value: '19' },
+	{ label: 'Escuela de Graduados', value: '40' },
+	{ label: 'Escuela de Medicina', value: '14' },
+	{ label: 'Escuela de Odontología', value: '15' },
+	{ label: 'Escuela de Salud Pública', value: '31' },
+	{ label: 'Estudios Urbanos', value: '95' },
+	{ label: 'Estética', value: '51' },
+	{ label: 'Filosofía', value: '67' },
+	{ label: 'Física', value: '3' },
+	{ label: 'Geografía', value: '57' },
+	{ label: 'Historia', value: '56' },
+	{ label: 'Ing Matemática y Computacional', value: '23' },
+	{ label: 'Ingeniería', value: '4' },
+	{ label: 'Ingeniería Biológica y Médica', value: '18' },
+	{ label: 'Instituto de Éticas Aplicadas', value: '26' },
+	{ label: 'Letras', value: '64' },
+	{ label: 'Matemáticas', value: '6' },
+	{ label: 'Medicina Veterinaria', value: '24' },
+	{ label: 'Movilidad e Intercambio', value: '96' },
+	{ label: 'Música', value: '70' },
+	{ label: 'Psicología', value: '29' },
+	{ label: 'Química', value: '10' },
+	{ label: 'Química y Farmacia', value: '8' },
+	{ label: 'Requisito Idioma', value: '54' },
+	{ label: 'Sociología', value: '91' },
+	{ label: 'Teatro', value: '34' },
+	{ label: 'Teología', value: '38' },
+	{ label: 'Trabajo Social', value: '30' },
+	{ label: 'Villarrica', value: '21' },
+];

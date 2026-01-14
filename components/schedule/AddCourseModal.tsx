@@ -15,14 +15,16 @@ import {
 import { useState, useCallback } from 'react';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 import { Colors } from '@/utils/native-theme';
 import { useTheme } from '@/providers/ThemeProviders';
 import { searchCourses } from '@/services/courses';
+import { academicUnitsData, campusData, categoriesData, formatData, generalFormationData } from '@/utils/searchData';
 
-import CampusDropdown from '@/components/schedule/CampusDropdown';
+import ModalDropdown from '@/components/schedule/ModalDropdown';
 
 type Props = {
 	visible: boolean;
@@ -84,7 +86,7 @@ export default function AddCourseModal({
 		<Modal
 			visible={visible}
 			animationType='slide'
-			transparent={true}
+			onRequestClose={onClose}
 		>
 			<KeyboardAvoidingView
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -209,14 +211,58 @@ export default function AddCourseModal({
 						</View>
 
 						<View className='flex-row items-start border-t border-[color:var(--border-text-input)] p-[10px] px-[20px]'>
-							<MaterialIcons
-								name='people'
+							<FontAwesome
+								name='university'
 								size={24}
 								color={colors.textInputIcon}
 								style={{ marginTop: 12 }}
 							/>
 
-							<CampusDropdown />
+							<ModalDropdown data={campusData} placeholder='Todos los campus'/>
+						</View>
+
+						<View className='flex-row items-start border-t border-[color:var(--border-text-input)] p-[10px] px-[20px]'>
+							<MaterialIcons
+								name='laptop'
+								size={24}
+								color={colors.textInputIcon}
+								style={{ marginTop: 12 }}
+							/>
+
+							<ModalDropdown data={formatData} placeholder='Todos los formatos'/>
+						</View>
+
+						<View className='flex-row items-start border-t border-[color:var(--border-text-input)] p-[10px] px-[20px]'>
+							<Ionicons
+								name='folder-outline'
+								size={24}
+								color={colors.textInputIcon}
+								style={{ marginTop: 12 }}
+							/>
+
+							<ModalDropdown data={categoriesData} placeholder='Todas las categorías'/>
+						</View>
+
+						<View className='flex-row items-start border-t border-[color:var(--border-text-input)] p-[10px] px-[20px]'>
+							<Ionicons
+								name='globe-outline'
+								size={24}
+								color={colors.textInputIcon}
+								style={{ marginTop: 12 }}
+							/>
+
+							<ModalDropdown data={generalFormationData} placeholder='Todas las áreas de formación general'/>
+						</View>
+
+						<View className='flex-row items-start border-t border-[color:var(--border-text-input)] p-[10px] px-[20px]'>
+							<Ionicons
+								name='library-outline'
+								size={24}
+								color={colors.textInputIcon}
+								style={{ marginTop: 12 }}
+							/>
+
+							<ModalDropdown data={academicUnitsData} placeholder='Todas las unidades académicas'/>
 						</View>
 					</ScrollView>
 				</View>
