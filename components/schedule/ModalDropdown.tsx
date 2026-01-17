@@ -48,7 +48,6 @@ export default function ModalDropdown({ data, placeholder }: ModalDropdownProps)
 			}}
 			activeColor={colors.containerActiveItem}
 			data={dropdownData}
-			dropdownPosition='top'
 			labelField='label'
 			valueField='value'
 			placeholder={placeholder}

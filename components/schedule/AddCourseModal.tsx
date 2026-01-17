@@ -19,10 +19,19 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
+import {
+	academicUnitsData,
+	admissionPeriodData,
+	campusData,
+	categoriesData,
+	formatData,
+	generalFormationData,
+	programLevelData,
+	schoolData
+} from '@/utils/searchData';
 import { Colors } from '@/utils/native-theme';
 import { useTheme } from '@/providers/ThemeProviders';
 import { searchCourses } from '@/services/courses';
-import { academicUnitsData, campusData, categoriesData, formatData, generalFormationData } from '@/utils/searchData';
 
 import ModalDropdown from '@/components/schedule/ModalDropdown';
 
@@ -47,6 +56,7 @@ export default function AddCourseModal({
 		nombre: '',
 		profesor: '',
 	});
+	const hasInput = Object.values(courseForm).some(v => v.trim() !== '');
 
 	const onChangeText = useCallback((name: string, value: string) => {
 		setCourseForm(prev => ({ ...prev, [name]: value }));
@@ -94,8 +104,7 @@ export default function AddCourseModal({
 			>
 				<View className='flex-1 bg-[color:var(--color-bg)]'>
 					<View
-						pointerEvents='box-none'
-						className='absolute inset-4 flex-row justify-between z-10'
+						className='absolute top-0 left-0 right-0 h-[80px] bg-[color:var(--color-bg)] z-20 flex-row items-center justify-between px-4'
 					>
 						<Pressable
 							pointerEvents='auto'
@@ -103,16 +112,16 @@ export default function AddCourseModal({
 							className='bg-[color:var(--color-bg)] w-[40px] h-[40px] rounded-xs justify-center items-center'
 						>
 							<MaterialIcons 
-									name='close' 
-									size={20}
-									color={colors.cancelIcon}
+								name='close' 
+								size={20}
+								color={colors.cancelIcon}
 							/>
 						</Pressable>
 
 						<Pressable
 							pointerEvents='auto'
 							onPress={() => handleSearch()}
-							disabled={loading}
+							disabled={loading || !hasInput}
 							className='bg-[color:var(--color-secondary)] w-[100px] h-[40px] rounded-full justify-center items-center'
 						>
 							{loading ? (
@@ -120,9 +129,9 @@ export default function AddCourseModal({
 							) : (
 								<View className='flex-row gap-2 items-center justify-center'>
 									<Ionicons 
-											name='search' 
-											size={20}
-											color={colors.searchIcon}
+										name='search' 
+										size={20}
+										color={colors.searchIcon}
 									/>
 									<Text className='text-[color:var(--text-modal-button)] font-semibold text-base'>
 										Buscar
@@ -136,6 +145,7 @@ export default function AddCourseModal({
 						contentContainerStyle={{ paddingTop: 80 }}
 						keyboardShouldPersistTaps='handled'
 					>
+						
 						<View className='flex-row items-start border-t border-[color:var(--border-text-input)] p-[10px] px-[20px]'>
 							<MaterialIcons
 								name='drive-file-rename-outline'
@@ -263,6 +273,39 @@ export default function AddCourseModal({
 							/>
 
 							<ModalDropdown data={academicUnitsData} placeholder='Todas las unidades académicas'/>
+						</View>
+
+						<View className='flex-row items-start border-t border-[color:var(--border-text-input)] p-[10px] px-[20px]'>
+							<MaterialCommunityIcons
+								name='door-open'
+								size={24}
+								color={colors.textInputIcon}
+								style={{ marginTop: 12 }}
+							/>
+
+							<ModalDropdown data={admissionPeriodData} placeholder='Todos los períodos de admisión'/>
+						</View>
+
+						<View className='flex-row items-start border-t border-[color:var(--border-text-input)] p-[10px] px-[20px]'>
+							<MaterialCommunityIcons
+								name='school-outline'
+								size={24}
+								color={colors.textInputIcon}
+								style={{ marginTop: 12 }}
+							/>
+
+							<ModalDropdown data={schoolData} placeholder='Todas las escuelas'/>
+						</View>
+
+						<View className='flex-row items-start border-t border-[color:var(--border-text-input)] p-[10px] px-[20px]'>
+							<MaterialCommunityIcons
+								name='certificate-outline'
+								size={24}
+								color={colors.textInputIcon}
+								style={{ marginTop: 12 }}
+							/>
+
+							<ModalDropdown data={programLevelData} placeholder='Todos los niveles'/>
 						</View>
 					</ScrollView>
 				</View>
