@@ -14,16 +14,23 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { defaultModules, DAY_INDEX } from '@/constants/schedule';
 import { useTheme } from '@/providers/ThemeProviders';
 import { Colors } from '@/utils/native-theme';
-import { ModuleIndex, Modules } from '@/types/schedule';
+import { DayBlocks, ModuleIndex, Modules } from '@/types/schedule';
 
 import FloatingActionButton from '@/components/schedule/FloatingActionButton';
 import AddCourseModal from '@/components/schedule/AddCourseModal';
 import ScheduleView from '@/components/schedule/ScheduleView';
+import BlockModal from '@/components/schedule/BlockModal';
 
 export default function Schedule() {
   const [modules, updateModules] = useState<Modules>(defaultModules);
   const [modalVisible, setModalVisible] = useState(false);
   const [resultsModalVisible, setResultsModalVisible] = useState(false);
+  const [blockModalVisible, setBlockModalVisible] = useState(false);
+  const [selectedBlock, setSelectedBlock] = useState<{
+    mod: { id: number, label: string, range: string };
+    dayBlocks: DayBlocks;
+    dayIndex: number;
+  } | null>(null);
   const [searchResults, setSearchResults] = useState([]);
 
   const { theme } = useTheme();
@@ -81,21 +88,35 @@ export default function Schedule() {
 
   return (
     <View className='flex-1' style={{ backgroundColor: appColors.layout }}>
-      <ScheduleView modules={modules}/>
+      <ScheduleView
+        modules={modules}
+        onPressBlock={(mod, dayBlocks, dayIndex) => {
+          setSelectedBlock({ mod, dayBlocks, dayIndex });
+          setBlockModalVisible(true);
+        }}
+      />
+      
+      <BlockModal
+        visible={blockModalVisible}
+        onClose={() => setBlockModalVisible(false)}
+        mod={selectedBlock?.mod ?? null}
+        dayBlocks={selectedBlock?.dayBlocks ?? null}
+        dayIndex={selectedBlock?.dayIndex ?? null}
+      />
+
+      <AddCourseModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onResults={(results) => {
+          setSearchResults(results);
+          setResultsModalVisible(true);
+        }}
+      />
 
       <View className='absolute bottom-[20px] right-[25px] items-end'>
         <FloatingActionButton
           onAddCourse={() => setModalVisible(true)}
           onShare={() => {}}
-        />
-
-        <AddCourseModal
-          visible={modalVisible}
-          onClose={() => setModalVisible(false)}
-          onResults={(results) => {
-            setSearchResults(results);
-            setResultsModalVisible(true);
-          }}
         />
 
         <Modal
