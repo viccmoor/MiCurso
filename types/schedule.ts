@@ -1,25 +1,18 @@
-export type Course = {
-  sigla: string;
-  nombre: string;
-  seccion: string;
+export type Block = {
+  name: string;
+  sigle: string;
+  section: string;
+  teacher: string;
+  location: string;
+  type: string;
   nrc: string;
-  profesor: string[];
-  horario: any[];
 };
 
-export type CourseBlock = {
-  nombre: string;
-  sigla: string;
-  sala: string;
-  tipo: string;
-  seccion: string;
-};
+export type DayBlocks = Block[];
+export type Module = DayBlocks[];
 
-export type ScheduleT = {
-  [day: string]: {
-    [moduleId: number]: CourseBlock[];
-  };
-};
+export type ModuleIndex = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+export type Modules = Record<ModuleIndex, Module>;
 
 export interface TypeColor {
   bg: string;

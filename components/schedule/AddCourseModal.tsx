@@ -211,7 +211,7 @@ export default function AddCourseModal({
 							/>
 
 							<TextInput
-								maxLength={10}
+								maxLength={50}
 								textAlignVertical='top'
 								className='text-[color:var(--text-modal-focus)] focus:text-[color:var(--text-modal-focus)] placeholder:text-[color:var(--text-modal-placeholder)] placeholder:font-normal text-xl rounded-lg p-[10px] w-full'
 								placeholder='Profesor (ej: Nombre Apellido)'

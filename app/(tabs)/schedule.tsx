@@ -11,19 +11,20 @@ import { useState } from 'react';
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
+import { defaultModules, DAY_INDEX } from '@/constants/schedule';
 import { useTheme } from '@/providers/ThemeProviders';
 import { Colors } from '@/utils/native-theme';
-import { MODULES, DAYS, TYPE_COLORS } from '@/constants/schedule';
-import { Course, CourseBlock, ScheduleT } from '@/types/schedule';
+import { ModuleIndex, Modules } from '@/types/schedule';
 
 import FloatingActionButton from '@/components/schedule/FloatingActionButton';
 import AddCourseModal from '@/components/schedule/AddCourseModal';
+import ScheduleView from '@/components/schedule/ScheduleView';
 
 export default function Schedule() {
-  const [schedule, setSchedule] = useState<ScheduleT>({});
+  const [modules, updateModules] = useState<Modules>(defaultModules);
   const [modalVisible, setModalVisible] = useState(false);
   const [resultsModalVisible, setResultsModalVisible] = useState(false);
-  const [searchResults, setSearchResults] = useState<Course[]>([]);
+  const [searchResults, setSearchResults] = useState([]);
 
   const { theme } = useTheme();
   const appColors = Colors[theme].app;
@@ -37,44 +38,37 @@ export default function Schedule() {
       { 
         text: 'Sí, agregar', 
         onPress: () => {
-          const dayMap: { [key: string]: string } = {
-            'L': 'Lun',
-            'M': 'Mar',
-            'W': 'Mié',
-            'J': 'Jue',
-            'V': 'Vie',
-            'S': 'Sab',
-          };
+          updateModules(prev => {
+            const next = { ...prev };
 
-          setSchedule(prev => {
-            const nextSchedule = { ...prev };
+            curso.horario.forEach((h: any) => {
+              const dayIndex = DAY_INDEX[h.dia];
+              const moduleId = h.modulo as ModuleIndex;
 
-            curso.horario.forEach((block: any) => {
-              const day = dayMap[block.dia];
-              const modId = block.modulo;
+              if (dayIndex === undefined) return;
 
-              if (day) {
-                if (!nextSchedule[day]) nextSchedule[day] = {};
-                
-                const existingBlocks = nextSchedule[day][modId] || [];
-                const exists = existingBlocks.some(b => 
-                  b.sigla === curso.sigla && b.seccion === curso.seccion
-                );
-                
-                if (!exists) {
-                  const newBlock: CourseBlock = {
-                    nombre: curso.nombre,
-                    sigla: curso.sigla,
-                    sala: curso.sala,
-                    tipo: block.tipo,
-                    seccion: curso.seccion,
-                  };
-                  nextSchedule[day][modId] = [...existingBlocks, newBlock];
-                }
+              const dayBlocks = next[moduleId as ModuleIndex][dayIndex];
+
+              const exists = dayBlocks.some(
+                b =>
+                  b.sigle === curso.sigla &&
+                  b.section === curso.seccion
+              );
+
+              if (!exists) {
+                dayBlocks.push({
+                  name: curso.nombre,
+                  sigle: curso.sigla,
+                  section: curso.seccion,
+                  teacher: curso.profesor.join(', '),
+                  location: curso.sala,
+                  type: h.tipo,
+                  nrc: curso.nrc,
+                });
               }
             });
 
-            return nextSchedule;
+            return { ...next };
           });
 
           setResultsModalVisible(false);
@@ -87,102 +81,8 @@ export default function Schedule() {
 
   return (
     <View className='flex-1' style={{ backgroundColor: appColors.layout }}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View className='flex-row'>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View>
-              <View className='flex-row h-[50px]'>
-                <View className='w-[100px]' />
-                {DAYS.map(day => (
-                  <View
-                    key={day}
-                    className='w-[110px] items-center justify-center'
-                  >
-                    <Text className='font-bold text-[color:var(--color-days-text)]'>
-                      {day}
-                    </Text>
-                  </View>
-                ))}
-              </View>
+      <ScheduleView modules={modules}/>
 
-              {MODULES.map(mod => (
-                <View
-                  key={mod.id}
-                  className='flex-row min-h-[95px]'
-                >
-                  <View
-                    key={mod.id}
-                    className='w-[100px] min-h-[95px] justify-center items-center --color-bg'
-                  >
-                    <Text className='text-base font-bold text-[color:var(--color-modules-text)]'>
-                      {mod.label}
-                    </Text>
-                    <Text className='text-xs text-[#999]'>
-                      {mod.range}
-                    </Text>
-                  </View>
-
-                  {mod.id === 5 ? (
-                    <View
-                      className="p-[4px]"
-                      style={{ width: DAYS.length * 110 }}
-                    >
-                      <View className="flex-1 justify-center items-center bg-[#FFF3CD] rounded-lg">
-                        <Text className='text-xl font-semibold text-[#856404]'>
-                          Horario de Almuerzo
-                        </Text>
-                      </View>
-                    </View>
-                  ) : (
-                    DAYS.map(day => (
-                      <View
-                        key={`${day}-${mod.id}`}
-                        className='w-[110px] p-[4px]'
-                      >
-                        {schedule[day]?.[mod.id] ? (
-                          <View className='flex-1 gap-[4px]'>
-                            {schedule[day][mod.id].map((curso, idx) => {
-                              const colors = TYPE_COLORS[curso.tipo] || TYPE_COLORS.DEFAULT;
-
-                              return (
-                                <View
-                                  key={idx}
-                                  style={{
-                                    backgroundColor: colors.bg,
-                                    borderLeftColor: colors.border,
-                                    borderLeftWidth: 5
-                                  }}
-                                  className='flex-1 rounded-md p-1 justify-center'
-                                >
-                                  <Text
-                                    style={{ color: colors.border }}
-                                    className='text-sm font-bold text-center'
-                                  >
-                                    {`${curso.nombre}\n${curso.sigla}-${curso.seccion}`}
-                                  </Text>
-                                  <Text
-                                    style={{ color: colors.border }}
-                                    className='text-xs font-bold text-center'
-                                  >
-                                    {curso.tipo}
-                                  </Text>
-                                </View>
-                              );
-                          })}
-                          </View>
-                        ) : (
-                          <View className='flex-1 bg-[color:var(--color-schedule-block)] rounded-lg' />
-                        )}
-                      </View>
-                    ))
-                  )}
-                </View>
-              ))}
-            </View>
-          </ScrollView>
-        </View>
-      </ScrollView>
-      
       <View className='absolute bottom-[20px] right-[25px] items-end'>
         <FloatingActionButton
           onAddCourse={() => setModalVisible(true)}
