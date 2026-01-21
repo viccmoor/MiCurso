@@ -67,7 +67,7 @@ export default function Schedule({ modules, onPressBlock }: Props) {
                         <Pressable
                           key={dayIndex}
                           onPress={() => onPressBlock(mod, dayBlocks, dayIndex)}
-                          className='flex-1 gap-[1px] items-center h-[56px] rounded-sm border border-transparent active:border-[#AAAA] overflow-hidden'
+                          className='flex-1 gap-[1px] items-center h-full rounded-sm border border-transparent active:border-[#AAAA] overflow-hidden'
                         >
                           {
                             dayBlocks.map((block, blockIndex) => {
