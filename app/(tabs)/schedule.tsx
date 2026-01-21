@@ -113,12 +113,12 @@ export default function Schedule() {
         }}
       />
 
-      <View className='absolute bottom-[20px] right-[25px] items-end'>
-        <FloatingActionButton
-          onAddCourse={() => setModalVisible(true)}
-          onShare={() => {}}
-        />
+      <FloatingActionButton
+        onAddCourse={() => setModalVisible(true)}
+        onShare={() => {}}
+      />
 
+      <View className='absolute bottom-[20px] right-[25px] items-end'>
         <Modal
           visible={resultsModalVisible}
           animationType='slide'

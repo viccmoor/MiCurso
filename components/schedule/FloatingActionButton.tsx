@@ -1,6 +1,8 @@
 import '@/global.css';
-import { View, Pressable, Animated } from 'react-native';
-import { useRef, useState } from 'react';
+import { View, Pressable, Animated, Modal } from 'react-native';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+
+import React, { useRef, useState } from 'react';
 
 import { Colors } from '@/utils/native-theme';
 import { useTheme } from '@/providers/ThemeProviders';
@@ -19,20 +21,29 @@ export default function FloatingActionButton({
 }: FABProps) {
   const { theme } = useTheme();
   const fabColors = Colors[theme].fab;
+  const tabBarHeight = useBottomTabBarHeight(); 
 
   const [open, setOpen] = useState(false);
   const animationValue = useRef(new Animated.Value(0)).current;
 
   const toggleMenu = () => {
-    const toValue = open ? 0 : 1;
-    setOpen(!open);
-
-    Animated.spring(animationValue, {
-      toValue,
-      friction: 6,
-      tension: 40,
-      useNativeDriver: false,
-    }).start();
+    if (!open) {
+      setOpen(true);
+      Animated.spring(animationValue, {
+        toValue: 1,
+        friction: 6,
+        tension: 40,
+        useNativeDriver: false,
+      }).start();
+    } else {
+      Animated.timing(animationValue, {
+        toValue: 0,
+        duration: 80,
+        useNativeDriver: false,
+      }).start(({ finished }) => {
+        if (finished) setOpen(false);
+      });
+    }
   };
 
   const width = {
@@ -42,23 +53,13 @@ export default function FloatingActionButton({
     }),
     shareScheduleButton: animationValue.interpolate({
       inputRange: [0, 1],
-      outputRange: [60, 200],
+      outputRange: [60, 205],
     }),
   };
 
   const optionsOpacity = animationValue.interpolate({
     inputRange: [0, 1],
     outputRange: [0, 1],
-  });
-
-  const fabBorderRadius = animationValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [20, 30],
-  });
-
-  const fabColor = animationValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: [fabColors.mainBgClosed, fabColors.mainBgOpen],
   });
 
   const textOpacity = animationValue.interpolate({
@@ -74,107 +75,137 @@ export default function FloatingActionButton({
   });
   
   return (
-    <View className='absolute bottom-0 items-end'>
-      <Animated.View
-        style={{
-          width: width.shareScheduleButton,
-          opacity: optionsOpacity,
-          marginBottom: 5,
-        }}
-      >
-        <Pressable
-          style={{
-            backgroundColor: fabColors.optionsBg,
-            height: 55,
-            borderRadius: 30,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          pointerEvents={open ? 'auto' : 'none'}
-          onPress={onShare}
+    <React.Fragment>
+      {!open && (
+        <View
+          className='absolute bottom-[20px] right-[25px] items-end'
         >
-          <View className='flex-row items-center gap-2'>
-            <Ionicons
-              name='share-social-outline'
+          <Pressable
+            onPress={toggleMenu}
+            className='bg-[color:var(--color-primary-default)] flex-1 justify-center items-center w-[60px] h-[60px] rounded-full'
+          >
+            <MaterialIcons
+              name='add'
               size={24}
-              color={fabColors.optionsIcon}
+              color={fabColors.mainIconClosed}
             />
-            <Animated.Text
-              style={{
-                color: fabColors.optionsText,
-                fontSize: 16,
-                fontWeight: 500,
-                opacity: textOpacity,
-                transform: [{ translateX: textTranslateX }]
-              }}
-            >
-              Compartir horario
-            </Animated.Text>
-          </View>
-        </Pressable>
-      </Animated.View>
+          </Pressable>
+        </View>
+      )}
 
-      <Animated.View
-        style={{
-          width: width.addCourseButton,
-          opacity: optionsOpacity,
-          marginBottom: 5,
-        }}
+      <Modal
+        visible={open}
+        animationType='fade'
+        transparent
       >
-        <Pressable
-          pointerEvents={open ? 'auto' : 'none'}
-          onPress={() => {
-            toggleMenu();
-            onAddCourse();
-          }}
-          style={{
-              backgroundColor: fabColors.optionsBg,
-              height: 55,
-              borderRadius: 55,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-        >
-          <View className='flex-row items-center gap-2'>
-            <Ionicons
-              name='school-outline'
-              size={24}
-              color={fabColors.optionsIcon}
-            />
-            <Animated.Text
-              style={{
-                color: fabColors.optionsText,
-                fontSize: 16,
-                fontWeight: 500,
-                opacity: textOpacity,
-                transform: [{ translateX: textTranslateX }]
-              }}
-            >
-              Agregar curso
-            </Animated.Text>
-          </View>
-        </Pressable>
-      </Animated.View>
-
-      <Animated.View
-        style={{
-          backgroundColor: fabColor,
-          borderRadius: fabBorderRadius,
-          width: 60,
-          height: 60,
-        }}
-      >
-        <Pressable
-          onPress={toggleMenu}
-          className='flex-1 justify-center items-center'
-        >
-          <MaterialIcons
-            name={open ? 'close' : 'add'}
-            size={24}
-            color={open ? fabColors.mainIconOpen : fabColors.mainIconClosed}
+        {open && (
+          <Pressable
+            className='absolute top-0 right-0 bottom-0 left-0 bg-black/50'
+            onPress={toggleMenu}
           />
-        </Pressable>
-      </Animated.View>
-    </View>
+        )}
+
+        <View
+          className='absolute right-[25px] items-end'
+          style={{
+            bottom: 5 + tabBarHeight
+          }}
+        >
+          <Animated.View
+            style={{
+              width: width.shareScheduleButton,
+              opacity: optionsOpacity,
+              marginBottom: 8,
+            }}
+          >
+            <Pressable
+              style={{
+                backgroundColor: fabColors.optionsBg,
+                height: 55,
+                borderRadius: 30,
+                paddingHorizontal: 16,
+                gap: 4,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              pointerEvents={open ? 'auto' : 'none'}
+              onPress={onShare}
+            >
+              <Ionicons
+                name='share-social-outline'
+                size={22}
+                color={fabColors.optionsIcon}
+              />
+              <Animated.Text
+                className='text-lg font-medium'
+                style={{
+                  color: fabColors.optionsText,
+                  opacity: textOpacity,
+                  transform: [{ translateX: textTranslateX }]
+                }}
+                numberOfLines={1}
+              >
+                Compartir horario
+              </Animated.Text>
+            </Pressable>
+          </Animated.View>
+
+          <Animated.View
+            style={{
+              width: width.addCourseButton,
+              opacity: optionsOpacity,
+              marginBottom: 8,
+            }}
+          >
+            <Pressable
+              pointerEvents={open ? 'auto' : 'none'}
+              onPress={() => {
+                toggleMenu();
+                onAddCourse();
+              }}
+              style={{
+                backgroundColor: fabColors.optionsBg,
+                height: 55,
+                borderRadius: 55,
+                paddingHorizontal: 16,
+                gap: 4,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Ionicons
+                name='school-outline'
+                size={22}
+                color={fabColors.optionsIcon}
+              />
+              <Animated.Text
+                className='text-lg font-medium'
+                style={{
+                  color: fabColors.optionsText,
+                  opacity: textOpacity,
+                  transform: [{ translateX: textTranslateX }]
+                }}
+                numberOfLines={1}
+              >
+                Agregar curso
+              </Animated.Text>
+            </Pressable>
+          </Animated.View>
+
+          <Pressable
+            onPress={toggleMenu}
+            className='bg-[color:var(--color-secondary-default)] flex-1 justify-center items-center w-[60px] h-[60px] rounded-full'
+          >
+            <MaterialIcons
+              name='close'
+              size={24}
+              color={fabColors.mainIconOpen}
+            />
+          </Pressable>
+        </View>
+      </Modal>
+    </React.Fragment>
   );
 }
