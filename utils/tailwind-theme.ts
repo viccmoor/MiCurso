@@ -15,6 +15,11 @@ export const themes = {
 		'--text-modal-focus': '#1E1E1E',
 		'--text-modal-button': '#FFFFFF',
 		'--border-text-input': '#E1E1E1',
+		'--title-search-results': '#1E1E1E',
+		'--sigle-search-results': '#2D336B',
+		'--name-search-results': '#1E1E1E',
+		'--section-search-results': '#4B5563',
+		'--teachers-search-results': '#4B5563',
 	}),
 	dark: vars({
 		'--color-bg': '#1E1E1E',
@@ -30,5 +35,10 @@ export const themes = {
 		'--text-modal-focus': '#FFFFFF',
 		'--text-modal-button': '#2D336B',
 		'--border-text-input': '#131313',
+		'--title-search-results': '#F1F1F1',
+		'--sigle-search-results': '#A9B5DF',
+		'--name-search-results': '#F1F1F1',
+		'--section-search-results': '#9CA3AF',
+		'--teachers-search-results': '#9CA3AF',
 	}),
 };

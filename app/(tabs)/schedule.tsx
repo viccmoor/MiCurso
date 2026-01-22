@@ -1,15 +1,9 @@
 import '@/global.css';
 import {
-  Text,
   View,
-  ScrollView,
-  Pressable,
-  Modal,
   Alert,
 } from 'react-native';
 import { useState } from 'react';
-
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 import { defaultModules, DAY_INDEX } from '@/constants/schedule';
 import { useTheme } from '@/providers/ThemeProviders';
@@ -20,6 +14,7 @@ import FloatingActionButton from '@/components/schedule/FloatingActionButton';
 import AddCourseModal from '@/components/schedule/AddCourseModal';
 import ScheduleView from '@/components/schedule/ScheduleView';
 import BlockModal from '@/components/schedule/BlockModal';
+import SearchResultsModal from '@/components/schedule/SearchResultsModal';
 
 export default function Schedule() {
   const [modules, updateModules] = useState<Modules>(defaultModules);
@@ -107,7 +102,7 @@ export default function Schedule() {
       <AddCourseModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
-        onResults={(results) => {
+        onResults={(results: any) => {
           setSearchResults(results);
           setResultsModalVisible(true);
         }}
@@ -118,50 +113,12 @@ export default function Schedule() {
         onShare={() => {}}
       />
 
-      <View className='absolute bottom-[20px] right-[25px] items-end'>
-        <Modal
-          visible={resultsModalVisible}
-          animationType='slide'
-          transparent={true}
-        >
-          <View className='flex-1 bg-black/50 justify-center items-center'>
-            <View className='w-[95%] h-[80%] bg-[color:var(--color-bg)] rounded-2xl p-4'>
-              <Text className='text-xl font-bold text-center mb-4 text-[#2D336B]'>
-                Se han encontrado {searchResults.length} cursos
-              </Text>
-
-              <ScrollView className='flex-1' showsVerticalScrollIndicator={false}>
-                {searchResults.map((curso: any, index) => (
-                  <Pressable
-                    key={index}
-                    onPress={() => addCourseToSchedule(curso)}
-                    className='bg-[#F8F9FA] p-4 rounded-xl mb-3 border-l-4 border-[#2D336B] shadow-sm active:opacity-70'
-                  >
-                    <View className='flex-row justify-between items-start'>
-                      <View className='flex-1'>
-                        <Text className='text-[#2D336B] font-bold text-sm'>{curso.sigla}</Text>
-                        <Text className='text-gray-800 font-semibold text-lg' numberOfLines={1}>
-                          {curso.nombre}
-                        </Text>
-                        <Text className='text-gray-500 text-xs'>Sección: {curso.seccion} | NRC: {curso.nrc}</Text>
-                        <Text className='text-gray-600 text-sm italic mt-1'>{curso.profesor.join(', ')}</Text>
-                      </View>
-                      <MaterialIcons name='add-circle-outline' size={24} color='#2D336B' />
-                    </View>
-                  </Pressable>
-                ))}
-              </ScrollView>
-
-              <Pressable
-                onPress={() => setResultsModalVisible(false)}
-                className='mt-4 bg-gray-200 p-3 rounded-xl items-center'
-              >
-                <Text className='text-gray-600 font-bold'>Volver a buscar</Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
-      </View>
+      <SearchResultsModal
+        visible={resultsModalVisible}
+        searchResults={searchResults}
+        onAddCourse={(curso: any) => addCourseToSchedule(curso)}
+        onClose={() => setResultsModalVisible(false)}
+      />
     </View>
   );
 }

@@ -19,6 +19,9 @@ export const Colors = {
       containerText: '#1E1E1E',
       containerActiveItem: '#F1F1F1',
     },
+    searchResultsModal: {
+      addCircleIcon: '#2D336B',
+    },
     app: {
       layout: '#FFFFFF',
       tabs: '#1E1E1E',
@@ -43,6 +46,9 @@ export const Colors = {
       containerBorder: '#131313',
       containerText: '#FFFFFF',
       containerActiveItem: '#131313',
+    },
+    searchResultsModal: {
+      addCircleIcon: '#A9B5DF',
     },
     app: {
       layout: '#1E1E1E',
