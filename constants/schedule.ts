@@ -1,8 +1,10 @@
 import {
   Block,
+  CourseForm,
   Module,
   ModuleIndex,
   Modules,
+  OptionSelectorData,
   TypeColor
 } from '@/types/schedule';
 
@@ -73,3 +75,25 @@ export const TYPE_COLORS: { [key: string]: TypeColor } = {
   'OTR':  { bg: '#ff9999', border: '#FF2E2E'},
   'DEFAULT': { bg: '#E8F5E9', border: '#2E7D32'},
 };
+
+export const EMPTY_COURSE_FORM: CourseForm = {
+  name: '',
+  sigle: '',
+  nrc: '',
+  teacher: '',
+  campus: 'TODOS',
+  format: 'TODOS',
+  category: 'TODOS',
+  generalFormationArea: 'TODOS',
+  academicUnit: 'TODOS',
+  admissionPeriod: 'TODOS',
+  school: 'TODOS',
+  programLevel: 'TODOS',
+};
+
+export const EMPTY_OPTION_SELECTOR_DATA: OptionSelectorData = {
+  options: [],
+  name: '',
+  field: '',
+  selectedValue: '',
+}

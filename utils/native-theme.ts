@@ -23,6 +23,9 @@ export const Colors = {
       backIcon: '#1E1E1E',
       infoIcon: '#1E1E1E',
     },
+    optionSelectorModal: {
+      checkboxCircle: '#2D336B'
+    },
     searchResultsModal: {
       addCircleIcon: '#2D336B',
     },
@@ -57,6 +60,9 @@ export const Colors = {
     courseInfoModal: {
       backIcon: '#FFFFFF',
       infoIcon: '#FFFFFF',
+    },
+    optionSelectorModal: {
+      checkboxCircle: '#A9B5DF'
     },
     searchResultsModal: {
       addCircleIcon: '#A9B5DF',

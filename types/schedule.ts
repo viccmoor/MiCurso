@@ -21,3 +21,30 @@ export interface TypeColor {
   bg: string;
   border: string;
 }
+
+export type CourseForm = {
+  name: string;
+  sigle: string;
+  nrc: string;
+  teacher: string;
+  campus: string;
+  format: string;
+  category: string;
+  generalFormationArea: string;
+  academicUnit: string;
+  admissionPeriod: string;
+  school: string;
+  programLevel: string;
+}
+
+export type DataOption = {
+    label: string;
+    value: string;
+};
+
+export type OptionSelectorData = {
+  options: DataOption[];
+  name: string;
+  field: string;
+  selectedValue: string;
+};

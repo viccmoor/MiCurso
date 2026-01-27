@@ -1,9 +1,7 @@
-export type DataOption = {
-    label: string;
-    value: string;
-};
+import { DataOption } from '@/types/schedule';
 
 export const campusData: DataOption[] = [
+	{ label: 'Todos los campus', value: 'TODOS' },
 	{ label: 'Campus Externo', value: 'Campus Externo' },
 	{ label: 'Casa Central', value: 'Casa Central' },
 	{ label: 'Lo Contador', value: 'Lo Contador' },
@@ -13,6 +11,7 @@ export const campusData: DataOption[] = [
 ];
 
 export const formatData: DataOption[] = [
+	{ label: 'Todos los formatos', value: 'TODOS' },
 	{ label: 'Híbrido', value: 'HIB' },
 	{ label: 'Online Asincrónico', value: 'OA' },
 	{ label: 'Online Combinado', value: 'OC' },
@@ -26,6 +25,7 @@ export const formatData: DataOption[] = [
 ];
 
 export const generalFormationData: DataOption[] = [
+	{ label: 'Todas las áreas de formación general', value: 'TODOS' },
 	{ label: 'Artes', value: 'ARTS' },
 	{ label: 'Ciencias Sociales', value: 'CSOC' },
 	{ label: 'Ciencia y Tecnología', value: 'CTEC' },
@@ -38,6 +38,7 @@ export const generalFormationData: DataOption[] = [
 ];
 
 export const categoriesData: DataOption[] = [
+	{ label: 'Todas las categorías', value: 'TODOS' },
 	{ label: 'Formación Antropológica Ética', value: 'AE' },
 	{ label: 'Aprendizaje Servicio', value: 'AS' },
 	{ label: 'Formación Teológica', value: 'FT' },
@@ -48,6 +49,7 @@ export const categoriesData: DataOption[] = [
 ];
 
 export const academicUnitsData: DataOption[] = [
+	{ label: 'Todas las unidades académicas', value: 'TODOS' },
 	{ label: 'Acad Inter de Filosofía', value: '68' },
 	{ label: 'Actividades Universitarias', value: '0' },
 	{ label: 'Agronomía y Sistemas Naturales', value: '11' },
@@ -103,6 +105,7 @@ export const academicUnitsData: DataOption[] = [
 ];
 
 export const programLevelData: DataOption[] = [
+	{ label: 'Todos los niveles', value: 'TODOS' },
 	{ label: 'Doctorado', value: 'Doctorado' },
 	{ label: 'Magíster', value: 'Magister' },
 	{ label: 'Postítulo', value: 'Postitulo' },
@@ -111,21 +114,23 @@ export const programLevelData: DataOption[] = [
 ];
 
 export const admissionPeriodData: DataOption[] = [
+	{ label: 'Todos los períodos de admisión', value: 'TODOS' },
 	{ label: '202022', value: '202022' },
-  { label: '202120', value: '202120' },
-  { label: '202220', value: '202220' },
-  { label: '202222', value: '202222' },
-  { label: '202320', value: '202320' },
-  { label: '202322', value: '202322' },
-  { label: '202420', value: '202420' },
-  { label: '202422', value: '202422' },
-  { label: '202520', value: '202520' },
-  { label: '202522', value: '202522' },
-  { label: '202620', value: '202620' },
-  { label: '202622', value: '202622' },
+	{ label: '202120', value: '202120' },
+	{ label: '202220', value: '202220' },
+	{ label: '202222', value: '202222' },
+	{ label: '202320', value: '202320' },
+	{ label: '202322', value: '202322' },
+	{ label: '202420', value: '202420' },
+	{ label: '202422', value: '202422' },
+	{ label: '202520', value: '202520' },
+	{ label: '202522', value: '202522' },
+	{ label: '202620', value: '202620' },
+	{ label: '202622', value: '202622' },
 ];
 
 export const schoolData: DataOption[] = [
+	{ label: 'Todas las escuelas', value: 'TODOS' },
   { label: 'Actividades Universitarias', value: 'Actividades Universitarias' },
   { label: 'Agronomía y Sistemas Naturales', value: 'Agronomía y Sistemas Naturales' },
   { label: 'Alumnos Condicionales', value: 'Alumnos Condicionales' },

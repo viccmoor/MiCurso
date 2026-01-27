@@ -15,7 +15,6 @@ import {
 import { useState, useCallback } from 'react';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
@@ -28,12 +27,14 @@ import {
 	generalFormationData,
 	programLevelData,
 	schoolData
-} from '@/utils/searchData';
+} from '@/data/schedule/searchData';
 import { Colors } from '@/utils/native-theme';
+import { CourseForm, OptionSelectorData } from '@/types/schedule';
 import { useTheme } from '@/providers/ThemeProviders';
 import { searchCourses } from '@/services/courses';
+import { EMPTY_COURSE_FORM, EMPTY_OPTION_SELECTOR_DATA } from '@/constants/schedule';
 
-import ModalDropdown from '@/components/schedule/ModalDropdown';
+import OptionSelectorModal from '@/components/schedule/OptionSelectorModal';
 
 type Props = {
 	visible: boolean;
@@ -49,13 +50,11 @@ export default function AddCourseModal({
 	const { theme } = useTheme();
 	const colors = Colors[theme].addCourseModal;
 
+	const [optionSelectorVisible, setOptionSelectorVisible] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [courseForm, setCourseForm] = useState({
-		sigla: '',
-		nrc: '',
-		nombre: '',
-		profesor: '',
-	});
+
+	const [data, setData] = useState<OptionSelectorData>(EMPTY_OPTION_SELECTOR_DATA);
+	const [courseForm, setCourseForm] = useState<CourseForm>(EMPTY_COURSE_FORM);
 	const hasInput = Object.values(courseForm).some(v => v.trim() !== '');
 
 	const onChangeText = useCallback((name: string, value: string) => {
@@ -63,7 +62,7 @@ export default function AddCourseModal({
 	}, []);
 
 	const resetForm = () => {
-		setCourseForm({ sigla: '', nrc: '', nombre: '', profesor: '' });
+		setCourseForm(EMPTY_COURSE_FORM);
 		onClose();
 	};
 
@@ -98,6 +97,18 @@ export default function AddCourseModal({
 			animationType='slide'
 			onRequestClose={onClose}
 		>
+			<OptionSelectorModal
+				visible={optionSelectorVisible}
+				data={data}
+				onClose={() => setOptionSelectorVisible(false)}
+				onSelectOption={(field, value) => {
+					setCourseForm(prev => ({
+						...prev,
+						[field as keyof CourseForm]: value
+					}));
+				}}
+			/>
+
 			<KeyboardAvoidingView
 				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 				style={{ flex: 1 }}
@@ -160,8 +171,8 @@ export default function AddCourseModal({
 								textAlignVertical='top'
 								className='text-[color:var(--text-modal-focus)] focus:text-[color:var(--text-modal-focus)] placeholder:text-[color:var(--text-modal-placeholder)] placeholder:font-normal text-xl rounded-lg p-[10px] w-full'
 								placeholder='Nombre (ej: Cálculo I)'
-								value={courseForm.nombre}
-								onChangeText={(val) => onChangeText('nombre', val)}
+								value={courseForm.name}
+								onChangeText={(val) => onChangeText('name', val)}
 							/>
 						</View>
 
@@ -178,8 +189,8 @@ export default function AddCourseModal({
 								textAlignVertical='top'
 								className='text-[color:var(--text-modal-focus)] focus:text-[color:var(--text-modal-focus)] placeholder:text-[color:var(--text-modal-placeholder)] placeholder:font-normal text-xl rounded-lg p-[10px] w-full'
 								placeholder='Sigla (ej: MAT1610)'
-								value={courseForm.sigla}
-								onChangeText={(val) => onChangeText('sigla', val)}
+								value={courseForm.sigle}
+								onChangeText={(val) => onChangeText('sigle', val)}
 							/>
 						</View>
 
@@ -215,98 +226,194 @@ export default function AddCourseModal({
 								textAlignVertical='top'
 								className='text-[color:var(--text-modal-focus)] focus:text-[color:var(--text-modal-focus)] placeholder:text-[color:var(--text-modal-placeholder)] placeholder:font-normal text-xl rounded-lg p-[10px] w-full'
 								placeholder='Profesor (ej: Nombre Apellido)'
-								value={courseForm.profesor}
-								onChangeText={(val) => onChangeText('profesor', val)}
+								value={courseForm.teacher}
+								onChangeText={(val) => onChangeText('teacher', val)}
 							/>
 						</View>
 
-						<View className='flex-row items-start border-t border-[color:var(--border-text-input)] p-[10px] px-[20px]'>
-							<FontAwesome
-								name='university'
+						<Pressable
+							className='flex-row items-start gap-[10px] border-t border-[color:var(--border-text-input)] p-[20px] active:bg-[#8885]'
+							onPress={() => {
+								setData({
+									options: campusData,
+									name: 'campus',
+									field: 'campus',
+									selectedValue: courseForm['campus'],
+								});
+								setOptionSelectorVisible(true);
+							}}
+						>
+							<MaterialIcons
+								name='domain'
 								size={24}
 								color={colors.textInputIcon}
-								style={{ marginTop: 12 }}
 							/>
 
-							<ModalDropdown data={campusData} placeholder='Todos los campus'/>
-						</View>
+							<Text className='text-[color:var(--text-modal-focus)] text-xl'>
+								{campusData.find(opt => opt.value === courseForm['campus'])!.label}
+							</Text>
+						</Pressable>
 
-						<View className='flex-row items-start border-t border-[color:var(--border-text-input)] p-[10px] px-[20px]'>
+						<Pressable
+							className='flex-row items-start gap-[10px] border-t border-[color:var(--border-text-input)] p-[20px] active:bg-[#8885]'
+							onPress={() => {
+								setData({
+									options: formatData,
+									name: 'formato',
+									field: 'format',
+									selectedValue: courseForm['format'],
+								});
+								setOptionSelectorVisible(true);
+							}}
+						>
 							<MaterialIcons
 								name='laptop'
 								size={24}
 								color={colors.textInputIcon}
-								style={{ marginTop: 12 }}
 							/>
 
-							<ModalDropdown data={formatData} placeholder='Todos los formatos'/>
-						</View>
+							<Text className='text-[color:var(--text-modal-focus)] text-xl'>
+								{formatData.find(opt => opt.value === courseForm['format'])!.label}
+							</Text>
+						</Pressable>
 
-						<View className='flex-row items-start border-t border-[color:var(--border-text-input)] p-[10px] px-[20px]'>
+						<Pressable
+							className='flex-row items-start gap-[10px] border-t border-[color:var(--border-text-input)] p-[20px] active:bg-[#8885]'
+							onPress={() => {
+								setData({
+									options: categoriesData,
+									name: 'categoría',
+									field: 'category',
+									selectedValue: courseForm['category'],
+								});
+								setOptionSelectorVisible(true);
+							}}
+						>
 							<Ionicons
 								name='folder-outline'
 								size={24}
 								color={colors.textInputIcon}
-								style={{ marginTop: 12 }}
 							/>
 
-							<ModalDropdown data={categoriesData} placeholder='Todas las categorías'/>
-						</View>
+							<Text className='text-[color:var(--text-modal-focus)] text-xl'>
+								{categoriesData.find(opt => opt.value === courseForm['category'])!.label}
+							</Text>
+						</Pressable>
 
-						<View className='flex-row items-start border-t border-[color:var(--border-text-input)] p-[10px] px-[20px]'>
+						<Pressable
+							className='flex-row items-start gap-[10px] border-t border-[color:var(--border-text-input)] p-[20px] active:bg-[#8885]'
+							onPress={() => {
+								setData({
+									options: generalFormationData,
+									name: 'área de formación general',
+									field: 'generalFormationArea',
+									selectedValue: courseForm['generalFormationArea'],
+								});
+								setOptionSelectorVisible(true);
+							}}
+						>
 							<Ionicons
 								name='globe-outline'
 								size={24}
 								color={colors.textInputIcon}
-								style={{ marginTop: 12 }}
 							/>
 
-							<ModalDropdown data={generalFormationData} placeholder='Todas las áreas de formación general'/>
-						</View>
+							<Text className='text-[color:var(--text-modal-focus)] text-xl'>
+								{generalFormationData.find(opt => opt.value === courseForm['generalFormationArea'])!.label}
+							</Text>
+						</Pressable>
 
-						<View className='flex-row items-start border-t border-[color:var(--border-text-input)] p-[10px] px-[20px]'>
+						<Pressable
+							className='flex-row items-start gap-[10px] border-t border-[color:var(--border-text-input)] p-[20px] active:bg-[#8885]'
+							onPress={() => {
+								setData({
+									options: academicUnitsData,
+									name: 'unidad académica',
+									field: 'academicUnit',
+									selectedValue: courseForm['academicUnit'],
+								});
+								setOptionSelectorVisible(true);
+							}}
+						>
 							<Ionicons
 								name='library-outline'
 								size={24}
 								color={colors.textInputIcon}
-								style={{ marginTop: 12 }}
 							/>
 
-							<ModalDropdown data={academicUnitsData} placeholder='Todas las unidades académicas'/>
-						</View>
+							<Text className='text-[color:var(--text-modal-focus)] text-xl'>
+								{academicUnitsData.find(opt => opt.value === courseForm['academicUnit'])!.label}
+							</Text>
+						</Pressable>
 
-						<View className='flex-row items-start border-t border-[color:var(--border-text-input)] p-[10px] px-[20px]'>
+						<Pressable
+							className='flex-row items-start gap-[10px] border-t border-[color:var(--border-text-input)] p-[20px] active:bg-[#8885]'
+							onPress={() => {
+								setData({
+									options: admissionPeriodData,
+									name: 'período de admisión',
+									field: 'admissionPeriod',
+									selectedValue: courseForm['admissionPeriod'],
+								});
+								setOptionSelectorVisible(true);
+							}}
+						>
 							<MaterialCommunityIcons
 								name='door-open'
 								size={24}
 								color={colors.textInputIcon}
-								style={{ marginTop: 12 }}
 							/>
 
-							<ModalDropdown data={admissionPeriodData} placeholder='Todos los períodos de admisión'/>
-						</View>
+							<Text className='text-[color:var(--text-modal-focus)] text-xl'>
+								{admissionPeriodData.find(opt => opt.value === courseForm['admissionPeriod'])!.label}
+							</Text>
+						</Pressable>
 
-						<View className='flex-row items-start border-t border-[color:var(--border-text-input)] p-[10px] px-[20px]'>
+						<Pressable
+							className='flex-row items-start gap-[10px] border-t border-[color:var(--border-text-input)] p-[20px] active:bg-[#8885]'
+							onPress={() => {
+								setData({
+									options: schoolData,
+									name: 'escuela',
+									field: 'school',
+									selectedValue: courseForm['school'],
+								});
+								setOptionSelectorVisible(true);
+							}}
+						>
 							<MaterialCommunityIcons
 								name='school-outline'
 								size={24}
 								color={colors.textInputIcon}
-								style={{ marginTop: 12 }}
 							/>
 
-							<ModalDropdown data={schoolData} placeholder='Todas las escuelas'/>
-						</View>
+							<Text className='text-[color:var(--text-modal-focus)] text-xl'>
+								{schoolData.find(opt => opt.value === courseForm['school'])!.label}
+							</Text>
+						</Pressable>
 
-						<View className='flex-row items-start border-t border-[color:var(--border-text-input)] p-[10px] px-[20px]'>
+						<Pressable
+							className='flex-row items-start gap-[10px] border-t border-[color:var(--border-text-input)] p-[20px] active:bg-[#8885]'
+							onPress={() => {
+								setData({
+									options: programLevelData,
+									name: 'nivel',
+									field: 'programLevel',
+									selectedValue: courseForm['programLevel'],
+								});
+								setOptionSelectorVisible(true);
+							}}
+						>
 							<MaterialCommunityIcons
 								name='certificate-outline'
 								size={24}
 								color={colors.textInputIcon}
-								style={{ marginTop: 12 }}
 							/>
 
-							<ModalDropdown data={programLevelData} placeholder='Todos los niveles'/>
-						</View>
+							<Text className='text-[color:var(--text-modal-focus)] text-xl'>
+								{programLevelData.find(opt => opt.value === courseForm['programLevel'])!.label}
+							</Text>
+						</Pressable>
 					</ScrollView>
 				</View>
 			</KeyboardAvoidingView>

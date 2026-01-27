@@ -134,7 +134,10 @@ export default function Schedule() {
         visible={resultsModalVisible}
         searchResults={searchResults}
         onAddCourse={(curso: any) => addCourseToSchedule(curso)}
-        onClose={() => setResultsModalVisible(false)}
+        onClose={() => {
+          setResultsModalVisible(false);
+          setModalVisible(true);
+        }}
       />
     </View>
   );

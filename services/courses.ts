@@ -1,12 +1,14 @@
 import { fetch } from 'expo/fetch';
+import { CourseForm } from '@/types/schedule';
 
-export async function searchCourses(form: any) {
+export async function searchCourses(courseForm: CourseForm) {
+  console.log(courseForm)
   const params = new URLSearchParams({
     periodo: '2026-1',
-    sigla: form.sigla,
-    nrc: form.nrc,
-    nombre: form.nombre,
-    profesor: form.profesor,
+    sigla: courseForm.sigle,
+    nrc: courseForm.nrc,
+    nombre: courseForm.name,
+    profesor: courseForm.teacher,
   });
 
   const res = await fetch(
