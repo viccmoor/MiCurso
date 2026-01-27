@@ -63,7 +63,10 @@ export default function About() {
         </Text>
 
         <Text className='text-2xl text-[color:var(--text-about)]'>
-          Este proyecto se encuentra bajo la licencia GNU AGPLv3.
+          Este proyecto se encuentra bajo la licencia{' '}
+          <Text className="font-bold">
+            GNU AGPLv3
+          </Text>.
         </Text>
       </View>
     </SafeAreaView>
