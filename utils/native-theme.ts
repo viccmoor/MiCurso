@@ -35,6 +35,7 @@ export const Colors = {
     },
     info: {
       githubLogo: '#1E1E1E',
+      backIcon: '#1E1E1E',
     },
   },
   dark: {
@@ -73,6 +74,7 @@ export const Colors = {
     },
     info: {
       githubLogo: '#FFFFFF',
+      backIcon: '#FFFFFF',
     },
   },
 };
