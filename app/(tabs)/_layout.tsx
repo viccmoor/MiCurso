@@ -36,7 +36,7 @@ export default function TabLayout() {
             }
             style={{
               width: 150,
-              aspectRatio: 0.25,
+              height: 50,
             }}
             resizeMode="contain"
           />
