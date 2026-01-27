@@ -19,6 +19,10 @@ export const Colors = {
       containerText: '#1E1E1E',
       containerActiveItem: '#F1F1F1',
     },
+    courseInfoModal: {
+      backIcon: '#1E1E1E',
+      infoIcon: '#1E1E1E',
+    },
     searchResultsModal: {
       addCircleIcon: '#2D336B',
     },
@@ -46,6 +50,10 @@ export const Colors = {
       containerBorder: '#131313',
       containerText: '#FFFFFF',
       containerActiveItem: '#131313',
+    },
+    courseInfoModal: {
+      backIcon: '#FFFFFF',
+      infoIcon: '#FFFFFF',
     },
     searchResultsModal: {
       addCircleIcon: '#A9B5DF',

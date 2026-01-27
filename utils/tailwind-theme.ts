@@ -20,6 +20,7 @@ export const themes = {
 		'--name-search-results': '#1E1E1E',
 		'--section-search-results': '#4B5563',
 		'--teachers-search-results': '#4B5563',
+		'--text-course-info': '#1E1E1E',
 	}),
 	dark: vars({
 		'--color-bg': '#1E1E1E',
@@ -40,5 +41,6 @@ export const themes = {
 		'--name-search-results': '#F1F1F1',
 		'--section-search-results': '#9CA3AF',
 		'--teachers-search-results': '#9CA3AF',
+		'--text-course-info': '#FFFFFF',
 	}),
 };

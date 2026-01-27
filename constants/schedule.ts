@@ -12,8 +12,11 @@ export const emptyBlock: Block = {
   section: '',
   teacher: '',
   location: '',
+  campus: '',
   type: '',
   nrc: '',
+  day: '',
+  module: 0,
 };
 
 export const createEmptyModule = (days = 6): Module =>
@@ -28,15 +31,15 @@ export const defaultModules: Modules = Object.fromEntries(
 ) as Modules;
 
 export const MODULES = [
-  { id: 1, label: 'Mod 1', range: '8:20' },
-  { id: 2, label: 'Mod 2', range: '9:40' },
-  { id: 3, label: 'Mod 3', range: '11:00' },
-  { id: 4, label: 'Mod 4', range: '12:20' },
-  { id: 5, label: 'Mod 5', range: '14:50' },
-  { id: 6, label: 'Mod 6', range: '16:10' },
-  { id: 7, label: 'Mod 7', range: '17:30' },
-  { id: 8, label: 'Mod 8', range: '18:50' },
-  { id: 9, label: 'Mod 9', range: '20:10' },
+  { id: 1, label: 'Mod 1', start: '8:20', range: '8:20 - 9:30' },
+  { id: 2, label: 'Mod 2', start: '9:40', range: '9:40 - 10:50' },
+  { id: 3, label: 'Mod 3', start: '11:00', range: '11:00 - 12:10' },
+  { id: 4, label: 'Mod 4', start: '12:20', range: '12:20 - 13:30' },
+  { id: 5, label: 'Mod 5', start: '14:50', range: '14:50 - 16:00' },
+  { id: 6, label: 'Mod 6', start: '16:10', range: '16:10 - 17:20' },
+  { id: 7, label: 'Mod 7', start: '17:30', range: '17:30 - 18:40' },
+  { id: 8, label: 'Mod 8', start: '18:50', range: '18:50 - 20:00' },
+  { id: 9, label: 'Mod 9', start: '20:10', range: '20:10 - 21:20' },
 ];
 
 export const DAYS = ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'];

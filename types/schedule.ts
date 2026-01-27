@@ -4,8 +4,11 @@ export type Block = {
   section: string;
   teacher: string;
   location: string;
+  campus: string;
   type: string;
   nrc: string;
+  day: string;
+  module: number;
 };
 
 export type DayBlocks = Block[];

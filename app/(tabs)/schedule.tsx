@@ -15,18 +15,22 @@ import AddCourseModal from '@/components/schedule/AddCourseModal';
 import ScheduleView from '@/components/schedule/ScheduleView';
 import BlockModal from '@/components/schedule/BlockModal';
 import SearchResultsModal from '@/components/schedule/SearchResultsModal';
+import CourseInfoModal from '@/components/schedule/CourseInfoModal';
 
 export default function Schedule() {
   const [modules, updateModules] = useState<Modules>(defaultModules);
   const [modalVisible, setModalVisible] = useState(false);
   const [resultsModalVisible, setResultsModalVisible] = useState(false);
   const [blockModalVisible, setBlockModalVisible] = useState(false);
+  const [courseInfoModalVisible, setCourseInfoModalVisible] = useState(false);
+
+  const [searchResults, setSearchResults] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState<any>(null);
   const [selectedBlock, setSelectedBlock] = useState<{
-    mod: { id: number, label: string, range: string };
+    mod: { id: number, label: string, start: string, range: string };
     dayBlocks: DayBlocks;
     dayIndex: number;
   } | null>(null);
-  const [searchResults, setSearchResults] = useState([]);
 
   const { theme } = useTheme();
   const appColors = Colors[theme].app;
@@ -63,9 +67,12 @@ export default function Schedule() {
                   sigle: curso.sigla,
                   section: curso.seccion,
                   teacher: curso.profesor.join(', '),
-                  location: curso.sala,
+                  location: h.sala,
+                  campus: curso.campus,
                   type: h.tipo,
                   nrc: curso.nrc,
+                  day: h.dia,
+                  module: h.modulo,
                 });
               }
             });
@@ -93,10 +100,20 @@ export default function Schedule() {
       
       <BlockModal
         visible={blockModalVisible}
-        onClose={() => setBlockModalVisible(false)}
         mod={selectedBlock?.mod ?? null}
         dayBlocks={selectedBlock?.dayBlocks ?? null}
         dayIndex={selectedBlock?.dayIndex ?? null}
+        onClose={() => setBlockModalVisible(false)}
+        onPressCourse={(course) => {
+          setSelectedCourse(course);
+          setCourseInfoModalVisible(true);
+        }}
+      />
+
+      <CourseInfoModal
+        visible={courseInfoModalVisible}
+        course={selectedCourse}
+        onClose={() => setCourseInfoModalVisible(false)}
       />
 
       <AddCourseModal

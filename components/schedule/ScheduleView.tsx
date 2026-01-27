@@ -12,7 +12,7 @@ import { DayBlocks, ModuleIndex, Modules } from '@/types/schedule';
 type Props = {
 	modules: Modules;
   onPressBlock: (
-    mod: { id: number, label: string, range: string },
+    mod: { id: number, label: string, start: string, range: string  },
     dayBlocks: DayBlocks,
     dayIndex: number
   ) => void;
@@ -57,7 +57,7 @@ export default function Schedule({ modules, onPressBlock }: Props) {
                       {mod.label}
                     </Text>
                     <Text className='text-sm text-[#999]'>
-                      {mod.range}
+                      {mod.start}
                     </Text>
                   </View>
 

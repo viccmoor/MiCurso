@@ -13,13 +13,14 @@ import { DAY_MAP, TYPE_COLORS } from '@/constants/schedule';
 
 type Props = {
 	visible: boolean;
-	mod: { id: number, label: string, range: string } | null;
+	mod: { id: number, label: string, start: string, range: string  } | null;
 	dayBlocks: DayBlocks | null;
 	dayIndex: number | null;
 	onClose: () => void;
+	onPressCourse: (course: any) => void;
 };
 
-export default function BlockModal({ visible, mod, dayBlocks, dayIndex, onClose }: Props) {
+export default function BlockModal({ visible, mod, dayBlocks, dayIndex, onClose, onPressCourse }: Props) {
 	return (
 		<Modal
 			visible={visible}
@@ -68,11 +69,12 @@ export default function BlockModal({ visible, mod, dayBlocks, dayIndex, onClose 
 												{block.type}
 											</Text>
 										</View>
-										<View
+										<Pressable
 											className='flex-1 items-center py-[10px] px-[5px] rounded-xl'
 											style={{
 												backgroundColor: colors.bg,
 											}}
+											onPress={() => onPressCourse(block)}
 										>
 											<Text
 												className='text-medium'
@@ -87,7 +89,7 @@ export default function BlockModal({ visible, mod, dayBlocks, dayIndex, onClose 
 											>
 												{block.sigle}-{block.section}
 											</Text>
-										</View>
+										</Pressable>
 									</View>
 								);
 							}) : (
