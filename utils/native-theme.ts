@@ -30,6 +30,9 @@ export const Colors = {
       layout: '#FFFFFF',
       tabs: '#1E1E1E',
     },
+    info: {
+      githubLogo: '#1E1E1E',
+    },
   },
   dark: {
     fab: {
@@ -61,6 +64,9 @@ export const Colors = {
     app: {
       layout: '#1E1E1E',
       tabs: '#FFFFFF',
+    },
+    info: {
+      githubLogo: '#FFFFFF',
     },
   },
 };
