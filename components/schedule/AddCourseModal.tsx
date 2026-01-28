@@ -38,12 +38,14 @@ import OptionSelectorModal from '@/components/schedule/OptionSelectorModal';
 
 type Props = {
 	visible: boolean;
+	currentPeriod: string;
 	onClose: () => void;
 	onResults: (results: any[]) => void;
 };
 
 export default function AddCourseModal({
   visible,
+  currentPeriod,
   onClose,
   onResults,
 }: Props) {
@@ -54,6 +56,8 @@ export default function AddCourseModal({
 	const [loading, setLoading] = useState(false);
 
 	const [data, setData] = useState<OptionSelectorData>(EMPTY_OPTION_SELECTOR_DATA);
+
+	EMPTY_COURSE_FORM.period = currentPeriod;
 	const [courseForm, setCourseForm] = useState<CourseForm>(EMPTY_COURSE_FORM);
 	const hasInput = Object.values(courseForm).some(v => v.trim() !== '');
 

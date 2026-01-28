@@ -23,6 +23,7 @@ export const themes = {
 		'--text-course-info': '#1E1E1E',
 		'--text-about': '#1E1E1E',
 		'--text-license-button': '#FFFFFF',
+		'--text-calendar': '#1E1E1E',
 	}),
 	dark: vars({
 		'--color-bg': '#1E1E1E',
@@ -46,5 +47,6 @@ export const themes = {
 		'--text-course-info': '#FFFFFF',
 		'--text-about': '#FFFFFF',
 		'--text-license-button': '#1E1E1E',
+		'--text-calendar': '#FFFFFF',
 	}),
 };

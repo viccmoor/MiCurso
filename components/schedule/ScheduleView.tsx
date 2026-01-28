@@ -20,7 +20,7 @@ type Props = {
 
 export default function Schedule({ modules, onPressBlock }: Props) {
   return (
-    <View className='w-full h-full'>
+    <View className='flex-1 w-full'>
       <View className='flex-col w-full h-full'>
         <View className='flex-row w-full px-[10px]'>
           <View className='flex-1 items-center p-[10px]'>

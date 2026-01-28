@@ -1,5 +1,6 @@
 import {
   Block,
+  Calendars,
   CourseForm,
   Module,
   ModuleIndex,
@@ -77,6 +78,7 @@ export const TYPE_COLORS: { [key: string]: TypeColor } = {
 };
 
 export const EMPTY_COURSE_FORM: CourseForm = {
+  period: '',
   name: '',
   sigle: '',
   nrc: '',
@@ -96,4 +98,15 @@ export const EMPTY_OPTION_SELECTOR_DATA: OptionSelectorData = {
   name: '',
   field: '',
   selectedValue: '',
-}
+};
+
+export const DEFAULT_CALENDARS: Calendars = {
+  '2026-1': {
+    name: 'Primer semestre 2026',
+    modules: defaultModules,
+  },
+  '2026-2': {
+    name: 'Segundo semestre 2026',
+    modules: defaultModules,
+  },
+};

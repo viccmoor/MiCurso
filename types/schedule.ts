@@ -23,6 +23,7 @@ export interface TypeColor {
 }
 
 export type CourseForm = {
+  period: string;
   name: string;
   sigle: string;
   nrc: string;
@@ -47,4 +48,16 @@ export type OptionSelectorData = {
   name: string;
   field: string;
   selectedValue: string;
+};
+
+export type Calendar = {
+  name: string;
+  modules: Modules;
+};
+
+export type Calendars = Record<string, Calendar>;
+
+export type ScheduleModalData = {
+  calendars: Calendars;
+  currentPeriod: string;
 };

@@ -37,6 +37,10 @@ export const Colors = {
       githubLogo: '#1E1E1E',
       backIcon: '#1E1E1E',
     },
+    schedule: {
+      schoolIcon: '#1E1E1E',
+      checkboxCircle: '#2D336B',
+    },
   },
   dark: {
     fab: {
@@ -75,6 +79,10 @@ export const Colors = {
     info: {
       githubLogo: '#FFFFFF',
       backIcon: '#FFFFFF',
+    },
+    schedule: {
+      schoolIcon: '#FFFFFF',
+      checkboxCircle: '#A9B5DF',
     },
   },
 };

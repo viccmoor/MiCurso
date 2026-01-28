@@ -4,7 +4,7 @@ import { CourseForm } from '@/types/schedule';
 export async function searchCourses(courseForm: CourseForm) {
   console.log(courseForm)
   const params = new URLSearchParams({
-    periodo: '2026-1',
+    periodo: courseForm.period,
     sigla: courseForm.sigle,
     nrc: courseForm.nrc,
     nombre: courseForm.name,

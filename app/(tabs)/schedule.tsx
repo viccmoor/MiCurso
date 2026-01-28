@@ -1,14 +1,14 @@
 import '@/global.css';
 import {
-  View,
   Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 
-import { defaultModules, DAY_INDEX } from '@/constants/schedule';
+import { defaultModules, DAY_INDEX, DEFAULT_CALENDARS } from '@/constants/schedule';
 import { useTheme } from '@/providers/ThemeProviders';
 import { Colors } from '@/utils/native-theme';
-import { DayBlocks, ModuleIndex, Modules } from '@/types/schedule';
+import { Block, Calendars, DayBlocks, ModuleIndex } from '@/types/schedule';
 
 import FloatingActionButton from '@/components/schedule/FloatingActionButton';
 import AddCourseModal from '@/components/schedule/AddCourseModal';
@@ -16,9 +16,13 @@ import ScheduleView from '@/components/schedule/ScheduleView';
 import BlockModal from '@/components/schedule/BlockModal';
 import SearchResultsModal from '@/components/schedule/SearchResultsModal';
 import CourseInfoModal from '@/components/schedule/CourseInfoModal';
+import ScheduleSelector from '@/components/schedule/ScheduleSelector';
 
 export default function Schedule() {
-  const [modules, updateModules] = useState<Modules>(defaultModules);
+  const [calendars, setAllCalendars] = useState<Calendars>(DEFAULT_CALENDARS);
+  const [currentPeriod, setCurrentPeriod] = useState('2026-1');
+  const modules = calendars[currentPeriod].modules || defaultModules;
+
   const [modalVisible, setModalVisible] = useState(false);
   const [resultsModalVisible, setResultsModalVisible] = useState(false);
   const [blockModalVisible, setBlockModalVisible] = useState(false);
@@ -44,21 +48,18 @@ export default function Schedule() {
       { 
         text: 'Sí, agregar', 
         onPress: () => {
-          updateModules(prev => {
-            const next = { ...prev };
+          setAllCalendars(prev => {
+            const newModules = JSON.parse(JSON.stringify(prev[currentPeriod].modules));
 
             curso.horario.forEach((h: any) => {
               const dayIndex = DAY_INDEX[h.dia];
               const moduleId = h.modulo as ModuleIndex;
-
               if (dayIndex === undefined) return;
 
-              const dayBlocks = next[moduleId as ModuleIndex][dayIndex];
-
-              const exists = dayBlocks.some(
-                b =>
-                  b.sigle === curso.sigla &&
-                  b.section === curso.seccion
+              const dayBlocks = newModules[moduleId][dayIndex];
+              const exists = dayBlocks.some((b: Block) =>
+                b.sigle === curso.sigla &&
+                b.section === curso.seccion
               );
 
               if (!exists) {
@@ -77,11 +78,16 @@ export default function Schedule() {
               }
             });
 
-            return { ...next };
+            return {
+              ...prev,
+              [currentPeriod]: {
+                ...prev[currentPeriod],
+                modules: newModules
+              }
+            };
           });
 
           setResultsModalVisible(false);
-          Alert.alert('Añadido', `${curso.sigla} se sumó a tu horario.`);
         }
       }
     ]
@@ -89,7 +95,12 @@ export default function Schedule() {
   };
 
   return (
-    <View className='flex-1' style={{ backgroundColor: appColors.layout }}>
+    <SafeAreaView className='flex-1' style={{ backgroundColor: appColors.layout }}>
+      <ScheduleSelector
+        data={{ calendars: calendars, currentPeriod: currentPeriod }}
+        onSetPeriod={(period) => setCurrentPeriod(period)}
+      />
+
       <ScheduleView
         modules={modules}
         onPressBlock={(mod, dayBlocks, dayIndex) => {
@@ -118,6 +129,7 @@ export default function Schedule() {
 
       <AddCourseModal
         visible={modalVisible}
+        currentPeriod={currentPeriod}
         onClose={() => setModalVisible(false)}
         onResults={(results: any) => {
           setSearchResults(results);
@@ -139,6 +151,6 @@ export default function Schedule() {
           setModalVisible(true);
         }}
       />
-    </View>
+    </SafeAreaView>
   );
 }
