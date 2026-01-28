@@ -60,6 +60,7 @@ export default function TabLayout() {
         name='schedule'
         options={{
           title: 'Horario',
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
               name={focused ? 'calendar-month' : 'calendar-month-outline'}
