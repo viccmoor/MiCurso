@@ -4,6 +4,7 @@ import {
 	Text,
 	Pressable
 } from 'react-native';
+import { useState } from 'react';
 import MapView, { Geojson } from 'react-native-maps';
 
 import Entypo from '@expo/vector-icons/Entypo';
@@ -16,6 +17,8 @@ import { useTheme } from '@/providers/ThemeProviders';
 import { DAY_INDEX, DAY_MAP, MODULES, TYPE_COLORS } from '@/constants/schedule';
 import resolveMapTarget, { getRegionFromFeature } from '@/utils/geo';
 
+import CourseDeleteModal from '@/components/schedule/CourseDeleteModal';
+
 type Props = {
 	visible: boolean;
 	course: any;
@@ -25,12 +28,13 @@ type Props = {
 export default function CourseInfoModal({ visible, course, onClose }: Props) {
 	const { theme } = useTheme();
 	const colors = Colors[theme].courseInfoModal;
-	const mapTarget = resolveMapTarget(
-		course?.location, course?.campus
-	);
+
+	const mapTarget = resolveMapTarget(course?.location, course?.campus);
 	const region = mapTarget
 		? getRegionFromFeature(mapTarget.geojson.features[0])
 		: undefined;
+
+	const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
 	return (
 		<Modal
@@ -40,6 +44,12 @@ export default function CourseInfoModal({ visible, course, onClose }: Props) {
 			transparent
 		>
 			<View className='flex-1 bg-[color:var(--color-bg)]'>
+				<CourseDeleteModal
+					visible={deleteModalVisible}
+					onClose={() => setDeleteModalVisible(false)}
+					onDelete={() => null}
+				/>
+
 				<View className='flex-1 flex-col w-full items-start'>
 					<Pressable
 						pointerEvents='auto'
@@ -50,6 +60,18 @@ export default function CourseInfoModal({ visible, course, onClose }: Props) {
 							name='chevron-thin-left' 
 							size={24}
 							color={colors.backIcon}
+						/>
+					</Pressable>
+
+					<Pressable
+						pointerEvents='auto'
+						onPress={() => setDeleteModalVisible(true)}
+						className='absolute top-[15px] right-[15px] bg-[color:var(--color-bg)] w-[40px] h-[40px] justify-center items-center'
+					>
+						<Ionicons 
+							name='trash-outline' 
+							size={24}
+							color={colors.deleteIcon}
 						/>
 					</Pressable>
 
