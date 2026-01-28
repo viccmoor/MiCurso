@@ -88,7 +88,7 @@ export default function OptionSelectorModal({ visible, data, onClose, onSelectOp
 						className='w-full items-center'
 						onPress={onClose}
 					>
-						<Text className='text-[color:var(--text-modal-focus)] text-xl font-medium p-[10px]'>
+						<Text className='text-[color:var(--text-modal-focus)] text-xl font-medium p-[15px]'>
 							Cancelar
 						</Text>
 					</Pressable>
