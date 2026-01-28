@@ -53,8 +53,10 @@ export default function About() {
           </Text>
         </View>
 
-        <View className='w-full px-[50px] gap-[15px]'>
-          <Text className='text-lg text-[color:var(--text-about)] text-justify'>
+        <View className='w-full px-[50px] gap-[15px] items-center justify-center'>
+          <Text
+            className='text-lg text-[color:var(--text-about)] text-justify max-w-[300px]'
+          >
             MiCurso es un proyecto de código abierto creado por{' '}
             <Text
               className="font-bold underline"
@@ -74,7 +76,7 @@ export default function About() {
           </Text>
 
           <Pressable
-            className='bg-[color:var(--color-secondary)] w-full h-[40px] items-center justify-center rounded-full'
+            className='bg-[color:var(--color-secondary)] w-full h-[40px] max-w-[300px] items-center justify-center rounded-full'
             onPress={() => Linking.openURL('https://github.com/viccmoor/MiCurso/blob/main/LICENSE')}
           >
             <Text className='text-[color:var(--text-license-button)] font-medium'>
