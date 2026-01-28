@@ -105,8 +105,16 @@ export const DEFAULT_CALENDARS: Calendars = {
     name: 'Primer semestre 2026',
     modules: defaultModules,
   },
-  '2026-2': {
-    name: 'Segundo semestre 2026',
+  '2025-3': {
+    name: 'TAV 2025',
+    modules: defaultModules,
+  },
+  '2025-2': {
+    name: 'Segundo semestre 2025',
+    modules: defaultModules,
+  },
+  '2025-1': {
+    name: 'Primer semestre 2025',
     modules: defaultModules,
   },
 };
