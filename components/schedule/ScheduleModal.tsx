@@ -73,7 +73,7 @@ export default function ScheduleModal({ visible, data, onClose, onSetPeriod }: P
 									}
 
 									<Text
-										className='w-5/6 text-[color:var(--text-modal-focus)] text-xl font-normal border-[#8885] py-[15px]'
+										className='flex-1 text-[color:var(--text-modal-focus)] text-xl font-normal border-[#8885] py-[15px]'
 										style={{
 											borderBottomWidth: StyleSheet.hairlineWidth,
 										}}
