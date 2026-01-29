@@ -23,7 +23,7 @@ export default function ConfirmationModal({ visible, course, onClose, onAddCours
 				className='flex-1 bg-black/50 justify-center items-center'
 				onPress={onClose}
 			>
-				<View className='bg-[color:var(--color-bg)] w-[90%] h-[20%] rounded-2xl p-[20px]'>
+				<View className='bg-[color:var(--color-bg)] w-[85%] h-[20%] rounded-2xl p-[20px]'>
 					<View className='flex-1 gap-[10px]'>
 						<Text className='text-[color:var(--text-modal-focus)] text-xl font-medium'>
 							Agregar curso
