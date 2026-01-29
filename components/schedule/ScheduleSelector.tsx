@@ -24,7 +24,7 @@ export default function ScheduleSelector({ data, onSetPeriod }: Props) {
 
 	const [visible, setVisible] = useState(false);
 
-  return (
+	return (
 		<View className='w-full h-[50px] items-start justify-center px-[10px]'>
 			<Pressable
 				className='flex-row active:bg-[#8885] items-center justify-center p-[10px] gap-[10px] rounded-full'
