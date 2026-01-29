@@ -7,15 +7,11 @@ import {
 import React from 'react';
 
 import { DAYS, MODULES, TYPE_COLORS } from '@/constants/schedule';
-import { DayBlocks, ModuleIndex, Modules } from '@/types/schedule';
+import { ModuleIndex, Modules, SelectedBlock } from '@/types/schedule';
 
 type Props = {
 	modules: Modules;
-  onPressBlock: (
-    mod: { id: number, label: string, start: string, range: string  },
-    dayBlocks: DayBlocks,
-    dayIndex: number
-  ) => void;
+  onPressBlock: (block: SelectedBlock) => void;
 };
 
 export default function Schedule({ modules, onPressBlock }: Props) {
@@ -66,7 +62,7 @@ export default function Schedule({ modules, onPressBlock }: Props) {
                       return (
                         <Pressable
                           key={dayIndex}
-                          onPress={() => onPressBlock(mod, dayBlocks, dayIndex)}
+                          onPress={() => onPressBlock({mod, dayBlocks, dayIndex})}
                           className='flex-1 gap-[1px] items-center h-full rounded-sm border border-transparent active:border-[#AAAA] overflow-hidden'
                         >
                           {

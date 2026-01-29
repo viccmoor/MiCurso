@@ -8,19 +8,17 @@ import {
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-import { DayBlocks } from '@/types/schedule';
+import { SelectedBlock } from '@/types/schedule';
 import { DAY_MAP, TYPE_COLORS } from '@/constants/schedule';
 
 type Props = {
 	visible: boolean;
-	mod: { id: number, label: string, start: string, range: string  } | null;
-	dayBlocks: DayBlocks | null;
-	dayIndex: number | null;
+	selectedBlock: SelectedBlock | null;
 	onClose: () => void;
 	onPressCourse: (course: any) => void;
 };
 
-export default function BlockModal({ visible, mod, dayBlocks, dayIndex, onClose, onPressCourse }: Props) {
+export default function BlockModal({ visible, selectedBlock, onClose, onPressCourse }: Props) {
 	return (
 		<Modal
 			visible={visible}
@@ -35,11 +33,11 @@ export default function BlockModal({ visible, mod, dayBlocks, dayIndex, onClose,
 				<View className='w-[70%] h-[50%] bg-[color:var(--color-bg)] rounded-3xl p-[10px]'>
 					<View className='flex-row items-center p-[10px] gap-x-2'>
 						<Text className='text-xl font-bold text-[color:var(--color-modules-text)]'>
-							{mod?.label.toUpperCase()}
+							{selectedBlock?.mod?.label.toUpperCase()}
 						</Text>
 
 						<Text className='font-bold text-[color:var(--color-modules-text)]'>
-							{DAY_MAP[dayIndex ?? 0].toLowerCase()}
+							{DAY_MAP[selectedBlock?.dayIndex ?? 0].toLowerCase()}
 						</Text>
 					</View>
 					<ScrollView
@@ -51,7 +49,7 @@ export default function BlockModal({ visible, mod, dayBlocks, dayIndex, onClose,
 						}}
 					>
 						{
-							dayBlocks && dayBlocks.length > 0 ? dayBlocks?.map((block, blockIndex) => {
+							selectedBlock?.dayBlocks && selectedBlock?.dayBlocks.length > 0 ? selectedBlock?.dayBlocks?.map((block, blockIndex) => {
 								const colors = TYPE_COLORS[block.type] || TYPE_COLORS.DEFAULT;
 
 								return (

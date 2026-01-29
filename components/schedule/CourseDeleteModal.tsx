@@ -13,7 +13,7 @@ import { Colors } from '@/utils/native-theme';
 type Props = {
 	visible: boolean;
 	onClose: () => void;
-	onDelete: () => void;
+	onDelete: (deleteCourse: boolean) => void;
 };
 
 export default function CourseDeleteModal({ visible, onClose, onDelete }: Props) {
@@ -35,7 +35,10 @@ export default function CourseDeleteModal({ visible, onClose, onDelete }: Props)
 						¿Qué deseas eliminar?
 					</Text>
 
-					<Pressable className='flex-row w-full items-center gap-[10px] px-[20px] py-[10px] active:bg-[#8885]'>
+					<Pressable
+						className='flex-row w-full items-center gap-[10px] px-[20px] py-[10px] active:bg-[#8885]'
+						onPress={() => onDelete(true)}
+					>
 						<Ionicons
 							name='school-outline'
 							size={24}
@@ -46,7 +49,10 @@ export default function CourseDeleteModal({ visible, onClose, onDelete }: Props)
 						</Text>
 					</Pressable>
 
-					<Pressable className='flex-row w-full items-center gap-[10px] px-[20px] py-[10px] active:bg-[#8885]'>
+					<Pressable
+						className='flex-row w-full items-center gap-[10px] px-[20px] py-[10px] active:bg-[#8885]'
+						onPress={() => onDelete(false)}
+					>
 						<Ionicons
 							name='grid-outline'
 							size={24}

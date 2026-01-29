@@ -1,14 +1,12 @@
 import '@/global.css';
-import {
-  Alert,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { defaultModules, DAY_INDEX, DEFAULT_CALENDARS } from '@/constants/schedule';
-import { useTheme } from '@/providers/ThemeProviders';
 import { Colors } from '@/utils/native-theme';
-import { Block, Calendars, DayBlocks, ModuleIndex } from '@/types/schedule';
+import { useTheme } from '@/providers/ThemeProviders';
+import { Calendars, SelectedBlock } from '@/types/schedule';
+import { addCourseToModules } from '@/utils/schedule';
+import { defaultModules, DEFAULT_CALENDARS } from '@/constants/schedule';
 
 import FloatingActionButton from '@/components/schedule/FloatingActionButton';
 import AddCourseModal from '@/components/schedule/AddCourseModal';
@@ -30,68 +28,25 @@ export default function Schedule() {
 
   const [searchResults, setSearchResults] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState<any>(null);
-  const [selectedBlock, setSelectedBlock] = useState<{
-    mod: { id: number, label: string, start: string, range: string };
-    dayBlocks: DayBlocks;
-    dayIndex: number;
-  } | null>(null);
+  const [selectedBlock, setSelectedBlock] = useState<SelectedBlock | null>(null);
 
   const { theme } = useTheme();
   const appColors = Colors[theme].app;
 
-  const addCourseToSchedule = (curso: any) => {
-    Alert.alert(
-      'Agregar Curso',
-      `¿Quieres añadir ${curso.sigla}-${curso.seccion} a tu horario?`,
-      [
-      { text: 'Cancelar', style: 'cancel' },
-      { 
-        text: 'Sí, agregar', 
-        onPress: () => {
-          setAllCalendars(prev => {
-            const newModules = JSON.parse(JSON.stringify(prev[currentPeriod].modules));
+  const addCourseToSchedule = (course: any) => {
+    setAllCalendars(prev => {
+      const updatedModules = addCourseToModules(prev[currentPeriod].modules, course);
 
-            curso.horario.forEach((h: any) => {
-              const dayIndex = DAY_INDEX[h.dia];
-              const moduleId = h.modulo as ModuleIndex;
-              if (dayIndex === undefined) return;
-
-              const dayBlocks = newModules[moduleId][dayIndex];
-              const exists = dayBlocks.some((b: Block) =>
-                b.sigle === curso.sigla &&
-                b.section === curso.seccion
-              );
-
-              if (!exists) {
-                dayBlocks.push({
-                  name: curso.nombre,
-                  sigle: curso.sigla,
-                  section: curso.seccion,
-                  teacher: curso.profesor.join(', '),
-                  location: h.sala,
-                  campus: curso.campus,
-                  type: h.tipo,
-                  nrc: curso.nrc,
-                  day: h.dia,
-                  module: h.modulo,
-                });
-              }
-            });
-
-            return {
-              ...prev,
-              [currentPeriod]: {
-                ...prev[currentPeriod],
-                modules: newModules
-              }
-            };
-          });
-
-          setResultsModalVisible(false);
+      return {
+        ...prev,
+        [currentPeriod]: {
+          ...prev[currentPeriod],
+          modules: updatedModules
         }
-      }
-    ]
-    )
+      };
+    });
+
+    setResultsModalVisible(false);
   };
 
   return (
@@ -103,17 +58,15 @@ export default function Schedule() {
 
       <ScheduleView
         modules={modules}
-        onPressBlock={(mod, dayBlocks, dayIndex) => {
-          setSelectedBlock({ mod, dayBlocks, dayIndex });
+        onPressBlock={(selectedBlock) => {
+          setSelectedBlock(selectedBlock);
           setBlockModalVisible(true);
         }}
       />
       
       <BlockModal
         visible={blockModalVisible}
-        mod={selectedBlock?.mod ?? null}
-        dayBlocks={selectedBlock?.dayBlocks ?? null}
-        dayIndex={selectedBlock?.dayIndex ?? null}
+        selectedBlock={selectedBlock}
         onClose={() => setBlockModalVisible(false)}
         onPressCourse={(course) => {
           setSelectedCourse(course);
@@ -125,6 +78,12 @@ export default function Schedule() {
         visible={courseInfoModalVisible}
         course={selectedCourse}
         onClose={() => setCourseInfoModalVisible(false)}
+        onDeleteCourse={(nrc) => {
+
+        }}
+        onDeleteBlock={(course) => {
+
+        }}
       />
 
       <AddCourseModal

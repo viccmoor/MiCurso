@@ -12,6 +12,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
+import { Block } from '@/types/schedule';
 import { Colors } from '@/utils/native-theme';
 import { useTheme } from '@/providers/ThemeProviders';
 import { DAY_INDEX, DAY_MAP, MODULES, TYPE_COLORS } from '@/constants/schedule';
@@ -21,11 +22,13 @@ import CourseDeleteModal from '@/components/schedule/CourseDeleteModal';
 
 type Props = {
 	visible: boolean;
-	course: any;
+	course: Block;
 	onClose: () => void;
+	onDeleteCourse: (nrc: string) => void;
+	onDeleteBlock: (course: Block) => void;
 };
 
-export default function CourseInfoModal({ visible, course, onClose }: Props) {
+export default function CourseInfoModal({ visible, course, onClose, onDeleteCourse, onDeleteBlock }: Props) {
 	const { theme } = useTheme();
 	const colors = Colors[theme].courseInfoModal;
 
@@ -47,7 +50,13 @@ export default function CourseInfoModal({ visible, course, onClose }: Props) {
 				<CourseDeleteModal
 					visible={deleteModalVisible}
 					onClose={() => setDeleteModalVisible(false)}
-					onDelete={() => null}
+					onDelete={(deleteCourse) => {
+						if (deleteCourse) {
+							onDeleteCourse(course.nrc);
+						} else {
+							onDeleteBlock(course);
+						}
+					}}
 				/>
 
 				<View className='flex-1 flex-col w-full items-start'>

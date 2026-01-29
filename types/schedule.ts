@@ -61,3 +61,16 @@ export type ScheduleModalData = {
   calendars: Calendars;
   currentPeriod: string;
 };
+
+export type ModuleInfo = {
+  id: number;
+  label: string;
+  start: string;
+  range: string;
+};
+
+export type SelectedBlock = {
+  mod: ModuleInfo;
+  dayBlocks: DayBlocks;
+  dayIndex: number;
+};
