@@ -5,20 +5,29 @@ import {
 	ScrollView,
 	Pressable
 } from 'react-native';
+import { useState } from 'react';
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-import { SelectedBlock } from '@/types/schedule';
+import { Block, Modules, SelectedBlock, ModuleIndex } from '@/types/schedule';
 import { DAY_MAP, TYPE_COLORS } from '@/constants/schedule';
+
+import CourseInfoModal from '@/components/schedule/CourseInfoModal';
 
 type Props = {
 	visible: boolean;
-	selectedBlock: SelectedBlock | null;
+	selectedBlock: SelectedBlock;
+	modules: Modules;
 	onClose: () => void;
-	onPressCourse: (course: any) => void;
+	onDeleteCourse: (nrc: string) => void;
+	onDeleteBlock: (course: Block) => void;
 };
 
-export default function BlockModal({ visible, selectedBlock, onClose, onPressCourse }: Props) {
+export default function BlockModal({ visible, selectedBlock, modules, onClose, onDeleteCourse, onDeleteBlock }: Props) {
+	const [courseInfoVisible, setCourseInfoVisible] = useState(false);
+	const [selectedCourse, setSelectedCourse] = useState<Block | null>(null);
+	const dayBlocks = modules[selectedBlock.mod.id as ModuleIndex][selectedBlock.dayIndex];
+
 	return (
 		<Modal
 			visible={visible}
@@ -26,6 +35,20 @@ export default function BlockModal({ visible, selectedBlock, onClose, onPressCou
 			onRequestClose={onClose}
 			transparent
 		>
+			{selectedCourse && (
+				<CourseInfoModal
+					visible={courseInfoVisible}
+					course={selectedCourse}
+					onClose={() => setCourseInfoVisible(false)}
+					onDeleteCourse={(nrc) => {
+						onDeleteCourse(nrc);
+					}}
+					onDeleteBlock={(block) => {
+						onDeleteBlock(block);
+					}}
+				/>
+			)}
+
 			<Pressable
 				className='flex-1 bg-black/50 justify-center items-center'
 				onPress={onClose}
@@ -33,11 +56,11 @@ export default function BlockModal({ visible, selectedBlock, onClose, onPressCou
 				<View className='w-[70%] h-[50%] bg-[color:var(--color-bg)] rounded-3xl p-[10px]'>
 					<View className='flex-row items-center p-[10px] gap-x-2'>
 						<Text className='text-xl font-bold text-[color:var(--color-modules-text)]'>
-							{selectedBlock?.mod?.label.toUpperCase()}
+							{selectedBlock.mod.label.toUpperCase()}
 						</Text>
 
 						<Text className='font-bold text-[color:var(--color-modules-text)]'>
-							{DAY_MAP[selectedBlock?.dayIndex ?? 0].toLowerCase()}
+							{DAY_MAP[selectedBlock.dayIndex ?? 0].toLowerCase()}
 						</Text>
 					</View>
 					<ScrollView
@@ -49,7 +72,7 @@ export default function BlockModal({ visible, selectedBlock, onClose, onPressCou
 						}}
 					>
 						{
-							selectedBlock?.dayBlocks && selectedBlock?.dayBlocks.length > 0 ? selectedBlock?.dayBlocks?.map((block, blockIndex) => {
+							dayBlocks.length > 0 ? dayBlocks.map((block, blockIndex) => {
 								const colors = TYPE_COLORS[block.type] || TYPE_COLORS.DEFAULT;
 
 								return (
@@ -72,7 +95,10 @@ export default function BlockModal({ visible, selectedBlock, onClose, onPressCou
 											style={{
 												backgroundColor: colors.bg,
 											}}
-											onPress={() => onPressCourse(block)}
+											onPress={() => {
+												setSelectedCourse(block);
+												setCourseInfoVisible(true);
+											}}
 										>
 											<Text
 												className='text-medium'

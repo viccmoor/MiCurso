@@ -25,7 +25,7 @@ type Props = {
 	course: Block;
 	onClose: () => void;
 	onDeleteCourse: (nrc: string) => void;
-	onDeleteBlock: (course: Block) => void;
+	onDeleteBlock: (block: Block) => void;
 };
 
 export default function CourseInfoModal({ visible, course, onClose, onDeleteCourse, onDeleteBlock }: Props) {
@@ -56,6 +56,7 @@ export default function CourseInfoModal({ visible, course, onClose, onDeleteCour
 						} else {
 							onDeleteBlock(course);
 						}
+						onClose();
 					}}
 				/>
 

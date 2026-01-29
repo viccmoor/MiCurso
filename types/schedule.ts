@@ -63,7 +63,7 @@ export type ScheduleModalData = {
 };
 
 export type ModuleInfo = {
-  id: number;
+  id: ModuleIndex;
   label: string;
   start: string;
   range: string;
@@ -71,6 +71,5 @@ export type ModuleInfo = {
 
 export type SelectedBlock = {
   mod: ModuleInfo;
-  dayBlocks: DayBlocks;
   dayIndex: number;
 };

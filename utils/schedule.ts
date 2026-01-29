@@ -2,7 +2,7 @@ import { DAY_INDEX } from '@/constants/schedule';
 import { Block, Modules, ModuleIndex } from '@/types/schedule';
 
 export function addCourseToModules(modules: Modules, course: any) {
-  const newModules = JSON.parse(JSON.stringify(modules));
+	const newModules = JSON.parse(JSON.stringify(modules));
 
 	course.horario.forEach((h: any) => {
 		const dayIndex = DAY_INDEX[h.dia];
@@ -32,4 +32,43 @@ export function addCourseToModules(modules: Modules, course: any) {
 	});
 
 	return newModules;
+}
+
+export function deleteCourseByNRC(modules: Modules, nrc: string) {
+	const newModules = JSON.parse(JSON.stringify(modules));
+
+	Object.keys(newModules).forEach((moduleKey) => {
+    const moduleIndex = Number(moduleKey) as keyof Modules;
+
+    newModules[moduleIndex].forEach((dayBlocks: Block[]) => {
+      for (let i = dayBlocks.length - 1; i >= 0; i--) {
+        if (dayBlocks[i].nrc === nrc) {
+          dayBlocks.splice(i, 1);
+        }
+      }
+    });
+  });
+
+  return newModules;
+}
+
+export function deleteSingleBlock(
+  modules: Modules,
+  module: ModuleIndex,
+  dayIndex: number,
+  block: Block
+): Modules {
+  const newModules = JSON.parse(JSON.stringify(modules));
+
+  newModules[module][dayIndex] = newModules[module][dayIndex].filter(
+    (b: Block) =>
+      !(
+        b.nrc === block.nrc &&
+        b.type === block.type &&
+        b.day === block.day &&
+        b.module === block.module
+      )
+  );
+
+  return newModules;
 }

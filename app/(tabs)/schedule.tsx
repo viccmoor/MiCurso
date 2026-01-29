@@ -4,16 +4,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Colors } from '@/utils/native-theme';
 import { useTheme } from '@/providers/ThemeProviders';
-import { Calendars, SelectedBlock } from '@/types/schedule';
-import { addCourseToModules } from '@/utils/schedule';
+import { Calendars, SelectedBlock, ModuleIndex } from '@/types/schedule';
 import { defaultModules, DEFAULT_CALENDARS } from '@/constants/schedule';
+import { addCourseToModules, deleteCourseByNRC, deleteSingleBlock } from '@/utils/schedule';
 
 import FloatingActionButton from '@/components/schedule/FloatingActionButton';
 import AddCourseModal from '@/components/schedule/AddCourseModal';
 import ScheduleView from '@/components/schedule/ScheduleView';
 import BlockModal from '@/components/schedule/BlockModal';
 import SearchResultsModal from '@/components/schedule/SearchResultsModal';
-import CourseInfoModal from '@/components/schedule/CourseInfoModal';
 import ScheduleSelector from '@/components/schedule/ScheduleSelector';
 
 export default function Schedule() {
@@ -24,10 +23,8 @@ export default function Schedule() {
   const [modalVisible, setModalVisible] = useState(false);
   const [resultsModalVisible, setResultsModalVisible] = useState(false);
   const [blockModalVisible, setBlockModalVisible] = useState(false);
-  const [courseInfoModalVisible, setCourseInfoModalVisible] = useState(false);
 
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState<any>(null);
   const [selectedBlock, setSelectedBlock] = useState<SelectedBlock | null>(null);
 
   const { theme } = useTheme();
@@ -64,27 +61,39 @@ export default function Schedule() {
         }}
       />
       
-      <BlockModal
-        visible={blockModalVisible}
-        selectedBlock={selectedBlock}
-        onClose={() => setBlockModalVisible(false)}
-        onPressCourse={(course) => {
-          setSelectedCourse(course);
-          setCourseInfoModalVisible(true);
-        }}
-      />
+      {selectedBlock && (
+        <BlockModal
+          visible={blockModalVisible}
+          selectedBlock={selectedBlock}
+          modules={modules}
+          onClose={() => setBlockModalVisible(false)}
+          onDeleteCourse={(nrc) => {
+            setAllCalendars(prev => ({
+              ...prev,
+              [currentPeriod]: {
+                ...prev[currentPeriod],
+                modules: deleteCourseByNRC(prev[currentPeriod].modules, nrc),
+              },
+            }));
+          }}
+          onDeleteBlock={(block) => {
+            if (!selectedBlock) return;
 
-      <CourseInfoModal
-        visible={courseInfoModalVisible}
-        course={selectedCourse}
-        onClose={() => setCourseInfoModalVisible(false)}
-        onDeleteCourse={(nrc) => {
-
-        }}
-        onDeleteBlock={(course) => {
-
-        }}
-      />
+            setAllCalendars(prev => ({
+              ...prev,
+              [currentPeriod]: {
+                ...prev[currentPeriod],
+                modules: deleteSingleBlock(
+                  prev[currentPeriod].modules,
+                  selectedBlock.mod.id as ModuleIndex,
+                  selectedBlock.dayIndex,
+                  block
+                ),
+              },
+            }));
+          }}
+        />
+      )}
 
       <AddCourseModal
         visible={modalVisible}

@@ -37,7 +37,10 @@ export default function CourseDeleteModal({ visible, onClose, onDelete }: Props)
 
 					<Pressable
 						className='flex-row w-full items-center gap-[10px] px-[20px] py-[10px] active:bg-[#8885]'
-						onPress={() => onDelete(true)}
+						onPress={() => {
+							onDelete(true);
+							onClose();
+						}}
 					>
 						<Ionicons
 							name='school-outline'
@@ -51,7 +54,10 @@ export default function CourseDeleteModal({ visible, onClose, onDelete }: Props)
 
 					<Pressable
 						className='flex-row w-full items-center gap-[10px] px-[20px] py-[10px] active:bg-[#8885]'
-						onPress={() => onDelete(false)}
+						onPress={() => {
+							onClose();
+							onDelete(false);
+						}}
 					>
 						<Ionicons
 							name='grid-outline'
