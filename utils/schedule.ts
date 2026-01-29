@@ -41,7 +41,7 @@ export function deleteCourseByNRC(modules: Modules, nrc: string) {
     const moduleIndex = Number(moduleKey) as keyof Modules;
 
     newModules[moduleIndex].forEach((dayBlocks: Block[]) => {
-      for (let i = dayBlocks.length - 1; i >= 0; i--) {
+			for (let i = dayBlocks.length - 1; i >= 0; i--) {
         if (dayBlocks[i].nrc === nrc) {
           dayBlocks.splice(i, 1);
         }
@@ -71,4 +71,11 @@ export function deleteSingleBlock(
   );
 
   return newModules;
+}
+
+export function isValidParam(value: string) {
+	const v = value.trim();
+	
+
+	return v !== '' && v !== 'TODOS';
 }

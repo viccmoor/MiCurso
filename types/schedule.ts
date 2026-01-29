@@ -73,3 +73,8 @@ export type SelectedBlock = {
   mod: ModuleInfo;
   dayIndex: number;
 };
+
+export type AlertInfo = {
+  title: string;
+  description: string;
+};

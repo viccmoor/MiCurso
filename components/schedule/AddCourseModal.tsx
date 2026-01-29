@@ -2,7 +2,6 @@ import '@/global.css';
 
 import {
 	ActivityIndicator,
-	Alert,
 	KeyboardAvoidingView,
 	Modal,
 	Platform,
@@ -29,11 +28,13 @@ import {
 	schoolData
 } from '@/data/schedule/searchData';
 import { Colors } from '@/utils/native-theme';
-import { CourseForm, OptionSelectorData } from '@/types/schedule';
+import { isValidParam } from '@/utils/schedule';
+import { AlertInfo, CourseForm, OptionSelectorData } from '@/types/schedule';
 import { useTheme } from '@/providers/ThemeProviders';
 import { searchCourses } from '@/services/courses';
 import { EMPTY_COURSE_FORM, EMPTY_OPTION_SELECTOR_DATA } from '@/constants/schedule';
 
+import AlertModal from '@/components/schedule/AlertModal';
 import OptionSelectorModal from '@/components/schedule/OptionSelectorModal';
 
 type Props = {
@@ -52,6 +53,8 @@ export default function AddCourseModal({
 	const { theme } = useTheme();
 	const colors = Colors[theme].addCourseModal;
 
+	const [alertVisible, setAlertVisible] = useState(false);
+	const [alertInfo, setAlertInfo] = useState<AlertInfo | null>()
 	const [optionSelectorVisible, setOptionSelectorVisible] = useState(false);
 	const [loading, setLoading] = useState(false);
 
@@ -71,10 +74,17 @@ export default function AddCourseModal({
 	};
 
 	const handleSearch = async () => {
-		const hasInput = Object.values(courseForm).some(value => value.trim() !== '');
+		const hasValidInput = Object.entries(courseForm).some(
+			([key, value]) =>
+				key !== 'period' && isValidParam(value)
+		);
 		
-		if (!hasInput) {
-			Alert.alert('Atención', 'Debes completar al menos un campo para realizar la búsqueda.');
+		if (!hasValidInput) {
+			setAlertInfo({
+				title: 'No se han proporcionado filtros',
+				description: 'Ingresa al menos un criterio de búsqueda para continuar.'
+			});
+			setAlertVisible(true);
 			return;
 		}
 
@@ -86,10 +96,18 @@ export default function AddCourseModal({
 				onResults(data.data.curso);
         resetForm();
 			} else {
-				Alert.alert('Sin resultados', 'No se encontraron cursos con esos criterios.');
+				setAlertInfo({
+					title: 'Sin resultados',
+					description: 'No se encontraron cursos que coincidan con los filtros ingresados.'
+				});
+				setAlertVisible(true);
 			}
 		} catch {
-			Alert.alert('Atención', 'No pudimos buscar el curso. Intenta nuevamente.');
+			setAlertInfo({
+				title: 'Algo salió mal',
+				description: 'Ocurrió un problema al buscar los cursos. Intenta nuevamente en unos segundos.'
+			});
+			setAlertVisible(true);
 		} finally {
 			setLoading(false);
 		}
@@ -101,6 +119,14 @@ export default function AddCourseModal({
 			animationType='slide'
 			onRequestClose={onClose}
 		>
+			{alertInfo && (
+				<AlertModal
+					visible={alertVisible}
+					alertInfo={alertInfo}
+					onClose={() => setAlertVisible(false)}
+				/>
+			)}
+
 			<OptionSelectorModal
 				visible={optionSelectorVisible}
 				data={data}
