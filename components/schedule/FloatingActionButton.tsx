@@ -7,17 +7,18 @@ import React, { useRef, useState } from 'react';
 import { Colors } from '@/utils/native-theme';
 import { useTheme } from '@/providers/ThemeProviders';
 
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 type FABProps = {
   onAddCourse: () => void;
-  onShare: () => void;
+  onRemoveSchedule: () => void;
 };
 
 export default function FloatingActionButton({
   onAddCourse,
-  onShare,
+  onRemoveSchedule,
 }: FABProps) {
   const { theme } = useTheme();
   const fabColors = Colors[theme].fab;
@@ -51,9 +52,9 @@ export default function FloatingActionButton({
       inputRange: [0, 1],
       outputRange: [60, 180],
     }),
-    shareScheduleButton: animationValue.interpolate({
+    removeScheduleButton: animationValue.interpolate({
       inputRange: [0, 1],
-      outputRange: [60, 205],
+      outputRange: [60, 190],
     }),
   };
 
@@ -113,7 +114,7 @@ export default function FloatingActionButton({
         >
           <Animated.View
             style={{
-              width: width.shareScheduleButton,
+              width: width.removeScheduleButton,
               opacity: optionsOpacity,
               marginBottom: 8,
             }}
@@ -130,10 +131,13 @@ export default function FloatingActionButton({
                 alignItems: 'center',
               }}
               pointerEvents={open ? 'auto' : 'none'}
-              onPress={onShare}
+              onPress={() => {
+                toggleMenu();
+                onRemoveSchedule();
+              }}
             >
-              <Ionicons
-                name='share-social-outline'
+              <MaterialCommunityIcons
+                name='calendar-remove-outline'
                 size={22}
                 color={fabColors.optionsIcon}
               />
@@ -146,7 +150,7 @@ export default function FloatingActionButton({
                 }}
                 numberOfLines={1}
               >
-                Compartir horario
+                Eliminar horario
               </Animated.Text>
             </Pressable>
           </Animated.View>

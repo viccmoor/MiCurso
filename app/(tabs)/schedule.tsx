@@ -14,6 +14,7 @@ import ScheduleView from '@/components/schedule/ScheduleView';
 import BlockModal from '@/components/schedule/BlockModal';
 import SearchResultsModal from '@/components/schedule/SearchResultsModal';
 import ScheduleSelector from '@/components/schedule/ScheduleSelector';
+import RemoveScheduleModal from '@/components/schedule/RemoveScheduleModal';
 
 export default function Schedule() {
   const [calendars, setAllCalendars] = useState<Calendars>(DEFAULT_CALENDARS);
@@ -23,6 +24,7 @@ export default function Schedule() {
   const [modalVisible, setModalVisible] = useState(false);
   const [resultsModalVisible, setResultsModalVisible] = useState(false);
   const [blockModalVisible, setBlockModalVisible] = useState(false);
+  const [removeScheduleVisible, setRemoveScheduleVisible] = useState(false);
 
   const [searchResults, setSearchResults] = useState([]);
   const [selectedBlock, setSelectedBlock] = useState<SelectedBlock | null>(null);
@@ -107,7 +109,23 @@ export default function Schedule() {
 
       <FloatingActionButton
         onAddCourse={() => setModalVisible(true)}
-        onShare={() => {}}
+        onRemoveSchedule={() => setRemoveScheduleVisible(true)}
+      />
+
+      <RemoveScheduleModal
+        visible={removeScheduleVisible}
+        onClose={() => setRemoveScheduleVisible(false)}
+        onRemoveSchedule={() => {
+          setAllCalendars(prev => {
+            return {
+              ...prev,
+              [currentPeriod]: {
+                ...prev[currentPeriod],
+                modules: defaultModules
+              }
+            };
+          });
+        }}
       />
 
       <SearchResultsModal
