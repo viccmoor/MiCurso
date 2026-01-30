@@ -8,6 +8,7 @@ export async function searchCourses(courseForm: CourseForm) {
     nrc: courseForm.nrc,
     nombre: courseForm.name,
     profesor: courseForm.teacher,
+    proxy_url: 'https://buscacursos.vicmoor07.workers.dev/',
   });
 
   const res = await fetch(
@@ -15,6 +16,5 @@ export async function searchCourses(courseForm: CourseForm) {
   );
 
   if (!res.ok) throw new Error('Error buscando cursos');
-
   return res.json();
 };
