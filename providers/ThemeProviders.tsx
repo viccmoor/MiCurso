@@ -7,11 +7,13 @@ interface ThemeProviderProps {
 	children: React.ReactNode;
 };
 
-export const ThemeContext = createContext<{
+type ThemeContextType = {
 	theme: 'light' | 'dark';
-}>({
-	theme: 'light',
-});
+};
+
+export const ThemeContext = createContext<ThemeContextType | undefined>(
+	undefined
+);
 
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
 	const { colorScheme } = useColorScheme();
@@ -28,5 +30,9 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
 
 export const useTheme = () => {
 	const context = useContext(ThemeContext);
+	if (!context) {
+    throw new Error('useTheme must be used within ThemeProvider');
+  }
+	
 	return context;
 };
