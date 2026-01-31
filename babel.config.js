@@ -7,7 +7,6 @@ module.exports = function (api) {
     ],
     plugins: [
       "react-native-reanimated/plugin",
-      "@maplibre/maplibre-react-native"
     ],
   };
 };
