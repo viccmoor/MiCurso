@@ -1,5 +1,6 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import * as Notifications from 'expo-notifications';
 
@@ -17,11 +18,13 @@ Notifications.setNotificationHandler({
 
 export default function RootLayout() {
   return (
-    <ScheduleProvider>
-      <ThemeProvider>
-        <ThemedStack />
-      </ThemeProvider>
-    </ScheduleProvider>
+    <SafeAreaProvider>
+      <ScheduleProvider>
+        <ThemeProvider>
+          <ThemedStack />
+        </ThemeProvider>
+      </ScheduleProvider>
+    </SafeAreaProvider>
   );
 }
 

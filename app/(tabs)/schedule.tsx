@@ -1,8 +1,8 @@
 import '@/global.css';
 import { useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Colors } from '@/utils/native-theme';
 import { useTheme } from '@/providers/ThemeProviders';
 import { defaultModules } from '@/constants/schedule';
 import { useSchedule } from '@/providers/ScheduleProvider';
@@ -29,8 +29,8 @@ export default function Schedule() {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedBlock, setSelectedBlock] = useState<SelectedBlock | null>(null);
 
+  const insets = useSafeAreaInsets();
   const { theme } = useTheme();
-  const appColors = Colors[theme].app;
 
   const addCourseToSchedule = (course: any) => {
     setCalendars(prev => {
@@ -49,7 +49,13 @@ export default function Schedule() {
   };
 
   return (
-    <SafeAreaView className='flex-1' style={{ backgroundColor: appColors.layout }}>
+    <View
+      className='flex-1 bg-[color:var(--color-bg)]'
+      style={{
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+      }}
+    >
       <ScheduleSelector
         data={{ calendars: calendars, currentPeriod: currentPeriod }}
         onSetPeriod={(period) => setCurrentPeriod(period)}
@@ -137,6 +143,6 @@ export default function Schedule() {
           setModalVisible(true);
         }}
       />
-    </SafeAreaView>
+    </View>
   );
 }

@@ -6,7 +6,7 @@ import {
   Linking,
   Pressable,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 
 import Entypo from '@expo/vector-icons/Entypo';
@@ -15,12 +15,19 @@ import { useTheme } from '@/providers/ThemeProviders';
 import { Colors } from '@/utils/native-theme';
 
 export default function About() {
+  const insets = useSafeAreaInsets();
   const { theme } = useTheme();
   const colors = Colors[theme].info;
   const navigation = useNavigation();
 
   return (
-    <SafeAreaView className='flex-1 bg-[color:var(--color-bg)] justify-start items-start'>
+    <View
+      className='flex-1 bg-[color:var(--color-bg)] justify-start items-start'
+      style={{
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+      }}
+    >
       <View className='w-full flex-row items-center justify-start p-[15px]'>
         <Pressable
           className='w-[48px] h-[48px] justify-center items-center'
@@ -85,6 +92,6 @@ export default function About() {
           </Pressable>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
