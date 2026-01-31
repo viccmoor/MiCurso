@@ -13,6 +13,7 @@ import { getNextClass } from '@/utils/schedule';
 import { useTheme } from '@/providers/ThemeProviders';
 import { useSchedule } from '@/providers/ScheduleProvider';
 import { DAY_MAP, TYPE_COLORS } from '@/constants/schedule';
+import { useClassNotifications } from '@/hooks/useClassNotifications';
 import resolveMapTarget, { getRegionFromFeature } from '@/utils/geo';
 
 export default function HomeScreen() {
@@ -20,6 +21,8 @@ export default function HomeScreen() {
   const { calendars, currentPeriod } = useSchedule();
 
   const nextClass = getNextClass(calendars, currentPeriod);
+  useClassNotifications(nextClass ?? undefined);
+
   const mapTarget = nextClass
     ? resolveMapTarget(nextClass.block.location, nextClass.block.campus)
     : undefined;
