@@ -1,5 +1,5 @@
-import { DAY_INDEX } from '@/constants/schedule';
-import { Block, Modules, ModuleIndex } from '@/types/schedule';
+import { DAY_INDEX, MODULES } from '@/constants/schedule';
+import { Block, Calendars, Modules, ModuleIndex, NextClass } from '@/types/schedule';
 
 export function addCourseToModules(modules: Modules, course: any) {
 	const newModules = JSON.parse(JSON.stringify(modules));
@@ -75,7 +75,48 @@ export function deleteSingleBlock(
 
 export function isValidParam(value: string) {
 	const v = value.trim();
-	
-
 	return v !== '' && v !== 'TODOS';
 }
+
+export function getNextClass(calendars: Calendars, currentPeriod: string) {
+	const calendar = calendars[currentPeriod];
+  if (!calendar) return null;
+
+  const now = new Date();
+  const today = new Date();
+
+  const todayIndex = (today.getDay() + 6) % 7;
+  const futureClasses: NextClass[] = [];
+
+  Object.entries(calendar.modules).forEach(([moduleKey, module]) => {
+    const moduleIndex = Number(moduleKey) as ModuleIndex;
+    const moduleInfo = MODULES.find(m => m.id === moduleIndex);
+    if (!moduleInfo) return;
+
+    const [hour, minute] = moduleInfo.start.split(':').map(Number);
+
+    module.forEach((dayBlocks, dayIndex) => {
+      dayBlocks.forEach(block => {
+        const classDate = new Date();
+        classDate.setHours(hour, minute, 0, 0);
+
+        let diffDays = dayIndex - todayIndex;
+        if (diffDays < 0) diffDays += 7;
+
+        classDate.setDate(today.getDate() + diffDays);
+
+        if (classDate > now) {
+          futureClasses.push({
+            block,
+            date: classDate,
+            dayIndex,
+          });
+        }
+      });
+    });
+  });
+
+  futureClasses.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+  return futureClasses[0] ?? null;
+};

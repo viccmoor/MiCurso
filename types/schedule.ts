@@ -39,8 +39,8 @@ export type CourseForm = {
 }
 
 export type DataOption = {
-    label: string;
-    value: string;
+  label: string;
+  value: string;
 };
 
 export type OptionSelectorData = {
@@ -78,3 +78,9 @@ export type AlertInfo = {
   title: string;
   description: string;
 };
+
+export type NextClass = {
+  block: Block;
+  date: Date;
+  dayIndex: number;
+}

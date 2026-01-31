@@ -1,13 +1,16 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 
-import { ThemeProvider} from '@/providers/ThemeProviders';
+import { ThemeProvider } from '@/providers/ThemeProviders';
+import { ScheduleProvider } from '@/providers/ScheduleProvider';
 
 export default function RootLayout() {
   return (
-    <ThemeProvider>
-      <ThemedStack />
-    </ThemeProvider>
+    <ScheduleProvider>
+      <ThemeProvider>
+        <ThemedStack />
+      </ThemeProvider>
+    </ScheduleProvider>
   );
 }
 
