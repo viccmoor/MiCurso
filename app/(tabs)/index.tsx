@@ -36,7 +36,7 @@ export default function HomeScreen() {
         </Text>
       </View>
 
-      <View className='w-full items-center px-[20px] py-[10px] border-y border-[color:var(--color-schedule-block)]'>
+      <View className='w-full items-center px-[20px] py-[10px]'>
         <View className='flex-row min-h-[80px] w-full items-center rounded-xl'>
           {nextClass ? (
             <React.Fragment>
