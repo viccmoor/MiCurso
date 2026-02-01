@@ -3,7 +3,14 @@ import {
   View,
   Text
 } from 'react-native';
-import MapView, { Geojson } from 'react-native-maps';
+
+import {
+	MapView,
+	Camera,
+	ShapeSource,
+	FillLayer,
+	LineLayer,
+} from '@maplibre/maplibre-react-native';
 
 import React from 'react';
 
@@ -30,6 +37,11 @@ export default function HomeScreen() {
   const region = mapTarget
     ? getRegionFromFeature(mapTarget.geojson.features[0])
     : undefined;
+
+  const cameraProps = region ? {
+    centerCoordinate: [region.longitude, region.latitude],
+    zoomLevel: 16,
+  } : {};
 
   return (
     <View className='flex-1 bg-[color:var(--color-bg)]'>
@@ -114,15 +126,36 @@ export default function HomeScreen() {
                     flex: 1,
                     zIndex: 50
                   }}
-                  initialRegion={region}
-                  userInterfaceStyle={theme}
+                  mapStyle='https://tiles.openfreemap.org/styles/liberty'
+                  logoEnabled={false}
+                  attributionEnabled={false}
+                  compassEnabled={false}
                 >
-                  <Geojson
-                    geojson={mapTarget.geojson as any}
-                    strokeColor="#2563eb"
-                    fillColor="#2563EB40"
-                    strokeWidth={2}
+                  <Camera
+                    {...cameraProps}
+                    animationDuration={1000}
                   />
+
+                  <ShapeSource
+                    id='targetSource'
+                    shape={mapTarget.geojson as any}
+                  >
+                    <FillLayer
+                      id='targetFill'
+                      style={{
+                        fillColor: '#2563EB',
+                        fillOpacity: 0.25,
+                      }}
+                    />
+
+                    <LineLayer
+                      id='targetOutline'
+                      style={{
+                        lineColor: '#2563eb',
+                        lineWidth: 2,
+                      }}
+                    />
+                  </ShapeSource>
                 </MapView>
               )
               : (
