@@ -6,6 +6,7 @@ import {
 	Pressable
 } from 'react-native';
 import { useState } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
@@ -24,6 +25,8 @@ type Props = {
 };
 
 export default function BlockModal({ visible, selectedBlock, modules, onClose, onDeleteCourse, onDeleteBlock }: Props) {
+	const insets = useSafeAreaInsets();
+
 	const [courseInfoVisible, setCourseInfoVisible] = useState(false);
 	const [selectedCourse, setSelectedCourse] = useState<Block | null>(null);
 	const dayBlocks = modules[selectedBlock.mod.id as ModuleIndex][selectedBlock.dayIndex];
@@ -51,6 +54,7 @@ export default function BlockModal({ visible, selectedBlock, modules, onClose, o
 
 			<Pressable
 				className='flex-1 bg-black/50 justify-center items-center'
+				style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
 				onPress={onClose}
 			>
 				<View className='w-[70%] h-[50%] bg-[color:var(--color-bg)] rounded-3xl p-[10px]'>

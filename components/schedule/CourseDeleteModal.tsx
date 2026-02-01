@@ -4,6 +4,7 @@ import {
 	Modal,
 	Pressable,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -17,6 +18,7 @@ type Props = {
 };
 
 export default function CourseDeleteModal({ visible, onClose, onDelete }: Props) {
+	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
 	const colors = Colors[theme].courseInfoModal;
 
@@ -28,6 +30,7 @@ export default function CourseDeleteModal({ visible, onClose, onDelete }: Props)
 		>
 			<Pressable
 				className='flex-1 bg-black/50 justify-end items-center'
+				style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
 				onPress={onClose}
 			>
 				<View className='bg-[color:var(--color-bg)] w-[90%] h-[28%] mb-[20px] rounded-2xl justify-center'>

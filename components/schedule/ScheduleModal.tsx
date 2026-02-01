@@ -6,6 +6,7 @@ import {
 	ScrollView,
 	StyleSheet,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export default function ScheduleModal({ visible, data, onClose, onSetPeriod }: Props) {
+	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
 	const colors = Colors[theme].schedule;
 
@@ -33,6 +35,7 @@ export default function ScheduleModal({ visible, data, onClose, onSetPeriod }: P
 		>
 			<Pressable
 				className='flex-1 bg-black/50 justify-center items-center'
+				style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
 				onPress={onClose}
 			>
 				<View className='bg-[color:var(--color-bg)] w-[80%] h-[70%] rounded-2xl'>

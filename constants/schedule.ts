@@ -4,6 +4,7 @@ import {
   CourseForm,
   Module,
   ModuleIndex,
+  ModuleInfo,
   Modules,
   OptionSelectorData,
   TypeColor
@@ -33,7 +34,7 @@ export const defaultModules: Modules = Object.fromEntries(
   moduleIndexes.map(i => [i, createEmptyModule()])
 ) as Modules;
 
-export const MODULES = [
+export const MODULES: ModuleInfo[] = [
   { id: 1, label: 'Mod 1', start: '8:20', range: '8:20 - 9:30' },
   { id: 2, label: 'Mod 2', start: '9:40', range: '9:40 - 10:50' },
   { id: 3, label: 'Mod 3', start: '11:00', range: '11:00 - 12:10' },

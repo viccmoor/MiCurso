@@ -62,7 +62,7 @@ export default function Schedule({ modules, onPressBlock }: Props) {
                       return (
                         <Pressable
                           key={dayIndex}
-                          onPress={() => onPressBlock({mod, dayBlocks, dayIndex})}
+                          onPress={() => onPressBlock({mod, dayIndex})}
                           className='flex-1 gap-[1px] items-center h-full rounded-sm border border-transparent active:border-[#AAAA] overflow-hidden'
                         >
                           {

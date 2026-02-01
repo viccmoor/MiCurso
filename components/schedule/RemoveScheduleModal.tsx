@@ -4,6 +4,7 @@ import {
 	Modal,
 	Pressable,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = {
 	visible: boolean;
@@ -12,6 +13,7 @@ type Props = {
 };
 
 export default function RemoveScheduleModal({ visible, onClose, onRemoveSchedule }: Props) {
+	const insets = useSafeAreaInsets();
   return (
 		<Modal
 			visible={visible}
@@ -20,6 +22,7 @@ export default function RemoveScheduleModal({ visible, onClose, onRemoveSchedule
 		>
 			<Pressable
 				className='flex-1 bg-black/50 justify-center items-center'
+				style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
 				onPress={onClose}
 			>
 				<View className='bg-[color:var(--color-bg)] w-[80%] min-h-[170px] rounded-2xl p-[20px]'>

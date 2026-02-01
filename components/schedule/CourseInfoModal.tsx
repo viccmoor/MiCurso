@@ -5,6 +5,7 @@ import {
 	Pressable
 } from 'react-native';
 import { useState } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
 	MapView,
@@ -36,6 +37,7 @@ type Props = {
 };
 
 export default function CourseInfoModal({ visible, course, onClose, onDeleteCourse, onDeleteBlock }: Props) {
+	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
 	const colors = Colors[theme].courseInfoModal;
 
@@ -57,7 +59,10 @@ export default function CourseInfoModal({ visible, course, onClose, onDeleteCour
 			onRequestClose={onClose}
 			transparent
 		>
-			<View className='flex-1 bg-[color:var(--color-bg)]'>
+			<View
+				className='flex-1 bg-[color:var(--color-bg)]'
+				style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
+			>
 				<CourseDeleteModal
 					visible={deleteModalVisible}
 					onClose={() => setDeleteModalVisible(false)}
