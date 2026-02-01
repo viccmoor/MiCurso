@@ -8,6 +8,14 @@ export async function searchCourses(courseForm: CourseForm) {
     nrc: courseForm.nrc,
     nombre: courseForm.name,
     profesor: courseForm.teacher,
+    campus: courseForm.campus,
+    formato: courseForm.format,
+    categoria: courseForm.category,
+    area_fg: courseForm.generalFormationArea,
+    unidad_academica: courseForm.academicUnit,
+    periodo_admision: courseForm.admissionPeriod,
+    escuela: courseForm.school,
+    nivel: courseForm.programLevel,
     proxy_url: 'https://buscacursos.vicmoor07.workers.dev/',
   });
 
