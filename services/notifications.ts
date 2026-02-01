@@ -24,7 +24,7 @@ export async function scheduleNextClassNotification(nextClass: NextClass) {
 	await Notifications.cancelAllScheduledNotificationsAsync();
 	await Notifications.scheduleNotificationAsync({
 		content: {
-			title: 'Próxima clase',
+			title: 'Próxima clase en 10 minutos',
 			body: `${nextClass.block.name} - Sala: ${nextClass.block.location}`,
 			sound: true,
 		},
