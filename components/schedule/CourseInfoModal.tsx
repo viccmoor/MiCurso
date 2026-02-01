@@ -5,7 +5,15 @@ import {
 	Pressable
 } from 'react-native';
 import { useState } from 'react';
-import MapView, { Geojson } from 'react-native-maps';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import {
+	MapView,
+	Camera,
+	ShapeSource,
+	FillLayer,
+	LineLayer,
+} from '@maplibre/maplibre-react-native';
 
 import Entypo from '@expo/vector-icons/Entypo';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -29,6 +37,7 @@ type Props = {
 };
 
 export default function CourseInfoModal({ visible, course, onClose, onDeleteCourse, onDeleteBlock }: Props) {
+	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
 	const colors = Colors[theme].courseInfoModal;
 
@@ -36,6 +45,10 @@ export default function CourseInfoModal({ visible, course, onClose, onDeleteCour
 	const region = mapTarget
 		? getRegionFromFeature(mapTarget.geojson.features[0])
 		: undefined;
+	const cameraProps = region ? {
+    centerCoordinate: [region.longitude, region.latitude],
+    zoomLevel: 16,
+  } : {};
 
 	const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
@@ -46,7 +59,10 @@ export default function CourseInfoModal({ visible, course, onClose, onDeleteCour
 			onRequestClose={onClose}
 			transparent
 		>
-			<View className='flex-1 bg-[color:var(--color-bg)]'>
+			<View
+				className='flex-1 bg-[color:var(--color-bg)]'
+				style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
+			>
 				<CourseDeleteModal
 					visible={deleteModalVisible}
 					onClose={() => setDeleteModalVisible(false)}
@@ -187,15 +203,36 @@ export default function CourseInfoModal({ visible, course, onClose, onDeleteCour
 												flex: 1,
 												zIndex: 50
 											}}
-											initialRegion={region}
-											userInterfaceStyle={theme}
+											mapStyle='https://tiles.openfreemap.org/styles/liberty'
+											logoEnabled={false}
+											attributionEnabled={false}
+											compassEnabled={false}
 										>
-											<Geojson
-												geojson={mapTarget.geojson as any}
-												strokeColor="#2563eb"
-												fillColor="#2563EB40"
-												strokeWidth={2}
+											<Camera
+												{...cameraProps}
+												animationDuration={1000}
 											/>
+
+											<ShapeSource
+												id='targetSource'
+												shape={mapTarget.geojson as any}
+											>
+												<FillLayer
+													id='targetFill'
+													style={{
+														fillColor: '#2563EB',
+														fillOpacity: 0.25,
+													}}
+												/>
+
+												<LineLayer
+													id='targetOutline'
+													style={{
+														lineColor: '#2563eb',
+														lineWidth: 2,
+													}}
+												/>
+											</ShapeSource>
 										</MapView>
 									)
 									: (

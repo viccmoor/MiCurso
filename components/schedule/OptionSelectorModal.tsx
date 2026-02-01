@@ -6,6 +6,7 @@ import {
 	ScrollView,
 	StyleSheet,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export default function OptionSelectorModal({ visible, data, onClose, onSelectOption }: Props) {
+	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
 	const colors = Colors[theme].optionSelectorModal;
 
@@ -33,6 +35,7 @@ export default function OptionSelectorModal({ visible, data, onClose, onSelectOp
 		>
 			<Pressable
 				className='flex-1 bg-black/50 justify-center items-center'
+				style={{ flex:1, paddingTop: insets.top, paddingBottom: insets.bottom }}
 				onPress={onClose}
 			>
 				<View className='w-[95%] h-[90%] bg-[color:var(--color-bg)] rounded-3xl'>

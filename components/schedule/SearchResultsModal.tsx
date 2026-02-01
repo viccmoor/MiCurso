@@ -6,6 +6,7 @@ import {
 	Pressable,
 } from 'react-native';
 import { useState } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export default function SearchResultsModal({ visible, searchResults, onAddCourse, onClose }: Props) {
+	const insets = useSafeAreaInsets();
 	const { theme } = useTheme();
 	const colors = Colors[theme].searchResultsModal;
 
@@ -46,6 +48,7 @@ export default function SearchResultsModal({ visible, searchResults, onAddCourse
 
 			<Pressable
 				className='flex-1 bg-black/50 justify-center items-center'
+				style={{ flex:1, paddingTop: insets.top, paddingBottom: insets.bottom }}
 				onPress={onClose}
 			>
 				<View className='w-[90%] h-[80%] bg-[color:var(--color-bg)] rounded-2xl p-4'>

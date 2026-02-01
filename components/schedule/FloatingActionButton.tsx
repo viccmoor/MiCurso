@@ -1,6 +1,7 @@
 import '@/global.css';
 import { View, Pressable, Animated, Modal } from 'react-native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import React, { useRef, useState } from 'react';
 
@@ -20,6 +21,7 @@ export default function FloatingActionButton({
   onAddCourse,
   onRemoveSchedule,
 }: FABProps) {
+  const insets = useSafeAreaInsets();
   const { theme } = useTheme();
   const fabColors = Colors[theme].fab;
   const tabBarHeight = useBottomTabBarHeight(); 
@@ -74,22 +76,23 @@ export default function FloatingActionButton({
     outputRange: [-10, 0],
     extrapolate: 'clamp',
   });
-  
+
   return (
     <React.Fragment>
       {!open && (
         <View
-          className='absolute bottom-[20px] right-[25px] items-end'
+          style={{ 
+            position: 'absolute',
+            bottom: insets.bottom,
+            right: 25,
+            zIndex: 50,
+          }}
         >
           <Pressable
             onPress={toggleMenu}
-            className='bg-[color:var(--color-primary-default)] flex-1 justify-center items-center w-[60px] h-[60px] rounded-full'
+            className='bg-[color:var(--color-primary-default)] justify-center items-center w-[60px] h-[60px] rounded-full shadow-lg'
           >
-            <MaterialIcons
-              name='add'
-              size={24}
-              color={fabColors.mainIconClosed}
-            />
+            <MaterialIcons name='add' size={24} color={fabColors.mainIconClosed} />
           </Pressable>
         </View>
       )}
@@ -98,18 +101,14 @@ export default function FloatingActionButton({
         visible={open}
         animationType='fade'
         transparent
+        statusBarTranslucent
       >
-        {open && (
-          <Pressable
-            className='absolute top-0 right-0 bottom-0 left-0 bg-black/50'
-            onPress={toggleMenu}
-          />
-        )}
-
+        <Pressable className='flex-1 bg-black/50' onPress={toggleMenu} />
         <View
-          className='absolute right-[25px] items-end'
+          className='absolute items-end'
           style={{
-            bottom: 5 + tabBarHeight
+            right: 25,
+            bottom: tabBarHeight + insets.bottom,
           }}
         >
           <Animated.View

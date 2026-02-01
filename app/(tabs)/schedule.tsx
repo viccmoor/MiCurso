@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { useTheme } from '@/providers/ThemeProviders';
 import { defaultModules } from '@/constants/schedule';
 import { useSchedule } from '@/providers/ScheduleProvider';
 import { SelectedBlock, ModuleIndex } from '@/types/schedule';
@@ -30,7 +29,6 @@ export default function Schedule() {
   const [selectedBlock, setSelectedBlock] = useState<SelectedBlock | null>(null);
 
   const insets = useSafeAreaInsets();
-  const { theme } = useTheme();
 
   const addCourseToSchedule = (course: any) => {
     setCalendars(prev => {

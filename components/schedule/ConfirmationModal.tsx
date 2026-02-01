@@ -3,7 +3,8 @@ import {
 	Text,
 	Modal,
 	Pressable,
-} from "react-native";
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = {
 	visible: boolean;
@@ -13,6 +14,7 @@ type Props = {
 };
 
 export default function ConfirmationModal({ visible, course, onClose, onAddCourse }: Props) {
+	const insets = useSafeAreaInsets();
 	return (
 		<Modal
 			visible={visible}
@@ -21,6 +23,7 @@ export default function ConfirmationModal({ visible, course, onClose, onAddCours
 		>
 			<Pressable
 				className='flex-1 bg-black/50 justify-center items-center'
+				style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
 				onPress={onClose}
 			>
 				<View className='bg-[color:var(--color-bg)] w-[85%] h-[20%] rounded-2xl p-[20px]'>
