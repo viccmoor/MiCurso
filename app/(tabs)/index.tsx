@@ -1,7 +1,8 @@
 import '@/global.css';
 import {
   View,
-  Text
+  Text,
+  Pressable,
 } from 'react-native';
 
 import {
@@ -14,8 +15,9 @@ import {
 
 import React from 'react';
 
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
+import { Colors } from '@/utils/native-theme';
 import { getNextClass } from '@/utils/schedule';
 import { useTheme } from '@/providers/ThemeProviders';
 import { useSchedule } from '@/providers/ScheduleProvider';
@@ -25,6 +27,8 @@ import resolveMapTarget, { getRegionFromFeature } from '@/utils/geo';
 
 export default function HomeScreen() {
   const { theme } = useTheme();
+  const colors = Colors[theme].home;
+
   const { calendars, currentPeriod } = useSchedule();
 
   const nextClass = getNextClass(calendars, currentPeriod);
@@ -45,16 +49,20 @@ export default function HomeScreen() {
 
   return (
     <View className='flex-1 bg-[color:var(--color-bg)]'>
-      <View className='w-full items-start px-[20px] py-[10px]'>
-        <Text className='text-[color:var(--text-calendar)] text-2xl font-medium'>
-          Próxima clase
-        </Text>
-      </View>
+      {nextClass && mapTarget && (
+        <React.Fragment>
+          <View className='flex-row w-full items-start px-[20px] gap-[5px]'>
+            <Text className='bg-[color:var(--next-class-bg)] text-[color:var(--next-class-text)] text-xs font-bold p-[5px] rounded-md'>
+              Próxima clase
+            </Text>
 
-      <View className='w-full items-center px-[20px] py-[10px]'>
-        <View className='flex-row min-h-[80px] w-full items-center rounded-xl'>
-          {nextClass ? (
-            <React.Fragment>
+            <Text className='bg-[color:var(--next-class-bg)] text-[color:var(--next-class-text)] text-xs font-bold p-[5px] rounded-md'>
+              {currentPeriod}
+            </Text>
+          </View>
+
+          <View className='w-full items-center px-[20px] py-[10px]'>
+            <View className='flex-row min-h-[80px] w-full items-center rounded-xl'>
               <View
                 className='self-stretch items-center justify-center px-[20px] border-r-[3px]'
                 style={{
@@ -95,32 +103,17 @@ export default function HomeScreen() {
               >
                 {nextClass.block.type}
               </Text>
-            </React.Fragment>
-          ) : (
-            <View className='flex-1 flex-row bg-[color:var(--color-schedule-block)] items-center justify-center gap-[5px] p-[10px] rounded-2xl'>
-              <MaterialIcons name='event-available' size={64} color='#8885' />
-              <View>
-                <Text className='text-[color:var(--text-calendar)] text-base font-medium opacity-[33%]'>
-                  Sin clases por ahora
-                </Text>
-                <Text className='text-[color:var(--text-calendar)] text-sm opacity-[33%]'>
-                  Revisa el horario completo si quieres
-                </Text>
-              </View>
             </View>
-          )}
-        </View>
-      </View>
+          </View>
 
-      <View className='w-full flex-1 p-[20px]'>
-          <View
-            className='w-full h-full'
-            style={{
-              borderRadius: 50,
-              overflow: 'hidden',
-            }}
-          >
-            {mapTarget ? (
+          <View className='w-full flex-1 px-[20px] pb-[20px]'>
+              <View
+                className='w-full h-full'
+                style={{
+                  borderRadius: 50,
+                  overflow: 'hidden',
+                }}
+              >
                 <MapView
                   style={{
                     flex: 1,
@@ -157,19 +150,39 @@ export default function HomeScreen() {
                     />
                   </ShapeSource>
                 </MapView>
-              )
-              : (
-                <View className='bg-[color:var(--color-schedule-block)] flex-1 items-center justify-center'>
-                  <MaterialIcons 
-                    name='location-off' 
-                    size={128}
-                    color='#8885'
-                  />
-                </View>
-              )
-            }
+              </View>
           </View>
+        </React.Fragment>
+      )}
+
+      {!nextClass && (
+        <View className='flex-1 items-center justify-center'>
+          <MaterialCommunityIcons
+            className='bg-[color:var(--color-bg)] p-[20px] rounded-full border-[5px] border-secondary'
+            name='calendar-check'
+            size={128}
+            color={colors.calendarIcon}
+          />
+
+          <Text className='text-[color:var(--text-calendar)] text-2xl font-bold mt-[20px]'>
+            Aún no tienes clases
+          </Text>
+
+          <Text className='max-w-[240px] text-[color:var(--text-calendar)] text-base text-center font-base opacity-70 mt-[10px]'>
+            Agrega tus cursos del período {currentPeriod} y verás tu próxima clase.
+          </Text>
+
+          <View className='w-full max-w-[216px] h-px bg-[#8885] px-[20px] mt-[20px]'/>
+
+          <Pressable
+            className='w-full max-w-[256px] items-center bg-[color:var(--color-secondary)] p-[15px] rounded-xl mt-[20px]'
+          >
+            <Text className='text-[color:var(--color-cta-text)] text-lg font-medium'>
+              Agregar cursos
+            </Text>
+          </Pressable>
         </View>
+      )}
     </View>
   );
 }

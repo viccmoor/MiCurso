@@ -24,6 +24,9 @@ export const themes = {
 		'--text-about': '#1E1E1E',
 		'--text-license-button': '#FFFFFF',
 		'--text-calendar': '#1E1E1E',
+		'--next-class-bg': '#2D336B',
+		'--next-class-text': '#FFFFFF',
+		'--color-cta-text': '#FFFFFF',
 	}),
 	dark: vars({
 		'--color-bg': '#1E1E1E',
@@ -48,5 +51,8 @@ export const themes = {
 		'--text-about': '#FFFFFF',
 		'--text-license-button': '#1E1E1E',
 		'--text-calendar': '#FFFFFF',
+		'--next-class-bg': '#FFFFFF',
+		'--next-class-text': '#1E1E1E',
+		'--color-cta-text': '#2D336B',
 	}),
 };

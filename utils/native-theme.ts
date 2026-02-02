@@ -44,6 +44,9 @@ export const Colors = {
       schoolIcon: '#1E1E1E',
       checkboxCircle: '#2D336B',
     },
+    home: {
+      calendarIcon: '#2D336B',
+    },
   },
   dark: {
     fab: {
@@ -89,6 +92,9 @@ export const Colors = {
     schedule: {
       schoolIcon: '#FFFFFF',
       checkboxCircle: '#A9B5DF',
+    },
+    home: {
+      calendarIcon: '#A9B5DF',
     },
   },
 };
