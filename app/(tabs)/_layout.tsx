@@ -1,5 +1,5 @@
-import { Tabs } from 'expo-router';
-import { Image } from 'react-native';
+import { Tabs, router } from 'expo-router';
+import { Image, Pressable } from 'react-native';
 
 import React from 'react';
 
@@ -40,6 +40,19 @@ export default function TabLayout() {
             }}
             resizeMode="contain"
           />
+        ),
+        headerRight: () => (
+          <Pressable
+            onPress={() => router.push('/settings')}
+            style={{ marginRight: 16 }}
+            hitSlop={10}
+          >
+            <MaterialIcons
+              name='more-vert'
+              size={26}
+              color={appColors.tabs}
+            />
+          </Pressable>
         ),
       }}
     >

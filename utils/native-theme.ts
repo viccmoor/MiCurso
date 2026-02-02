@@ -35,6 +35,7 @@ export const Colors = {
     app: {
       layout: '#FFFFFF',
       tabs: '#1E1E1E',
+      text: '#1E1E1E',
     },
     info: {
       githubLogo: '#1E1E1E',
@@ -46,6 +47,10 @@ export const Colors = {
     },
     home: {
       calendarIcon: '#2D336B',
+    },
+    settings: {
+      themeIcon: '#1E1E1EB3',
+      checkboxCircle: '#2D336B',
     },
   },
   dark: {
@@ -84,6 +89,7 @@ export const Colors = {
     app: {
       layout: '#1E1E1E',
       tabs: '#FFFFFF',
+      text: '#FFFFFF',
     },
     info: {
       githubLogo: '#FFFFFF',
@@ -95,6 +101,10 @@ export const Colors = {
     },
     home: {
       calendarIcon: '#A9B5DF',
+    },
+    settings: {
+      themeIcon: '#FFFFFFB3',
+      checkboxCircle: '#A9B5DF',
     },
   },
 };
