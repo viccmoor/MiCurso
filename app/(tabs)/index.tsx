@@ -21,9 +21,10 @@ import { Colors } from '@/utils/native-theme';
 import { getNextClass } from '@/utils/schedule';
 import { useTheme } from '@/providers/ThemeProviders';
 import { useSchedule } from '@/providers/ScheduleProvider';
-import { DAY_MAP, TYPE_COLORS } from '@/constants/schedule';
 import { useClassNotifications } from '@/hooks/useClassNotifications';
 import resolveMapTarget, { getRegionFromFeature } from '@/utils/geo';
+
+import NextClassCard from '@/components/home/NextClassCard';
 
 export default function HomeScreen() {
   const { theme } = useTheme();
@@ -44,113 +45,69 @@ export default function HomeScreen() {
 
   const cameraProps = region ? {
     centerCoordinate: [region.longitude, region.latitude],
-    zoomLevel: 16,
+    zoomLevel: mapTarget?.zoom === 'campus' ? 14 : 16,
   } : {};
 
   return (
     <View className='flex-1 bg-[color:var(--color-bg)]'>
       {nextClass && mapTarget && (
         <React.Fragment>
-          <View className='flex-row w-full items-start px-[20px] gap-[5px]'>
-            <Text className='bg-[color:var(--next-class-bg)] text-[color:var(--next-class-text)] text-xs font-bold p-[5px] rounded-md'>
-              Próxima clase
-            </Text>
-
-            <Text className='bg-[color:var(--next-class-bg)] text-[color:var(--next-class-text)] text-xs font-bold p-[5px] rounded-md'>
-              {currentPeriod}
-            </Text>
+          <View className='px-[20px] mt-[5px]'>
+            <NextClassCard nextClass={nextClass}/>
           </View>
 
-          <View className='w-full items-center px-[20px] py-[10px]'>
-            <View className='flex-row min-h-[80px] w-full items-center rounded-xl'>
-              <View
-                className='self-stretch items-center justify-center px-[20px] border-r-[3px]'
-                style={{
-                  borderRightColor: TYPE_COLORS[nextClass.block.type].border || TYPE_COLORS.DEFAULT.border
-                }}
-              >
-                <Text className='text-[color:var(--text-calendar)] text-xl font-medium'>
-                  {DAY_MAP[nextClass.dayIndex]}
-                </Text>
-
-                <Text className='text-[color:var(--text-calendar)] text-sm font-medium opacity-70'>
-                  {nextClass.date.toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </Text>
-              </View>
-              
-              <View className='flex-1 items-start p-[10px]'>
-                <Text className='text-[color:var(--text-calendar)] text-sm font-medium opacity-70'>
-                  {nextClass.block.sigle}-{nextClass.block.section}
-                </Text>
-
-                <Text className='text-[color:var(--text-calendar)] text-xl font-medium'>
-                  {nextClass.block.name}
-                </Text>
-
-                <Text className='text-[color:var(--text-calendar)] text-sm font-medium'>
-                  Sala: {nextClass.block.location}
-                </Text>
-              </View>
-
-              <Text
-                className='rounded-full text-lg text-white px-[20px] py-[10px]'
-                style={{
-                  backgroundColor: TYPE_COLORS[nextClass.block.type]?.border || TYPE_COLORS.DEFAULT.border,
-                }}
-              >
-                {nextClass.block.type}
-              </Text>
-            </View>
-          </View>
-
-          <View className='w-full flex-1 px-[20px] pb-[20px]'>
-              <View
-                className='w-full h-full'
-                style={{
-                  borderRadius: 50,
-                  overflow: 'hidden',
-                }}
-              >
-                <MapView
+          <View className='flex-1 px-[20px] py-[10px]'>
+            <View
+              className='flex-1 bg-[color:var(--color-bg)] shadow-xl'
+              style={{ borderRadius: 50 }}
+            >
+              <View className='w-full flex-1 p-[5px]'>
+                <View
+                  className='w-full h-full'
                   style={{
-                    flex: 1,
-                    zIndex: 50
+                    borderRadius: 50,
+                    overflow: 'hidden',
                   }}
-                  mapStyle='https://tiles.openfreemap.org/styles/liberty'
-                  logoEnabled={false}
-                  attributionEnabled={false}
-                  compassEnabled={false}
                 >
-                  <Camera
-                    {...cameraProps}
-                    animationDuration={1000}
-                  />
-
-                  <ShapeSource
-                    id='targetSource'
-                    shape={mapTarget.geojson as any}
+                  <MapView
+                    style={{
+                      flex: 1,
+                      zIndex: 50
+                    }}
+                    mapStyle='https://tiles.openfreemap.org/styles/liberty'
+                    logoEnabled={false}
+                    attributionEnabled={false}
+                    compassEnabled={false}
                   >
-                    <FillLayer
-                      id='targetFill'
-                      style={{
-                        fillColor: '#2563EB',
-                        fillOpacity: 0.25,
-                      }}
+                    <Camera
+                      {...cameraProps}
+                      animationDuration={1000}
                     />
 
-                    <LineLayer
-                      id='targetOutline'
-                      style={{
-                        lineColor: '#2563eb',
-                        lineWidth: 2,
-                      }}
-                    />
-                  </ShapeSource>
-                </MapView>
+                    <ShapeSource
+                      id='targetSource'
+                      shape={mapTarget.geojson as any}
+                    >
+                      <FillLayer
+                        id='targetFill'
+                        style={{
+                          fillColor: '#2563EB',
+                          fillOpacity: 0.25,
+                        }}
+                      />
+
+                      <LineLayer
+                        id='targetOutline'
+                        style={{
+                          lineColor: '#2563eb',
+                          lineWidth: 2,
+                        }}
+                      />
+                    </ShapeSource>
+                  </MapView>
+                </View>
               </View>
+            </View>
           </View>
         </React.Fragment>
       )}

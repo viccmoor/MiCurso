@@ -27,6 +27,7 @@ export const themes = {
 		'--next-class-bg': '#2D336B',
 		'--next-class-text': '#FFFFFF',
 		'--color-cta-text': '#FFFFFF',
+		'--next-class-info': '#1E1E1E',
 	}),
 	dark: vars({
 		'--color-bg': '#1E1E1E',
@@ -54,5 +55,6 @@ export const themes = {
 		'--next-class-bg': '#FFFFFF',
 		'--next-class-text': '#1E1E1E',
 		'--color-cta-text': '#2D336B',
+		'--next-class-info': '#FFFFFF',
 	}),
 };

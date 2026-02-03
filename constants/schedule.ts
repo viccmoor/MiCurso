@@ -119,3 +119,14 @@ export const DEFAULT_CALENDARS: Calendars = {
     modules: defaultModules,
   },
 };
+
+export const TYPE_MAP: Record<string, string> = {
+  'CLAS': 'Cátedra',
+  'AYU':  'Ayudantía',
+  'LAB':  'Laboratorio',
+  'TER':  'Terreno',
+  'TAL':  'Taller',
+  'PRA':  'Práctica',
+  'TES':  'Tesis',
+  'OTR':  'Otro',
+};

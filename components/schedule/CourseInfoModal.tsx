@@ -46,9 +46,9 @@ export default function CourseInfoModal({ visible, course, onClose, onDeleteCour
 		? getRegionFromFeature(mapTarget.geojson.features[0])
 		: undefined;
 	const cameraProps = region ? {
-    centerCoordinate: [region.longitude, region.latitude],
-    zoomLevel: 16,
-  } : {};
+		centerCoordinate: [region.longitude, region.latitude],
+		zoomLevel: mapTarget?.zoom === 'campus' ? 14 : 16,
+	} : {};
 
 	const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
