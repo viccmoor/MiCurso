@@ -53,60 +53,55 @@ export default function HomeScreen() {
     <View className='flex-1 bg-[color:var(--color-bg)]'>
       {nextClass && mapTarget && (
         <React.Fragment>
-          <View className='px-[20px] mt-[5px]'>
+          <View className='px-[20px]'>
             <NextClassCard nextClass={nextClass}/>
           </View>
 
-          <View className='flex-1 px-[20px] py-[10px]'>
-            <View
-              className='flex-1 bg-[color:var(--color-bg)] shadow-xl'
-              style={{ borderRadius: 50 }}
-            >
-              <View className='w-full flex-1 p-[5px]'>
-                <View
-                  className='w-full h-full'
+          <View className='flex-1 px-[20px] pb-[20px]'>
+            <View className='w-full flex-1'>
+              <View
+                className='w-full h-full'
+                style={{
+                  borderRadius: 20,
+                  overflow: 'hidden',
+                }}
+              >
+                <MapView
                   style={{
-                    borderRadius: 50,
-                    overflow: 'hidden',
+                    flex: 1,
+                    zIndex: 50
                   }}
+                  mapStyle='https://tiles.openfreemap.org/styles/liberty'
+                  logoEnabled={false}
+                  attributionEnabled={false}
+                  compassEnabled={false}
                 >
-                  <MapView
-                    style={{
-                      flex: 1,
-                      zIndex: 50
-                    }}
-                    mapStyle='https://tiles.openfreemap.org/styles/liberty'
-                    logoEnabled={false}
-                    attributionEnabled={false}
-                    compassEnabled={false}
+                  <Camera
+                    {...cameraProps}
+                    animationDuration={1000}
+                  />
+
+                  <ShapeSource
+                    id='targetSource'
+                    shape={mapTarget.geojson as any}
                   >
-                    <Camera
-                      {...cameraProps}
-                      animationDuration={1000}
+                    <FillLayer
+                      id='targetFill'
+                      style={{
+                        fillColor: '#2563EB',
+                        fillOpacity: 0.25,
+                      }}
                     />
 
-                    <ShapeSource
-                      id='targetSource'
-                      shape={mapTarget.geojson as any}
-                    >
-                      <FillLayer
-                        id='targetFill'
-                        style={{
-                          fillColor: '#2563EB',
-                          fillOpacity: 0.25,
-                        }}
-                      />
-
-                      <LineLayer
-                        id='targetOutline'
-                        style={{
-                          lineColor: '#2563eb',
-                          lineWidth: 2,
-                        }}
-                      />
-                    </ShapeSource>
-                  </MapView>
-                </View>
+                    <LineLayer
+                      id='targetOutline'
+                      style={{
+                        lineColor: '#2563eb',
+                        lineWidth: 2,
+                      }}
+                    />
+                  </ShapeSource>
+                </MapView>
               </View>
             </View>
           </View>

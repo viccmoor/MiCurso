@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import React from 'react';
 
+import { useTheme } from '@/providers/ThemeProviders';
 import { DAYS, MODULES, TYPE_COLORS } from '@/constants/schedule';
 import { ModuleIndex, Modules, SelectedBlock } from '@/types/schedule';
 
@@ -15,6 +16,8 @@ type Props = {
 };
 
 export default function Schedule({ modules, onPressBlock }: Props) {
+  const { theme } = useTheme();
+
   return (
     <View className='flex-1 w-full'>
       <View className='flex-col w-full h-full'>
@@ -74,11 +77,11 @@ export default function Schedule({ modules, onPressBlock }: Props) {
                                   key={blockIndex}
                                   className='rounded-sm w-[95%] p-[3px] max-h-[32px]'
                                   style={{
-                                    backgroundColor: colors.bg
+                                    backgroundColor: colors[theme]
                                   }}
                                 >
                                   <Text
-                                    className='text-xs leading-none text-start'
+                                    className='text-[color:var(--text-block-name)] text-xs leading-none text-start'
                                     ellipsizeMode='clip'
                                     numberOfLines={2}
                                   >

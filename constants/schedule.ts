@@ -67,15 +67,15 @@ export const DAY_MAP: Record<number, string> = {
 };
 
 export const TYPE_COLORS: { [key: string]: TypeColor } = {
-  'CLAS': { bg: '#FDE2BA', border: '#F79708'},
-  'AYU':  { bg: '#D0E7D0', border: '#55AA55'},
-  'LAB':  { bg: '#b3d4f5', border: '#4696E7'},
-  'TER':  { bg: '#ffccff', border: '#FF5CFF'},
-  'TAL':  { bg: '#c7c2f8', border: '#7A6DEE'},
-  'PRA':  { bg: '#cccc99', border: '#AAAA55'},
-  'TES':  { bg: '#b2efef', border: '#78E3E3'},
-  'OTR':  { bg: '#ff9999', border: '#FF2E2E'},
-  'DEFAULT': { bg: '#E8F5E9', border: '#2E7D32'},
+  'CLAS': { 'light': '#FDE2BA', 'dark': '#F79708', card: '#F79708'},
+  'AYU':  { 'light': '#D0E7D0', 'dark': '#55AA55', card: '#55AA55'},
+  'LAB':  { 'light': '#b3d4f5', 'dark': '#4696E7', card: '#4696E7'},
+  'TER':  { 'light': '#ffccff', 'dark': '#FF5CFF', card: '#FF5CFF'},
+  'TAL':  { 'light': '#c7c2f8', 'dark': '#7A6DEE', card: '#7A6DEE'},
+  'PRA':  { 'light': '#cccc99', 'dark': '#AAAA55', card: '#AAAA55'},
+  'TES':  { 'light': '#b2efef', 'dark': '#78E3E3', card: '#78E3E3'},
+  'OTR':  { 'light': '#ff9999', 'dark': '#FF2E2', card: '#FF2E2E'},
+  'DEFAULT': { 'light': '#E8F5E9', 'dark': '#2E7D32', card: '#2E7D32'},
 };
 
 export const EMPTY_COURSE_FORM: CourseForm = {

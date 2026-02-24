@@ -106,7 +106,7 @@ export default function CourseInfoModal({ visible, course, onClose, onDeleteCour
 							<Text
 								className='rounded-full text-lg text-white px-[15px]'
 								style={{
-									backgroundColor: TYPE_COLORS[course?.type]?.border || TYPE_COLORS.DEFAULT.border,
+									backgroundColor: TYPE_COLORS[course?.type].card || TYPE_COLORS.DEFAULT.card,
 								}}
 							>
 								{course?.type}

@@ -14,16 +14,16 @@ type NextClassCardProps = {
 };
 
 export default function NextClassCard({ nextClass }: NextClassCardProps) {
-  return (
-		<View className='w-full bg-[color:var(--color-bg)] min-h-[100px] rounded-xl shadow-xl p-[15px]'>
-			<Text className='text-sm font-normal text-[color:var(--text-calendar)] opacity-70'>
+	return (
+		<View className='w-full bg-[color:var(--color-bg)] min-h-[100px] rounded-xl p-[15px]'>
+			<Text className='text-sm font-normal text-[color:var(--text-calendar)]'>
 				Próxima clase: {nextClass.block.sigle}-{nextClass.block.section}
 			</Text>
 
 			<View className='flex-row items-start gap-[5px]'>
 				<View
 					className='rounded-full px-[10px] py-[2px] mt-[3px]'
-					style={{ backgroundColor: TYPE_COLORS[nextClass.block.type].border }}
+					style={{ backgroundColor: TYPE_COLORS[nextClass.block.type].card }}
 				>
 					<Text className='text-sm font-medium text-white'>
 						{TYPE_MAP[nextClass.block.type]}
@@ -40,7 +40,7 @@ export default function NextClassCard({ nextClass }: NextClassCardProps) {
 					<MaterialCommunityIcons 
 						name='clock-outline' 
 						size={20}
-						color={TYPE_COLORS[nextClass.block.type].border}
+						color={TYPE_COLORS[nextClass.block.type].card}
 					/>
 
 					<Text className='text-base font-medium text-[color:var(--next-class-info)] truncate'>
@@ -55,7 +55,7 @@ export default function NextClassCard({ nextClass }: NextClassCardProps) {
 					<MaterialIcons 
 						name='location-on' 
 						size={20}
-						color={TYPE_COLORS[nextClass.block.type].border}
+						color={TYPE_COLORS[nextClass.block.type].card}
 					/>
 
 					<Text className='text-base font-medium text-[color:var(--next-class-info)] truncate'>

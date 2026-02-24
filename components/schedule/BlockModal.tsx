@@ -10,6 +10,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
+import { useTheme } from '@/providers/ThemeProviders';
 import { Block, Modules, SelectedBlock, ModuleIndex } from '@/types/schedule';
 import { DAY_MAP, TYPE_COLORS } from '@/constants/schedule';
 
@@ -25,6 +26,7 @@ type Props = {
 };
 
 export default function BlockModal({ visible, selectedBlock, modules, onClose, onDeleteCourse, onDeleteBlock }: Props) {
+	const { theme } = useTheme();
 	const insets = useSafeAreaInsets();
 
 	const [courseInfoVisible, setCourseInfoVisible] = useState(false);
@@ -87,7 +89,7 @@ export default function BlockModal({ visible, selectedBlock, modules, onClose, o
 										<View
 											className='w-[60px] border-r-[3px]'
 											style={{
-												borderRightColor: colors.bg,
+												borderRightColor: colors[theme],
 											}}
 										>
 											<Text className='text-medium text-center font-bold text-[color:var(--color-modules-text)]'>
@@ -97,7 +99,7 @@ export default function BlockModal({ visible, selectedBlock, modules, onClose, o
 										<Pressable
 											className='flex-1 items-center py-[10px] px-[5px] rounded-xl'
 											style={{
-												backgroundColor: colors.bg,
+												backgroundColor: colors[theme],
 											}}
 											onPress={() => {
 												setSelectedCourse(block);
@@ -105,14 +107,14 @@ export default function BlockModal({ visible, selectedBlock, modules, onClose, o
 											}}
 										>
 											<Text
-												className='text-medium'
+												className='text-[color:var(--text-block-name)] text-medium'
 												numberOfLines={1}
 											>
 												{block.name}
 											</Text>
 											
 											<Text
-												className='text-sm'
+												className='text-[color:var(--text-block-name)] text-sm'
 												numberOfLines={1}
 											>
 												{block.sigle}-{block.section}
