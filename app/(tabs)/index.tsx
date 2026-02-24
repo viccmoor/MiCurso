@@ -4,6 +4,7 @@ import {
   Text,
   Pressable,
 } from 'react-native';
+import { router } from 'expo-router';
 
 import {
 	MapView,
@@ -133,6 +134,7 @@ export default function HomeScreen() {
 
           <Pressable
             className='w-full max-w-[256px] items-center bg-[color:var(--color-secondary)] p-[15px] rounded-xl mt-[20px]'
+            onPress={() => router.push('/(tabs)/schedule')}
           >
             <Text className='text-[color:var(--color-cta-text)] text-lg font-medium'>
               Agregar cursos
