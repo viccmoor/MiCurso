@@ -1,18 +1,12 @@
-import '@/global.css';
-import {
-  View,
-  Text,
-  Image,
-  Linking,
-  Pressable,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import "@/global.css";
+import { useNavigation } from "@react-navigation/native";
+import { Image, Linking, Pressable, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import Entypo from '@expo/vector-icons/Entypo';
+import Entypo from "@expo/vector-icons/Entypo";
 
-import { useTheme } from '@/providers/ThemeProviders';
-import { Colors } from '@/utils/native-theme';
+import { useTheme } from "@/providers/ThemeProviders";
+import { Colors } from "@/utils/native-theme";
 
 export default function About() {
   const insets = useSafeAreaInsets();
@@ -22,32 +16,28 @@ export default function About() {
 
   return (
     <View
-      className='flex-1 bg-[color:var(--color-bg)] justify-start items-start'
+      className="flex-1 bg-[color:var(--color-background)] justify-start items-start"
       style={{
         paddingTop: insets.top,
         paddingBottom: insets.bottom,
       }}
     >
-      <View className='w-full flex-row items-center justify-start p-[15px]'>
+      <View className="w-full flex-row items-center justify-start p-[15px]">
         <Pressable
-          className='w-[48px] h-[48px] justify-center items-center'
+          className="w-[48px] h-[48px] justify-center items-center"
           onPress={() => navigation.goBack()}
         >
-          <Entypo 
-            name='chevron-thin-left' 
-            size={28}
-            color={colors.backIcon}
-          />
+          <Entypo name="chevron-thin-left" size={28} color={colors.backIcon} />
         </Pressable>
       </View>
 
-      <View className='flex-1 w-full h-full items-center justify-start mt-[80px] gap-[15px]'>
-        <View className='items-center justify-center'>
+      <View className="flex-1 w-full h-full items-center justify-start mt-[80px] gap-[15px]">
+        <View className="items-center justify-center">
           <Image
             source={
-              theme === 'light'
-                ? require('../../assets/images/head-icon-light.png')
-                : require('../../assets/images/head-icon-dark.png')
+              theme === "light"
+                ? require("../../assets/images/head-icon-light.png")
+                : require("../../assets/images/head-icon-dark.png")
             }
             style={{
               width: 200,
@@ -55,38 +45,43 @@ export default function About() {
             }}
             resizeMode="contain"
           />
-          <Text className='text-[#888C]'>
-            © 2026 viccmoor
-          </Text>
+          <Text className="text-[#888C]">© 2026 viccmoor</Text>
         </View>
 
-        <View className='w-full px-[50px] gap-[15px] items-center justify-center'>
-          <Text
-            className='text-lg text-[color:var(--text-about)] text-justify max-w-[300px]'
-          >
-            MiCurso es un proyecto de código abierto creado por{' '}
+        <View className="w-full px-[50px] gap-[15px] items-center justify-center">
+          <Text className="text-lg text-[color:var(--color-text-primary)] text-justify max-w-[300px]">
+            MiCurso es un proyecto de código abierto creado por{" "}
             <Text
               className="font-bold underline"
-              onPress={() => Linking.openURL('https://github.com/viccmoor')}
+              onPress={() => Linking.openURL("https://github.com/viccmoor")}
             >
               viccmoor
-            </Text>{' '}
-            con el propósito de visualizar los horarios académicos fácilmente desde cualquier dispositivo movil.
-
-            Tú también puedes contribuir a este proyecto. Puedes contribuir ya sea reportando errores, sugiriendo mejoras o colaborando directamente con el desarrollo del código. Si estás interesado en ayudar, revisa el{' '}
+            </Text>{" "}
+            con el propósito de visualizar los horarios académicos fácilmente
+            desde cualquier dispositivo movil. Tú también puedes contribuir a
+            este proyecto. Puedes contribuir ya sea reportando errores,
+            sugiriendo mejoras o colaborando directamente con el desarrollo del
+            código. Si estás interesado en ayudar, revisa el{" "}
             <Text
               className="font-bold underline"
-              onPress={() => Linking.openURL('https://github.com/viccmoor/MiCurso')}
+              onPress={() =>
+                Linking.openURL("https://github.com/viccmoor/MiCurso")
+              }
             >
               repositorio de GitHub
-            </Text>.
+            </Text>
+            .
           </Text>
 
           <Pressable
-            className='bg-[color:var(--color-secondary)] w-full h-[40px] max-w-[300px] items-center justify-center rounded-full'
-            onPress={() => Linking.openURL('https://github.com/viccmoor/MiCurso/blob/main/LICENSE')}
+            className="bg-[color:var(--color-secondary)] w-full h-[40px] max-w-[300px] items-center justify-center rounded-full"
+            onPress={() =>
+              Linking.openURL(
+                "https://github.com/viccmoor/MiCurso/blob/main/LICENSE",
+              )
+            }
           >
-            <Text className='text-[color:var(--text-license-button)] font-medium'>
+            <Text className="text-[color:var(--color-text-on-primary)] font-medium">
               Licencia
             </Text>
           </Pressable>

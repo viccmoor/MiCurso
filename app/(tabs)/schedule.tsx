@@ -1,23 +1,28 @@
-import '@/global.css';
-import { useState } from 'react';
-import { View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import "@/global.css";
+import { useState } from "react";
+import { View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { defaultModules } from '@/constants/schedule';
-import { useSchedule } from '@/providers/ScheduleProvider';
-import { SelectedBlock, ModuleIndex } from '@/types/schedule';
-import { addCourseToModules, deleteCourseByNRC, deleteSingleBlock } from '@/utils/schedule';
+import { defaultModules } from "@/constants/schedule";
+import { useSchedule } from "@/providers/ScheduleProvider";
+import { ModuleIndex, SelectedBlock } from "@/types/schedule";
+import {
+    addCourseToModules,
+    deleteCourseByNRC,
+    deleteSingleBlock,
+} from "@/utils/schedule";
 
-import FloatingActionButton from '@/components/schedule/FloatingActionButton';
-import AddCourseModal from '@/components/schedule/AddCourseModal';
-import ScheduleView from '@/components/schedule/ScheduleView';
-import BlockModal from '@/components/schedule/BlockModal';
-import SearchResultsModal from '@/components/schedule/SearchResultsModal';
-import ScheduleSelector from '@/components/schedule/ScheduleSelector';
-import RemoveScheduleModal from '@/components/schedule/RemoveScheduleModal';
+import AddCourseModal from "@/components/schedule/AddCourseModal";
+import BlockModal from "@/components/schedule/BlockModal";
+import FloatingActionButton from "@/components/schedule/FloatingActionButton";
+import RemoveScheduleModal from "@/components/schedule/RemoveScheduleModal";
+import ScheduleSelector from "@/components/schedule/ScheduleSelector";
+import ScheduleView from "@/components/schedule/ScheduleView";
+import SearchResultsModal from "@/components/schedule/SearchResultsModal";
 
 export default function Schedule() {
-  const { calendars, setCalendars, currentPeriod, setCurrentPeriod } = useSchedule();
+  const { calendars, setCalendars, currentPeriod, setCurrentPeriod } =
+    useSchedule();
   const modules = calendars[currentPeriod].modules || defaultModules;
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -26,20 +31,25 @@ export default function Schedule() {
   const [removeScheduleVisible, setRemoveScheduleVisible] = useState(false);
 
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedBlock, setSelectedBlock] = useState<SelectedBlock | null>(null);
+  const [selectedBlock, setSelectedBlock] = useState<SelectedBlock | null>(
+    null,
+  );
 
   const insets = useSafeAreaInsets();
 
   const addCourseToSchedule = (course: any) => {
-    setCalendars(prev => {
-      const updatedModules = addCourseToModules(prev[currentPeriod].modules, course);
+    setCalendars((prev) => {
+      const updatedModules = addCourseToModules(
+        prev[currentPeriod].modules,
+        course,
+      );
 
       return {
         ...prev,
         [currentPeriod]: {
           ...prev[currentPeriod],
-          modules: updatedModules
-        }
+          modules: updatedModules,
+        },
       };
     });
 
@@ -48,7 +58,7 @@ export default function Schedule() {
 
   return (
     <View
-      className='flex-1 bg-[color:var(--color-bg)]'
+      className="flex-1 bg-[color:var(--color-background)]"
       style={{
         paddingTop: insets.top,
         paddingBottom: insets.bottom,
@@ -66,7 +76,7 @@ export default function Schedule() {
           setBlockModalVisible(true);
         }}
       />
-      
+
       {selectedBlock && (
         <BlockModal
           visible={blockModalVisible}
@@ -74,7 +84,7 @@ export default function Schedule() {
           modules={modules}
           onClose={() => setBlockModalVisible(false)}
           onDeleteCourse={(nrc) => {
-            setCalendars(prev => ({
+            setCalendars((prev) => ({
               ...prev,
               [currentPeriod]: {
                 ...prev[currentPeriod],
@@ -85,7 +95,7 @@ export default function Schedule() {
           onDeleteBlock={(block) => {
             if (!selectedBlock) return;
 
-            setCalendars(prev => ({
+            setCalendars((prev) => ({
               ...prev,
               [currentPeriod]: {
                 ...prev[currentPeriod],
@@ -93,7 +103,7 @@ export default function Schedule() {
                   prev[currentPeriod].modules,
                   selectedBlock.mod.id as ModuleIndex,
                   selectedBlock.dayIndex,
-                  block
+                  block,
                 ),
               },
             }));
@@ -120,13 +130,13 @@ export default function Schedule() {
         visible={removeScheduleVisible}
         onClose={() => setRemoveScheduleVisible(false)}
         onRemoveSchedule={() => {
-          setCalendars(prev => {
+          setCalendars((prev) => {
             return {
               ...prev,
               [currentPeriod]: {
                 ...prev[currentPeriod],
-                modules: defaultModules
-              }
+                modules: defaultModules,
+              },
             };
           });
         }}

@@ -90,7 +90,7 @@ export default function FloatingActionButton({
         >
           <Pressable
             onPress={toggleMenu}
-            className='bg-[color:var(--color-primary-default)] justify-center items-center w-[60px] h-[60px] rounded-full shadow-lg'
+            className='bg-[color:var(--color-primary)] justify-center items-center w-[60px] h-[60px] rounded-full shadow-lg'
           >
             <MaterialIcons name='add' size={24} color={fabColors.mainIconClosed} />
           </Pressable>
