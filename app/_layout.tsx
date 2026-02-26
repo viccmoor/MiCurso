@@ -6,6 +6,7 @@ import * as Notifications from 'expo-notifications';
 
 import { ThemeProvider, useTheme } from '@/providers/ThemeProviders';
 import { ScheduleProvider } from '@/providers/ScheduleProvider';
+import { LocationProvider } from '@/providers/LocationProvider';
 import { Colors } from '@/utils/native-theme';
 
 Notifications.setNotificationHandler({
@@ -20,11 +21,13 @@ Notifications.setNotificationHandler({
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
-      <ScheduleProvider>
-        <ThemeProvider>
-          <ThemedStack />
-        </ThemeProvider>
-      </ScheduleProvider>
+      <LocationProvider>
+        <ScheduleProvider>
+          <ThemeProvider>
+            <ThemedStack />
+          </ThemeProvider>
+        </ScheduleProvider>
+      </LocationProvider>
     </SafeAreaProvider>
   );
 }

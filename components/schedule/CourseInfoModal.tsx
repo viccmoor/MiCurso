@@ -8,6 +8,8 @@ import {
 	LineLayer,
 	MapView,
 	ShapeSource,
+  PointAnnotation,
+  UserLocation,
 } from "@maplibre/maplibre-react-native";
 
 import Entypo from "@expo/vector-icons/Entypo";
@@ -204,6 +206,11 @@ export default function CourseInfoModal({
                     attributionEnabled={false}
                     compassEnabled={false}
                   >
+                    <UserLocation
+                      visible={true}
+                      showsUserHeadingIndicator={true}
+                    />
+
                     <Camera {...cameraProps} animationDuration={1000} />
 
                     <ShapeSource
@@ -226,6 +233,21 @@ export default function CourseInfoModal({
                         }}
                       />
                     </ShapeSource>
+
+                    {region && mapTarget?.zoom !== "campus" && (
+                      <PointAnnotation
+                        id="locationPin"
+                        coordinate={[region.longitude, region.latitude]}
+                      >
+                        <View className="items-center justify-center">
+                          <MaterialIcons
+                            name="location-pin"
+                            size={36}
+                            color="#2563EB"
+                          />
+                        </View>
+                      </PointAnnotation>
+                    )}
                   </MapView>
                 ) : (
                   <View className="bg-[color:var(--color-surface)] flex-1 items-center justify-center">

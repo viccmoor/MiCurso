@@ -8,10 +8,13 @@ import {
     LineLayer,
     MapView,
     ShapeSource,
+    PointAnnotation,
+    UserLocation,
 } from "@maplibre/maplibre-react-native";
 
 import React from "react";
 
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 import { useClassNotifications } from "@/hooks/useClassNotifications";
@@ -74,6 +77,11 @@ export default function HomeScreen() {
                   attributionEnabled={false}
                   compassEnabled={false}
                 >
+                  <UserLocation
+                    visible={true}
+                    showsUserHeadingIndicator={true}
+                  />
+
                   <Camera {...cameraProps} animationDuration={1000} />
 
                   <ShapeSource
@@ -96,6 +104,21 @@ export default function HomeScreen() {
                       }}
                     />
                   </ShapeSource>
+
+                  {region && mapTarget?.zoom !== "campus" && (
+                    <PointAnnotation
+                      id="locationPin"
+                      coordinate={[region.longitude, region.latitude]}
+                    >
+                      <View className="items-center justify-center">
+                        <MaterialIcons
+                          name="location-pin"
+                          size={36}
+                          color="#2563EB"
+                        />
+                      </View>
+                    </PointAnnotation>
+                  )}
                 </MapView>
               </View>
             </View>
