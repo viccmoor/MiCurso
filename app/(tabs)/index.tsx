@@ -25,6 +25,7 @@ import { Colors } from "@/utils/native-theme";
 import { getNextClass } from "@/utils/schedule";
 
 import NextClassCard from "@/components/home/NextClassCard";
+import ModifiedLineLayers from "@/components/map/ModifiedLineLayers";
 
 export default function HomeScreen() {
   const { theme } = useTheme();
@@ -77,12 +78,19 @@ export default function HomeScreen() {
                   attributionEnabled={false}
                   compassEnabled={false}
                 >
+                  <ModifiedLineLayers />
+
                   <UserLocation
                     visible={true}
                     showsUserHeadingIndicator={true}
                   />
 
-                  <Camera {...cameraProps} animationDuration={1000} />
+                  <Camera
+                    {...cameraProps}
+                    animationDuration={1000}
+                    minZoomLevel={14}
+                    maxZoomLevel={18}
+                  />
 
                   <ShapeSource
                     id="targetSource"
@@ -91,16 +99,17 @@ export default function HomeScreen() {
                     <FillLayer
                       id="targetFill"
                       style={{
-                        fillColor: "#2563EB",
-                        fillOpacity: 0.25,
+                        fillColor: "#0176DE",
+                        fillOpacity: 0.15,
                       }}
                     />
 
                     <LineLayer
                       id="targetOutline"
                       style={{
-                        lineColor: "#2563eb",
+                        lineColor: "#0176DE",
                         lineWidth: 2,
+                        lineDasharray: [2, 2],
                       }}
                     />
                   </ShapeSource>
@@ -110,13 +119,12 @@ export default function HomeScreen() {
                       id="locationPin"
                       coordinate={[region.longitude, region.latitude]}
                     >
-                      <View className="items-center justify-center">
-                        <MaterialIcons
-                          name="location-pin"
-                          size={36}
-                          color="#2563EB"
-                        />
-                      </View>
+                      <MaterialIcons
+                      className="bg-[#FEC60D] p-[5px] rounded-full border-[2px] border-white"
+                        name="school"
+                        size={20}
+                        color="#FFFFFF"
+                      />
                     </PointAnnotation>
                   )}
                 </MapView>
@@ -129,7 +137,7 @@ export default function HomeScreen() {
       {!nextClass && (
         <View className="flex-1 items-center justify-center">
           <MaterialCommunityIcons
-            className="bg-[color:var(--color-background)] p-[20px] rounded-full border-[5px] border-secondary"
+            className="bg-[color:var(--color-background)] p-[20px] rounded-full border-[5px] border-[color:var(--color-secondary)]"
             name="calendar-check"
             size={128}
             color={colors.calendarIcon}

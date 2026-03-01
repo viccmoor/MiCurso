@@ -199,7 +199,7 @@ export default function FloatingActionButton({
 
           <Pressable
             onPress={toggleMenu}
-            className='bg-[color:var(--color-secondary-default)] flex-1 justify-center items-center w-[60px] h-[60px] rounded-full'
+            className='bg-[color:var(--color-secondary)] flex-1 justify-center items-center w-[60px] h-[60px] rounded-full'
           >
             <MaterialIcons
               name='close'

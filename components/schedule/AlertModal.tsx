@@ -32,7 +32,7 @@ export default function AlertModal({ visible, alertInfo, onClose }: Props) {
 
             <View className="items-end">
               <Pressable
-                className="bg-[color:var(--color-secondary-default)] px-[15px] py-[8px] rounded-xl"
+                className="bg-[color:var(--color-secondary)] px-[15px] py-[8px] rounded-xl"
                 onPress={onClose}
               >
                 <Text className="text-[color:var(--color-text-on-primary)] font-medium">

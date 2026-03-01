@@ -1,5 +1,11 @@
+import {
+  Modal,
+  Pressable,
+  Text,
+  View,
+  ScrollView,
+} from "react-native";
 import { useState } from "react";
-import { Modal, Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import {
@@ -24,6 +30,7 @@ import resolveMapTarget, { getRegionFromFeature } from "@/utils/geo";
 import { Colors } from "@/utils/native-theme";
 
 import CourseDeleteModal from "@/components/schedule/CourseDeleteModal";
+import ModifiedLineLayers from "@/components/map/ModifiedLineLayers";
 
 type Props = {
   visible: boolean;
@@ -81,32 +88,34 @@ export default function CourseInfoModal({
           }}
         />
 
-        <View className="flex-1 flex-col w-full items-start">
-          <Pressable
-            pointerEvents="auto"
-            onPress={onClose}
-            className="absolute top-[15px] left-[15px] bg-[color:var(--color-background)] w-[40px] h-[40px] justify-center items-center"
-          >
-            <Entypo
-              name="chevron-thin-left"
-              size={24}
-              color={colors.backIcon}
-            />
-          </Pressable>
+        <ScrollView className="flex-1">
+          <View className="w-full flex-row items-center justify-between px-[15px] pt-[15px]">
+            <Pressable
+              pointerEvents="auto"
+              onPress={onClose}
+              className="bg-[color:var(--color-background)] w-[40px] h-[40px] justify-center items-center"
+            >
+              <Entypo
+                name="chevron-thin-left"
+                size={24}
+                color={colors.backIcon}
+              />
+            </Pressable>
 
-          <Pressable
-            pointerEvents="auto"
-            onPress={() => setDeleteModalVisible(true)}
-            className="absolute top-[15px] right-[15px] bg-[color:var(--color-background)] w-[40px] h-[40px] justify-center items-center"
-          >
-            <Ionicons
-              name="trash-outline"
-              size={24}
-              color={colors.deleteIcon}
-            />
-          </Pressable>
+            <Pressable
+              pointerEvents="auto"
+              onPress={() => setDeleteModalVisible(true)}
+              className="bg-[color:var(--color-background)] w-[40px] h-[40px] justify-center items-center"
+            >
+              <Ionicons
+                name="trash-outline"
+                size={24}
+                color={colors.deleteIcon}
+              />
+            </Pressable>
+          </View>
 
-          <View className="flex-col w-full items-start justify-center mt-[50px]">
+          <View className="flex-col w-full items-start justify-center">
             <View className="flex-row w-full gap-[10px] items-center px-[24px] py-[15px] border-b border-[color:var(--color-outline-secondary)]">
               <Text
                 className="rounded-full text-lg text-white px-[15px]"
@@ -168,6 +177,14 @@ export default function CourseInfoModal({
             </View>
 
             <View className="flex-row w-full gap-[10px] items-center px-[24px] py-[15px] border-b border-[color:var(--color-outline-secondary)]">
+              <MaterialCommunityIcons name="account-school-outline" size={20} color={colors.infoIcon} />
+
+              <Text className="text-lg text-[color:var(--color-text-primary)]">
+                {course?.teacher}
+              </Text>
+            </View>
+
+            <View className="flex-row w-full gap-[10px] items-center px-[24px] py-[15px] border-b border-[color:var(--color-outline-secondary)]">
               <Ionicons name="grid-outline" size={20} color={colors.infoIcon} />
 
               <Text className="text-lg text-[color:var(--color-text-primary)]">
@@ -187,9 +204,9 @@ export default function CourseInfoModal({
               </Text>
             </View>
 
-            <View className="w-full h-2/5 p-[20px]">
+            <View className="w-full p-[20px]">
               <View
-                className="w-full h-full"
+                className="w-full h-[300px]"
                 style={{
                   borderRadius: 50,
                   overflow: "hidden",
@@ -206,12 +223,19 @@ export default function CourseInfoModal({
                     attributionEnabled={false}
                     compassEnabled={false}
                   >
+                    <ModifiedLineLayers />
+
                     <UserLocation
                       visible={true}
                       showsUserHeadingIndicator={true}
                     />
 
-                    <Camera {...cameraProps} animationDuration={1000} />
+                    <Camera
+                      {...cameraProps}
+                      animationDuration={1000}
+                      minZoomLevel={14}
+                      maxZoomLevel={18}
+                    />
 
                     <ShapeSource
                       id="targetSource"
@@ -220,16 +244,17 @@ export default function CourseInfoModal({
                       <FillLayer
                         id="targetFill"
                         style={{
-                          fillColor: "#2563EB",
-                          fillOpacity: 0.25,
+                          fillColor: "#0176DE",
+                          fillOpacity: 0.15,
                         }}
                       />
 
                       <LineLayer
                         id="targetOutline"
                         style={{
-                          lineColor: "#2563eb",
+                          lineColor: "#0176DE",
                           lineWidth: 2,
+                          lineDasharray: [2, 2],
                         }}
                       />
                     </ShapeSource>
@@ -239,13 +264,12 @@ export default function CourseInfoModal({
                         id="locationPin"
                         coordinate={[region.longitude, region.latitude]}
                       >
-                        <View className="items-center justify-center">
-                          <MaterialIcons
-                            name="location-pin"
-                            size={36}
-                            color="#2563EB"
-                          />
-                        </View>
+                        <MaterialIcons
+                        className="bg-[#FEC60D] p-[5px] rounded-full border-[2px] border-white"
+                          name="school"
+                          size={20}
+                          color="#FFFFFF"
+                        />
                       </PointAnnotation>
                     )}
                   </MapView>
@@ -261,7 +285,7 @@ export default function CourseInfoModal({
               </View>
             </View>
           </View>
-        </View>
+        </ScrollView>
       </View>
     </Modal>
   );

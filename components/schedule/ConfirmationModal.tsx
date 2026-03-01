@@ -35,7 +35,7 @@ export default function ConfirmationModal({
 
           <View className="flex-row w-full justify-between items-end">
             <Pressable
-              className="bg-[color:var(--color-secondary-default)] px-[15px] py-[8px] rounded-xl"
+              className="bg-[color:var(--color-secondary)] px-[15px] py-[8px] rounded-xl"
               onPress={onClose}
             >
               <Text className="text-[color:var(--color-text-on-primary)] font-medium">
@@ -44,7 +44,7 @@ export default function ConfirmationModal({
             </Pressable>
 
             <Pressable
-              className="bg-[color:var(--color-secondary-default)] px-[15px] py-[8px] rounded-xl"
+              className="bg-[color:var(--color-secondary)] px-[15px] py-[8px] rounded-xl"
               onPress={onAddCourse}
             >
               <Text className="text-[color:var(--color-text-on-primary)] font-medium">

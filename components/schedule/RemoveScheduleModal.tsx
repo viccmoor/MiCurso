@@ -33,7 +33,7 @@ export default function RemoveScheduleModal({
 
           <View className="flex-row w-full justify-between items-end">
             <Pressable
-              className="bg-[color:var(--color-secondary-default)] px-[15px] py-[8px] rounded-xl"
+              className="bg-[color:var(--color-secondary)] px-[15px] py-[8px] rounded-xl"
               onPress={onClose}
             >
               <Text className="text-[color:var(--color-text-on-primary)] font-medium">
@@ -42,7 +42,7 @@ export default function RemoveScheduleModal({
             </Pressable>
 
             <Pressable
-              className="bg-[color:var(--color-secondary-default)] px-[15px] py-[8px] rounded-xl"
+              className="bg-[color:var(--color-secondary)] px-[15px] py-[8px] rounded-xl"
               onPress={() => {
                 onRemoveSchedule();
                 onClose();

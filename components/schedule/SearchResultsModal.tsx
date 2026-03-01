@@ -99,7 +99,7 @@ export default function SearchResultsModal({
 
           <Pressable
             onPress={onClose}
-            className="mt-4 bg-[color:var(--color-secondary-default)] p-3 rounded-xl items-center"
+            className="mt-4 bg-[color:var(--color-secondary)] p-3 rounded-xl items-center"
           >
             <Text className="text-[color:var(--color-text-on-primary)] font-bold">
               Volver a buscar
