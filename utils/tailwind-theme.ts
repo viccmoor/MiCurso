@@ -27,6 +27,6 @@ export const themes = {
     "--color-text-on-primary": "#2D336B",
 
     "--color-outline": "#2A2A2A",
-    "--color-outline-secondary": "#131313",
+    "--color-outline-secondary": "#171717",
   }),
 };

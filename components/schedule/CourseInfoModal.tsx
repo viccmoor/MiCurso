@@ -126,10 +126,12 @@ export default function CourseInfoModal({
               >
                 {course?.type}
               </Text>
-
-              <Text className="text-2xl text-[color:var(--color-text-primary)]">
-                {course?.name}
-              </Text>
+              
+              <View className="flex-1">
+                <Text className="text-2xl text-[color:var(--color-text-primary)]">
+                  {course?.name}
+                </Text>
+              </View>
             </View>
 
             <View className="flex-row w-full gap-[10px] items-center px-[24px] py-[15px] border-b border-[color:var(--color-outline-secondary)]">
@@ -206,7 +208,7 @@ export default function CourseInfoModal({
 
             <View className="w-full p-[20px]">
               <View
-                className="w-full h-[300px]"
+                className="w-full h-[200px]"
                 style={{
                   borderRadius: 50,
                   overflow: "hidden",
@@ -265,7 +267,7 @@ export default function CourseInfoModal({
                         coordinate={[region.longitude, region.latitude]}
                       >
                         <MaterialIcons
-                        className="bg-[#FEC60D] p-[5px] rounded-full border-[2px] border-white"
+                          className="bg-[#FEC60D] p-[5px] rounded-full border-[2px] border-white"
                           name="school"
                           size={20}
                           color="#FFFFFF"
