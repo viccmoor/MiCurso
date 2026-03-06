@@ -174,7 +174,7 @@ export default function CourseInfoModal({
               />
 
               <Text className="text-lg text-[color:var(--color-text-primary)]">
-                {MODULES[course?.module]?.range}
+                {MODULES.find(m => m.id === course?.module)?.range}
               </Text>
             </View>
 
